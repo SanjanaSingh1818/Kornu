@@ -1,0 +1,34 @@
+import { Icon } from "../Icon";
+
+export function ContactDetails() {
+  return (
+    <section className="bg-primary-50 px-6 pb-24 pt-4">
+      <div className="mx-auto grid max-w-7xl gap-6 lg:grid-cols-3">
+        <div className="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-primary-200/50">
+          <h2 className="text-xl font-extrabold text-dark">Kontaktinformation</h2>
+          <div className="mt-5 space-y-4 text-sm leading-6 text-slate-600">
+            <p><strong className="text-dark">Adress:</strong> FO Petersons gata 6, 421 31 Västra Frölunda</p>
+            <p><strong className="text-dark">Telefon:</strong> <a href="tel:031-3860086" className="text-primary underline">031 386 00 86</a></p>
+            <p><strong className="text-dark">E-post:</strong> <a href="mailto:info@kornu.se" className="text-primary underline">info@kornu.se</a></p>
+            <p><strong className="text-dark">Org.nr:</strong> 559288-1386</p>
+          </div>
+        </div>
+        <div className="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-primary-200/50">
+          <h2 className="text-xl font-extrabold text-dark">Öppettider</h2>
+          <div className="mt-5 space-y-3 text-sm leading-6 text-slate-600">
+            <p><strong className="text-dark">Mån-Tors:</strong> 11:00-15:00</p>
+            <p><strong className="text-dark">Fre:</strong> 11:00-13:00</p>
+            <p><strong className="text-dark">Lör-Sön:</strong> Stängt</p>
+          </div>
+        </div>
+        <div className="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-primary-200/50">
+          <h2 className="text-xl font-extrabold text-dark">Hitta oss</h2>
+          <p className="mt-5 text-sm leading-6 text-slate-600">Körskolan ligger på samma gata som Förarprov Trafikverket i Högsbo.</p>
+          <a href="https://maps.app.goo.gl/WvBrSCZimUimjE9x7" target="_blank" rel="noopener" className="mt-6 inline-flex items-center gap-3 rounded-xl bg-dark px-5 py-3 text-sm font-bold text-white transition hover:bg-primary-900">
+            Öppna karta <Icon name="arrow" className="h-4 w-4" />
+          </a>
+        </div>
+      </div>
+    </section>
+  );
+}

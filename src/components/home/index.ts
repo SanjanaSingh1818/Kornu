@@ -1,0 +1,9 @@
+export { BenefitBar } from "./BenefitBar";
+export { ContactDetails } from "./ContactDetails";
+export { Courses } from "./Courses";
+export { FinalCta } from "./FinalCta";
+export { Gallery } from "./Gallery";
+export { Hero } from "./Hero";
+export { Journey } from "./Journey";
+export { Packages } from "./Packages";
+export { SimulatorSection } from "./SimulatorSection";
