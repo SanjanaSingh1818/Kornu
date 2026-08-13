@@ -1,5 +1,5 @@
 import type { Package } from "../types";
-import { BenefitBar, Courses, FinalCta, Gallery, Hero, Journey, Packages, SimulatorSection } from "../components/home";
+import { BenefitBar, BrakingDistanceVisualizer, FinalCta, Gallery, Hero, Journey, Packages, ReviewsCarousel, SimulatorSection, TheoryQuiz, VisitUs } from "../components/home";
 
 export function HomePage({ onBook, onSelect, onLaunch }: { onBook: () => void; onSelect: (p: Package) => void; onLaunch: () => void }) {
   return (
@@ -8,10 +8,13 @@ export function HomePage({ onBook, onSelect, onLaunch }: { onBook: () => void; o
       <BenefitBar />
       <Journey />
       <Packages onSelect={onSelect} />
-      <Courses />
+      <TheoryQuiz />
       <SimulatorSection onLaunch={onLaunch} />
+      <BrakingDistanceVisualizer />
+      <ReviewsCarousel />
       <Gallery preview />
       <FinalCta onBook={onBook} />
+      <VisitUs />
     </>
   );
 }

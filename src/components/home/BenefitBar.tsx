@@ -1,15 +1,16 @@
 import { motion } from "framer-motion";
-import { BENEFITS } from "../../data";
+import { useLanguage } from "../../i18n";
 import { Icon } from "../Icon";
 
 export function BenefitBar() {
+  const { t } = useLanguage();
   return (
     <section className="relative -mt-px border-t border-white/10 bg-[#05281F]">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 divide-y divide-white/10 sm:grid-cols-2 sm:divide-x sm:divide-y-0 xl:grid-cols-4">
-          {BENEFITS.map((benefit, index) => (
+          {t.benefits.map(([title, text, icon], index) => (
             <motion.div
-              key={benefit.title}
+              key={title}
               initial={{ opacity: 0, y: 15 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -21,18 +22,18 @@ export function BenefitBar() {
             >
               <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary ring-1 ring-primary/20 transition group-hover:scale-110">
                 <Icon
-                  name={benefit.icon}
+                  name={icon}
                   className="h-5 w-5"
                 />
               </div>
 
               <div className="min-w-0">
                 <h3 className="text-[15px] font-semibold text-white">
-                  {benefit.title}
+                  {title}
                 </h3>
 
                 <p className="mt-1 line-clamp-2 text-sm leading-6 text-white/65">
-                  {benefit.text}
+                  {text}
                 </p>
               </div>
             </motion.div>

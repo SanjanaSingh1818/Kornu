@@ -7,7 +7,7 @@ import {
   useSpring,
   useTransform,
 } from "framer-motion";
-import { JOURNEY } from "../../data";
+import { useLanguage } from "../../i18n";
 
 const ROAD_PATH =
   "M58 308 C156 374 230 268 304 202 C404 112 480 302 584 264 C676 230 672 76 788 108 C884 134 842 316 954 306 C1058 296 1054 178 1178 198";
@@ -17,8 +17,7 @@ const desktopSteps = [
   { left: "24%", top: "43%", align: "top", threshold: 0.16 },
   { left: "37%", top: "57%", align: "bottom", threshold: 0.32 },
   { left: "57%", top: "31%", align: "top", threshold: 0.5 },
-  { left: "71%", top: "61%", align: "bottom", threshold: 0.66 },
-  { left: "83%", top: "47%", align: "top", threshold: 0.83 },
+  { left: "76%", top: "52%", align: "top", threshold: 0.75 },
   { left: "94%", top: "43%", align: "bottom", threshold: 1 },
 ] as const;
 
@@ -29,7 +28,7 @@ function DesktopMilestone({
 }: {
   index: number;
   progress: MotionValue<number>;
-  step: typeof JOURNEY[number];
+  step: { label: string; detail: string };
 }) {
   const position = desktopSteps[index];
   const isTop = position.align === "top";
@@ -67,7 +66,7 @@ function MobileMilestone({
   step,
 }: {
   index: number;
-  step: typeof JOURNEY[number];
+  step: { label: string; detail: string };
 }) {
   return (
     <motion.li
@@ -89,6 +88,8 @@ function MobileMilestone({
 }
 
 export function Journey() {
+  const { t } = useLanguage();
+  const steps = t.journey.steps.map(([label, detail]) => ({ label, detail }));
   const ref = useRef<HTMLElement | null>(null);
   const rm = useReducedMotion();
   const { scrollYProgress } = useScroll({
@@ -119,12 +120,12 @@ export function Journey() {
 
       <div className="relative mx-auto max-w-7xl">
         <div className="mx-auto max-w-2xl text-center">
-          <p className="text-xs font-black uppercase tracking-[.24em] text-primary sm:text-sm">Din väg till körkortet</p>
+          <p className="text-xs font-black uppercase tracking-[.24em] text-primary sm:text-sm">{t.journey.tag}</p>
           <h2 className="mt-3 text-3xl font-semibold leading-tight tracking-[-0.025em] text-dark sm:text-4xl lg:text-5xl">
-            Från första testet till <span className="text-primary">trygg förare.</span>
+            {t.journey.title}
           </h2>
           <p className="mx-auto mt-4 max-w-xl text-sm leading-7 text-slate-600 sm:text-base">
-            En tydlig premiumplan där varje steg låses upp i takt med din körning, från syntest till uppkörning.
+            {t.journey.text}
           </p>
         </div>
 
@@ -178,7 +179,7 @@ export function Journey() {
             </svg>
 
             <div className="absolute inset-0">
-              {JOURNEY.map((step, i) => (
+              {steps.map((step, i) => (
                 <DesktopMilestone key={step.label} index={i} progress={progress} step={step} />
               ))}
             </div>
@@ -192,7 +193,7 @@ export function Journey() {
               aria-hidden
             />
             <ol className="relative space-y-4">
-              {JOURNEY.map((step, i) => (
+              {steps.map((step, i) => (
                 <MobileMilestone key={step.label} index={i} step={step} />
               ))}
             </ol>

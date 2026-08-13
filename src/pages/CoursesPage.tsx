@@ -1,9 +1,11 @@
 import { PageShell } from "../components/PageShell";
 import { Courses, Journey } from "../components/home";
+import { useLanguage } from "../i18n";
 
 export function CoursesPage() {
+  const { t } = useLanguage();
   return (
-    <PageShell eyebrow="Kurser" title="Körkortsutbildning för din vardag." text="Manuell, automat, intensivkurs och kompletterande körmoment med erfarna lärare nära Trafikverket i Högsbo.">
+    <PageShell eyebrow={t.pages.courses[0]} title={t.pages.courses[1]} text={t.pages.courses[2]}>
       <Courses />
       <Journey />
     </PageShell>

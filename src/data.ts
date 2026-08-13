@@ -1,11 +1,11 @@
 import type { Package, PagePath } from "./types";
 
 export const NAV: { label: string; path: PagePath }[] = [
-  { label: "Hem", path: "/" },
-  { label: "Kurser", path: "/courses" },
-  { label: "Paket", path: "/packages" },
+  { label: "Home page", path: "/" },
+  { label: "Services", path: "/courses" },
   { label: "Simulator", path: "/simulator" },
   { label: "Gallery", path: "/gallery" },
+  { label: "About Us", path: "/about" },
   { label: "Kontakt", path: "/contact" },
 ];
 
@@ -17,22 +17,21 @@ export const BENEFITS = [
 ];
 
 export const JOURNEY = [
-  { label: "Syntest", detail: "Kontrollera din syn och starta din plan.", x: "5%", y: "63%" },
+  { label: "Körkortstillstånd", detail: "Ansök hos Transportstyrelsen och starta din plan.", x: "5%", y: "63%" },
   { label: "Risk 1", detail: "Teoretisk kurs om alkohol, droger och trötthet.", x: "20%", y: "38%" },
   { label: "Risk 2", detail: "Halkkörning och kontrollövningar.", x: "35%", y: "58%" },
-  { label: "Teori", detail: "Digitala teorifrågor med ljudstöd och övningar.", x: "50%", y: "33%" },
-  { label: "Körlektioner", detail: "Stadskörning, landsväg, parkering och testrundor.", x: "64%", y: "56%" },
+  { label: "Teoriprov", detail: "Öva smart och gör provet hos Trafikverket.", x: "50%", y: "33%" },
   { label: "Uppkörning", detail: "Uppvärmning och sista förberedelser.", x: "79%", y: "35%" },
   { label: "Körkort!", detail: "Grattis – du är nu en licensierad förare.", x: "93%", y: "59%" },
 ];
 
 export const PACKAGES: Package[] = [
-  { id: "pkt-5", name: "Paket 5", lessons: "5 körlektioner (40 min)", includes: ["5 körlektioner", "Inskrivningsavgift 100 kr på plats"], price: 2475, originalPrice: null, popular: false },
-  { id: "pkt-total-5", name: "Totalpaket 1", lessons: "5 körlektioner + Risk 1-2 + Teori", includes: ["5 körlektioner (40 min)", "Risk 1 & Risk 2", "Teoriutbildning & inskrivning", "Körhäfte ingår"], price: 5393, originalPrice: 6945, popular: false },
-  { id: "pkt-10", name: "Kör Nu Paket", lessons: "10 körlektioner + Risk 1 & 2", includes: ["10 körlektioner (40 min)", "Risk 1 & Risk 2", "Inskrivning", "Perfekt startpaket"], price: 7249, originalPrice: 7890, popular: true },
+  { id: "pkt-5", name: "Grundpaketet", lessons: "5 körlektioner (80 min)", includes: ["5 körlektioner (80 min)", "Digitalt teoripaket", "Personlig studieplan"], price: 4900, originalPrice: null, popular: false },
+  { id: "pkt-total-5", name: "Mellanpaketet", lessons: "10 körlektioner (80 min) + Risk 1", includes: ["10 körlektioner (80 min)", "Riskettan", "Obegränsade teoriprov", "Låna bil till prov"], price: 9800, originalPrice: null, popular: true },
+  { id: "pkt-10", name: "Intensivpaket", lessons: "15 körlektioner (80 min) + Risk 1 & 2", includes: ["15 körlektioner (80 min)", "Risk 1 & Risk 2", "Komplett teoripaket", "Provförberedelse"], price: 15200, originalPrice: null, popular: false },
   { id: "pkt-mellan", name: "Mellanpaket", lessons: "10 körlektioner (80 min) + Risk 1-2 + Teori", includes: ["10 körlektioner (80 min)", "Risk 1 & Risk 2", "Teoriutbildning & inskrivning", "Körhäfte ingår"], price: 12999, originalPrice: 14500, popular: false },
   { id: "pkt-stor", name: "Stort Paket", lessons: "15 körlektioner (80 min) + Risk 1-2 + Teori", includes: ["15 körlektioner (80 min)", "Risk 1 & Risk 2", "Teoriutbildning & inskrivning", "Körhäfte ingår"], price: 19300, originalPrice: null, popular: false },
-  { id: "pkt-intensiv", name: "Intensivpaket", lessons: "40 körlektioner + Risk 1-2 + Teori", includes: ["40 körlektioner", "Risk 1 & Risk 2", "Teoriutbildning & inskrivning", "Körhäfte ingår", "Spara 2 560 kr"], price: 21499, originalPrice: 24059, popular: false },
+  { id: "pkt-intensiv", name: "Komplettpaket", lessons: "25 körlektioner (80 min) + Risk 1-2 + Teori", includes: ["25 körlektioner (80 min)", "Risk 1 & Risk 2", "Handledarutbildning", "Prioriterade tider", "Låna bil till uppkörning"], price: 24500, originalPrice: null, popular: false },
 ];
 
 export const COURSES = [

@@ -1,8 +1,10 @@
 import { motion } from "framer-motion";
 import { GALLERY_IMAGES } from "../../data";
+import { useLanguage } from "../../i18n";
 import { Icon } from "../Icon";
 
 export function Gallery({ preview = false }: { preview?: boolean }) {
+  const { t } = useLanguage();
   const images = preview ? GALLERY_IMAGES.slice(0, 8) : GALLERY_IMAGES;
 
   return (
@@ -10,10 +12,10 @@ export function Gallery({ preview = false }: { preview?: boolean }) {
       <div className="mx-auto max-w-7xl">
         <div className="flex flex-col justify-between gap-5 sm:flex-row sm:items-end">
           <div>
-            <p className="text-sm font-black uppercase tracking-[.26em] text-primary">Gallery</p>
-            <h2 className="mt-4 text-4xl font-extrabold tracking-[-0.04em] text-dark sm:text-6xl">Våra elever och Kör Nu-ögonblick.</h2>
+            <p className="text-sm font-black uppercase tracking-[.26em] text-primary">{t.pages.gallery[0]}</p>
+            <h2 className="mt-4 text-4xl font-extrabold tracking-[-0.04em] text-dark sm:text-6xl">{t.pages.gallery[1]}</h2>
           </div>
-          {preview && <a href="/gallery" className="inline-flex items-center gap-3 text-sm font-bold text-dark">Se hela galleriet <Icon name="arrow" className="h-4 w-4" /></a>}
+          {preview && <a href="/gallery" className="inline-flex items-center gap-3 text-sm font-bold text-dark">{t.nav.gallery} <Icon name="arrow" className="h-4 w-4" /></a>}
         </div>
 
         <div className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">

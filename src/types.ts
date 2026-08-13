@@ -1,4 +1,4 @@
-export type PagePath = "/" | "/courses" | "/packages" | "/simulator" | "/gallery" | "/contact";
+export type PagePath = "/" | "/courses" | "/packages" | "/simulator" | "/gallery" | "/contact" | "/about";
 
 export type Package = {
   id: string;

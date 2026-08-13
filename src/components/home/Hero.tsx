@@ -6,6 +6,7 @@ import {
   useTransform,
 } from "framer-motion";
 import { Icon } from "../Icon";
+import { useLanguage } from "../../i18n";
 
 function Stat({
   value,
@@ -27,6 +28,7 @@ function Stat({
 }
 
 export function Hero({ onBook }: { onBook: () => void }) {
+  const { t } = useLanguage();
   const ref = useRef<HTMLElement | null>(null);
 
   const rm = useReducedMotion();
@@ -101,7 +103,7 @@ export function Hero({ onBook }: { onBook: () => void }) {
             className="inline-flex items-center gap-2 rounded-full border border-primary-400/30 bg-primary-900/40 px-3 py-1.5 text-xs font-medium text-primary-300 backdrop-blur-md sm:px-4 sm:py-2"
           >
             <span className="h-2 w-2 rounded-full bg-primary-400 animate-pulse" />
-            Trafikskola i Göteborg
+            {t.hero.badge}
           </motion.div>
 
           {/* Heading */}
@@ -115,9 +117,9 @@ export function Hero({ onBook }: { onBook: () => void }) {
             }}
             className="mt-5 max-w-[680px] text-[2.55rem] font-medium leading-[1.08] tracking-[-0.025em] text-white sm:text-5xl md:text-[3.35rem] lg:text-[3.85rem] xl:text-[4.15rem]"
           >
-            Kör mot ditt körkort med{" "}
+            {t.hero.titleA}{" "}
             <span className="text-primary-400">
-              Kör Nu.
+              {t.hero.titleB}
             </span>
           </motion.h1>
 
@@ -132,9 +134,7 @@ export function Hero({ onBook }: { onBook: () => void }) {
             }}
             className="mt-5 max-w-xl text-[15px] leading-7 text-white/78 sm:mt-6 sm:text-base sm:leading-8 lg:max-w-2xl"
           >
-            Körkortsutbildning på svenska, engelska, kurdiska och arabiska.
-            Digitala teorimaterial, över 100 körövningar och enkel onlinebokning
-            – allt i Västra Frölunda nära Trafikverket i Högsbo.
+            {t.hero.text}
           </motion.p>
 
           {/* Buttons */}
@@ -152,7 +152,7 @@ export function Hero({ onBook }: { onBook: () => void }) {
               onClick={onBook}
               className="inline-flex items-center justify-center gap-3 rounded-xl bg-primary px-7 py-3.5 text-sm font-semibold text-white shadow-xl transition-all duration-300 hover:-translate-y-1 hover:bg-primary-600 sm:px-8 sm:py-4 sm:text-base"
             >
-              Boka lektion
+              {t.hero.book}
               <Icon
                 name="arrow"
                 className="h-4 w-4"
@@ -163,7 +163,7 @@ export function Hero({ onBook }: { onBook: () => void }) {
               href="#paket"
               className="inline-flex items-center justify-center rounded-xl border border-white/20 bg-white/10 px-7 py-3.5 text-sm font-semibold text-white backdrop-blur-lg transition-all duration-300 hover:-translate-y-1 hover:bg-white/15 sm:px-8 sm:py-4 sm:text-base"
             >
-              Se paket & priser
+              {t.hero.packages}
             </a>
           </motion.div>
 
@@ -179,9 +179,7 @@ export function Hero({ onBook }: { onBook: () => void }) {
             className="mt-9 max-w-md border-t border-white/15 pt-6 sm:mt-10 sm:pt-7"
           >
             <div className="grid grid-cols-3 gap-5 sm:gap-8">
-              <Stat value="4" label="Språk" />
-              <Stat value="100+" label="Körövningar" />
-              <Stat value="98%" label="Godkänd" />
+              {t.hero.stats.map(([value, label]) => <Stat key={label} value={value} label={label} />)}
             </div>
           </motion.div>
         </div>

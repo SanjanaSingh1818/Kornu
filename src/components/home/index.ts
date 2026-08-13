@@ -1,4 +1,5 @@
 export { BenefitBar } from "./BenefitBar";
+export { BrakingDistanceVisualizer } from "./BrakingDistanceVisualizer";
 export { ContactDetails } from "./ContactDetails";
 export { Courses } from "./Courses";
 export { FinalCta } from "./FinalCta";
@@ -6,4 +7,7 @@ export { Gallery } from "./Gallery";
 export { Hero } from "./Hero";
 export { Journey } from "./Journey";
 export { Packages } from "./Packages";
+export { ReviewsCarousel } from "./ReviewsCarousel";
 export { SimulatorSection } from "./SimulatorSection";
+export { TheoryQuiz } from "./TheoryQuiz";
+export { VisitUs } from "./VisitUs";

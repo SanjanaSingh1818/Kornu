@@ -1,8 +1,10 @@
 import { useRef } from "react";
 import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
+import { useLanguage } from "../../i18n";
 import { Icon } from "../Icon";
 
 export function SimulatorSection({ onLaunch }: { onLaunch: () => void }) {
+  const { t } = useLanguage();
   const ref = useRef<HTMLElement | null>(null);
   const rm = useReducedMotion();
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
@@ -25,18 +27,18 @@ export function SimulatorSection({ onLaunch }: { onLaunch: () => void }) {
           </div>
         </div>
         <div className="px-2 py-4 lg:px-8">
-          <p className="text-sm font-black uppercase tracking-[.26em] text-primary-400">Öva. Förbättra. Lyckas.</p>
-          <h2 className="mt-5 text-4xl font-extrabold tracking-[-0.04em] text-white sm:text-5xl">Testa dina kunskaper i vår körsimulator.</h2>
-          <p className="mt-6 max-w-xl text-lg leading-8 text-white/65">Träna reaktion, observation, parkering och Göteborgs trafikrytm i realistiska simulatorsessioner. Tre banor: stadskörning, motorväg och mörkerkörning.</p>
+          <p className="text-sm font-black uppercase tracking-[.26em] text-primary-400">{t.simulator.tag}</p>
+          <h2 className="mt-5 text-4xl font-extrabold tracking-[-0.04em] text-white sm:text-5xl">{t.simulator.title}</h2>
+          <p className="mt-6 max-w-xl text-lg leading-8 text-white/65">{t.simulator.text}</p>
 
           <div className="mt-6 flex flex-wrap gap-3">
-            <span className="inline-flex items-center gap-2 rounded-lg bg-primary-900/50 px-3 py-1.5 text-xs font-bold text-primary-300">🏙️ Stadskörning</span>
-            <span className="inline-flex items-center gap-2 rounded-lg bg-primary-900/50 px-3 py-1.5 text-xs font-bold text-primary-300">🛣️ Motorväg</span>
-            <span className="inline-flex items-center gap-2 rounded-lg bg-primary-900/50 px-3 py-1.5 text-xs font-bold text-primary-300">🌙 Mörkerkörning</span>
+            <span className="inline-flex items-center gap-2 rounded-lg bg-primary-900/50 px-3 py-1.5 text-xs font-bold text-primary-300">🏙️ {t.simulator.city}</span>
+            <span className="inline-flex items-center gap-2 rounded-lg bg-primary-900/50 px-3 py-1.5 text-xs font-bold text-primary-300">🛣️ {t.simulator.motorway}</span>
+            <span className="inline-flex items-center gap-2 rounded-lg bg-primary-900/50 px-3 py-1.5 text-xs font-bold text-primary-300">🌙 {t.simulator.night}</span>
           </div>
 
           <button onClick={onLaunch} className="mt-8 inline-flex items-center justify-center gap-3 rounded-xl bg-primary px-7 py-4 font-bold text-white shadow-[0_16px_48px_rgba(11,132,87,0.35)] transition hover:-translate-y-1 hover:bg-primary-600">
-            🎮 Starta simulator <Icon name="arrow" className="h-4 w-4" />
+            🎮 {t.simulator.start} <Icon name="arrow" className="h-4 w-4" />
           </button>
         </div>
       </div>

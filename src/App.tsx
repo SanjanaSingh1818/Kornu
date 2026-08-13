@@ -5,8 +5,9 @@ import { Header } from "./components/Header";
 import { PaymentModal } from "./components/PaymentModal";
 import { PACKAGES } from "./data";
 import { getPagePath } from "./routing";
+import { LanguageProvider } from "./i18n";
 import type { Package, PagePath } from "./types";
-import { ContactPage, CoursesPage, GalleryPage, HomePage, PackagesPage, SimulatorPage } from "./pages";
+import { AboutPage, ContactPage, CoursesPage, GalleryPage, HomePage, PackagesPage, SimulatorPage } from "./pages";
 
 const DrivingSimulator = lazy(() => import("./DrivingSimulator"));
 
@@ -30,23 +31,26 @@ export default function App() {
   }, []);
 
   return (
-    <main className="min-h-screen overflow-hidden bg-primary-50 text-slate-950 antialiased">
-      <Header path={path} onNavigate={navigate} onBook={openDefaultPackage} />
-      {path === "/" && <HomePage onBook={openDefaultPackage} onSelect={setPayModal} onLaunch={() => setShowSim(true)} />}
-      {path === "/courses" && <CoursesPage />}
-      {path === "/packages" && <PackagesPage onSelect={setPayModal} />}
-      {path === "/simulator" && <SimulatorPage onLaunch={() => setShowSim(true)} />}
-      {path === "/gallery" && <GalleryPage />}
-      {path === "/contact" && <ContactPage onBook={openDefaultPackage} />}
-      <Footer onNavigate={navigate} />
-      <AnimatePresence>
-        {payModal && <PaymentModal pkg={payModal} onClose={() => setPayModal(null)} />}
-      </AnimatePresence>
-      {showSim && (
-        <Suspense fallback={<div className="fixed inset-0 z-[60] grid place-items-center bg-dark text-white text-lg font-bold">Laddar simulator...</div>}>
-          <DrivingSimulator onClose={() => setShowSim(false)} />
-        </Suspense>
-      )}
-    </main>
+    <LanguageProvider>
+      <main className="min-h-screen overflow-hidden bg-primary-50 text-slate-950 antialiased">
+        <Header path={path} onNavigate={navigate} onBook={openDefaultPackage} />
+        {path === "/" && <HomePage onBook={openDefaultPackage} onSelect={setPayModal} onLaunch={() => setShowSim(true)} />}
+        {path === "/courses" && <CoursesPage />}
+        {path === "/packages" && <PackagesPage onSelect={setPayModal} />}
+        {path === "/simulator" && <SimulatorPage onLaunch={() => setShowSim(true)} />}
+        {path === "/gallery" && <GalleryPage />}
+        {path === "/about" && <AboutPage />}
+        {path === "/contact" && <ContactPage onBook={openDefaultPackage} />}
+        <Footer onNavigate={navigate} />
+        <AnimatePresence>
+          {payModal && <PaymentModal pkg={payModal} onClose={() => setPayModal(null)} />}
+        </AnimatePresence>
+        {showSim && (
+          <Suspense fallback={<div className="fixed inset-0 z-[60] grid place-items-center bg-dark text-white text-lg font-bold">Loading simulator...</div>}>
+            <DrivingSimulator onClose={() => setShowSim(false)} />
+          </Suspense>
+        )}
+      </main>
+    </LanguageProvider>
   );
 }

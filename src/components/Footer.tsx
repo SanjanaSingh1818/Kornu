@@ -1,4 +1,5 @@
 import { NAV } from "../data";
+import { useLanguage } from "../i18n";
 import { handleRouteClick } from "../routing";
 import type { PagePath } from "../types";
 import { Icon } from "./Icon";
@@ -18,12 +19,22 @@ function FLinks({ title, items, onNavigate }: { title: string; items: { label: s
 }
 
 export function Footer({ onNavigate }: { onNavigate: (path: PagePath) => void }) {
+  const { t } = useLanguage();
+  const navLabels: Record<PagePath, string> = {
+    "/": t.nav.home,
+    "/courses": t.nav.services,
+    "/packages": t.packages.tag,
+    "/simulator": t.nav.simulator,
+    "/gallery": t.nav.gallery,
+    "/about": t.nav.about,
+    "/contact": t.nav.contact,
+  };
   return (
     <footer className="bg-dark px-6 py-16 text-white">
       <div className="mx-auto grid max-w-7xl gap-12 md:grid-cols-[1.4fr_0.8fr_0.8fr_0.8fr]">
         <div>
           <Logo light />
-          <p className="mt-6 max-w-sm text-sm leading-6 text-white/55">Kör Nu Trafikskola i Göteborg hjälper nya förare att bli trygga, säkra och självständiga. Utbildning på svenska, engelska, kurdiska och arabiska.</p>
+          <p className="mt-6 max-w-sm text-sm leading-6 text-white/55">{t.footer.text}</p>
           <div className="mt-5 flex gap-4">
             {["facebook", "instagram"].map((s) => (
               <a key={s} href="#" className="grid h-10 w-10 place-items-center rounded-xl bg-white/8 text-white/60 transition hover:bg-primary hover:text-white" aria-label={s}>
@@ -32,26 +43,26 @@ export function Footer({ onNavigate }: { onNavigate: (path: PagePath) => void })
             ))}
           </div>
         </div>
-        <FLinks title="Snabblänkar" items={NAV} onNavigate={onNavigate} />
-        <FLinks title="Kurser" items={[
-          { label: "Manuell körning", path: "/courses" },
-          { label: "Automat körning", path: "/courses" },
+        <FLinks title={t.footer.quick} items={NAV.map((item) => ({ ...item, label: navLabels[item.path] }))} onNavigate={onNavigate} />
+        <FLinks title={t.footer.courses} items={[
+          { label: t.packages.items[0][1], path: "/courses" },
+          { label: t.pay.automatic, path: "/courses" },
           { label: "Risk 1", path: "/courses" },
           { label: "Risk 2", path: "/courses" },
-          { label: "Intensivkurs", path: "/courses" },
+          { label: t.packages.items[2][0], path: "/courses" },
         ]} onNavigate={onNavigate} />
         <div>
-          <h3 className="text-sm font-bold text-white">Kontakt</h3>
+          <h3 className="text-sm font-bold text-white">{t.footer.contact}</h3>
           <div className="mt-5 space-y-4 text-sm text-white/55">
             <a href="tel:031-3860086" className="flex items-center gap-3 hover:text-white"><Icon name="phone" className="h-4 w-4 text-primary-400" /> 031‑386 00 86</a>
             <a href="mailto:info@kornu.se" className="flex items-center gap-3 hover:text-white"><Icon name="mail" className="h-4 w-4 text-primary-400" /> info@kornu.se</a>
-            <a href="https://maps.app.goo.gl/WvBrSCZimUimjE9x7" target="_blank" rel="noopener" className="flex items-start gap-3 hover:text-white"><Icon name="pin" className="mt-0.5 h-4 w-4 shrink-0 text-primary-400" /> Västra Frölunda, nära Trafikverket, Högsbo, Göteborg</a>
+            <a href="https://maps.app.goo.gl/WvBrSCZimUimjE9x7" target="_blank" rel="noopener" className="flex items-start gap-3 hover:text-white"><Icon name="pin" className="mt-0.5 h-4 w-4 shrink-0 text-primary-400" /> Stockholm</a>
           </div>
         </div>
       </div>
       <div className="mx-auto mt-12 flex max-w-7xl flex-col justify-between gap-4 border-t border-white/10 pt-8 text-xs text-white/35 sm:flex-row">
-        <p>© 2026 Kör Nu Trafikskola AB. Alla rättigheter förbehållna.</p>
-        <p>Körskola i Göteborg 🇸🇪</p>
+        <p>© 2026 Kör Nu Trafikskola AB. {t.footer.rights}</p>
+        <p>{t.footer.city} 🇸🇪</p>
       </div>
     </footer>
   );
