@@ -2,14 +2,6 @@ import { useEffect, useRef } from "react";
 import { useLanguage } from "../../i18n";
 import { Icon } from "../Icon";
 
-const REVIEWS = [
-  { author: "Johanna Bergqvist", rating: 5, time: "för 2 veckor sedan", text: "Fantastisk körskola! Klarade uppkörningen på första försöket tack vare Kornu. Jättepedagogiska lärare.", avatar: "JB" },
-  { author: "Sven Malmström", rating: 5, time: "för 1 månad sedan", text: "Rekommenderar starkt! Riskettan och Risktvåan var otroligt lärorika. Professionellt team.", avatar: "SM" },
-  { author: "Emma Wallin", rating: 5, time: "för 3 månader sedan", text: "Tack för tålamodet! Klarade provet och är nu stolt bilförare.", avatar: "EW" },
-  { author: "Marcus Lindgren", rating: 5, time: "för 2 månader sedan", text: "Supersmidigt upplägg. Priset var rimligt och lärarna riktigt duktiga.", avatar: "ML" },
-  { author: "Fatima Al-Hassan", rating: 5, time: "för 1 vecka sedan", text: "Underbar skola! Lärarna pratar även arabiska vilket hjälpte mig enormt.", avatar: "FA" },
-];
-
 export function ReviewsCarousel() {
   const { t } = useLanguage();
   const trackRef = useRef<HTMLDivElement>(null);
@@ -35,7 +27,8 @@ export function ReviewsCarousel() {
     return () => cancelAnimationFrame(raf);
   }, []);
 
-  const items = [...REVIEWS, ...REVIEWS];
+  const reviews = t.reviews.items.map(([author, time, text, avatar]) => ({ author, rating: 5, time, text, avatar }));
+  const items = [...reviews, ...reviews];
 
   return (
     <section className="relative z-10 overflow-hidden border-y border-slate-100 bg-white py-14">

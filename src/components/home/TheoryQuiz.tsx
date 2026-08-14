@@ -1,37 +1,16 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useLanguage } from "../../i18n";
 
-type Question = {
-  id: number;
-  category: string;
-  question: string;
-  options: string[];
-  correct: number;
-  explanation: string;
-};
-
-const QUESTIONS: Question[] = [
-  { id: 1, category: "Vägmärken", question: "Vad innebär ett rött runt märke med en vit horisontell balk?", options: ["Stopp", "Förbud mot all trafik", "Förbud att stanna", "Motorväg slutar"], correct: 0, explanation: "Det röda runda märket med vit balk betyder stopp. Du måste stanna helt." },
-  { id: 2, category: "Vägmärken", question: "Vilket märke anger att du har väjningsplikt?", options: ["Röd cirkel", "Gul romb", "Vit triangel med röd kant", "Blå fyrkant"], correct: 2, explanation: "Den vita triangeln med röd kant och spets nedåt är väjningspliktsmärket." },
-  { id: 3, category: "Trafikregler", question: "I en okontrollerad korsning, vem har företräde?", options: ["Den som kör fortast", "Fordon från vänster", "Fordon från höger", "Den som kom först"], correct: 2, explanation: "Högerregeln gäller när inget annat anges." },
-  { id: 4, category: "Hastighet & Säkerhet", question: "Hur ökar bromssträckan om du dubblar hastigheten?", options: ["Dubbelt", "Tre gånger", "Fyra gånger", "Lika mycket"], correct: 2, explanation: "Bromssträckan ökar med kvadraten på hastigheten." },
-  { id: 5, category: "Alkohol & Droger", question: "Var går promillegränsen för rattfylleri i Sverige?", options: ["0,5 promille", "0,2 promille", "0,8 promille", "1,0 promille"], correct: 1, explanation: "Gränsen för rattfylleri i Sverige är 0,2 promille." },
-  { id: 6, category: "Riskutbildning", question: "Vad handlar Risktvåan om?", options: ["Alkohol och droger", "Halkbana och praktisk riskkörning", "Teoriprov", "Handledarkurs"], correct: 1, explanation: "Risktvåan är praktisk och handlar bland annat om halka, bromsning och sladd." },
-  { id: 7, category: "Förarprovet", question: "Hur många frågor måste du ha rätt på teoriprovet?", options: ["45 av 65", "52 av 65", "55 av 65", "60 av 65"], correct: 1, explanation: "Du behöver 52 rätt av 65 frågor för att bli godkänd." },
-  { id: 8, category: "Säkerhet", question: "Vad är defensiv körning?", options: ["Köra fort", "Förutse risker och anpassa körningen", "Köra nära bilen framför", "Använda mobiltelefon"], correct: 1, explanation: "Defensiv körning betyder att du planerar, håller avstånd och undviker onödiga risker." },
-];
-
-const CATEGORIES = ["Alla", ...Array.from(new Set(QUESTIONS.map((q) => q.category)))];
-
-function pickQuestions(category: string) {
-  const pool = category === "Alla" ? QUESTIONS : QUESTIONS.filter((q) => q.category === category);
+function pickQuestions<T extends { category: string }>(questions: T[], category: string, allLabel: string) {
+  const pool = category === allLabel ? questions : questions.filter((q) => q.category === category);
   return [...pool].sort(() => Math.random() - 0.5).slice(0, Math.min(6, pool.length));
 }
 
 export function TheoryQuiz() {
   const { t } = useLanguage();
-  const [category, setCategory] = useState("Alla");
-  const [questions, setQuestions] = useState(() => pickQuestions("Alla"));
+  const categories = useMemo(() => [t.quiz.all, ...Array.from(new Set(t.quiz.questions.map((q) => q.category)))], [t]);
+  const [category, setCategory] = useState(t.quiz.all);
+  const [questions, setQuestions] = useState(() => pickQuestions(t.quiz.questions, t.quiz.all, t.quiz.all));
   const [index, setIndex] = useState(0);
   const [selected, setSelected] = useState<number | null>(null);
   const [score, setScore] = useState(0);
@@ -41,12 +20,16 @@ export function TheoryQuiz() {
 
   const restart = (nextCategory = category) => {
     setCategory(nextCategory);
-    setQuestions(pickQuestions(nextCategory));
+    setQuestions(pickQuestions(t.quiz.questions, nextCategory, t.quiz.all));
     setIndex(0);
     setSelected(null);
     setScore(0);
     setDone(false);
   };
+
+  useEffect(() => {
+    restart(t.quiz.all);
+  }, [t]);
 
   const answer = (option: number) => {
     if (selected !== null) return;
@@ -80,7 +63,7 @@ export function TheoryQuiz() {
         </div>
 
         <div className="mb-4 flex flex-wrap items-center gap-2">
-          {CATEGORIES.map((item) => (
+          {categories.map((item) => (
             <button key={item} onClick={() => restart(item)} className={`rounded-full border px-3 py-1.5 text-[10px] font-extrabold uppercase tracking-wider transition ${category === item ? "border-primary bg-primary text-white" : "border-slate-200 bg-white text-slate-600 hover:border-primary-200"}`}>
               {item}
             </button>

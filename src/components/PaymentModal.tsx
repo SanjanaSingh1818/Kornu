@@ -1,6 +1,7 @@
 import { useCallback, useState } from "react";
 import { motion } from "framer-motion";
 import { useLanguage } from "../i18n";
+import { PACKAGES } from "../data";
 import type { Package } from "../types";
 import { Icon } from "./Icon";
 
@@ -8,6 +9,10 @@ type PayStep = "form" | "processing" | "success";
 
 export function PaymentModal({ pkg, onClose }: { pkg: Package; onClose: () => void }) {
   const { t } = useLanguage();
+  const packageIndex = PACKAGES.findIndex((item) => item.id === pkg.id);
+  const translatedPackage = packageIndex >= 0 ? t.packages.items[packageIndex] : null;
+  const packageName = translatedPackage?.[0] || pkg.name;
+  const packageLessons = translatedPackage?.[1] || pkg.lessons;
   const [step, setStep] = useState<PayStep>("form");
   const [method, setMethod] = useState<"card" | "swish">("card");
   const [form, setForm] = useState({ name: "", email: "", phone: "", personalNumber: "", transmission: "", notes: "", cardNum: "", expiry: "", cvc: "" });
@@ -25,7 +30,7 @@ export function PaymentModal({ pkg, onClose }: { pkg: Package; onClose: () => vo
       <motion.div initial={{ opacity: 0, scale: .96, y: 24 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: .96, y: 24 }} transition={{ type: "spring", damping: 28, stiffness: 340 }} className="modal-content">
         <div className="sticky top-0 z-10 flex items-center justify-between border-b border-primary-100 bg-white/95 px-6 py-4 backdrop-blur-xl rounded-t-3xl">
           <h2 className="text-lg font-extrabold text-dark">{step === "success" ? t.pay.successTitle : t.pay.title}</h2>
-          <button onClick={onClose} className="grid h-9 w-9 place-items-center rounded-xl bg-primary-50 text-slate-500 transition hover:bg-primary-100" aria-label="Stäng">
+          <button onClick={onClose} className="grid h-9 w-9 place-items-center rounded-xl bg-primary-50 text-slate-500 transition hover:bg-primary-100" aria-label={t.pay.close}>
             <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><path d="M18 6 6 18M6 6l12 12" /></svg>
           </button>
         </div>
@@ -34,8 +39,8 @@ export function PaymentModal({ pkg, onClose }: { pkg: Package; onClose: () => vo
           <form onSubmit={handlePay} className="space-y-5 p-6">
             <div className="rounded-xl bg-primary-50 p-4">
               <p className="text-xs font-bold uppercase tracking-wider text-primary">{t.pay.selected}</p>
-              <p className="mt-1 text-lg font-extrabold text-dark">{pkg.name}</p>
-              <p className="text-sm text-slate-600">{pkg.lessons}</p>
+              <p className="mt-1 text-lg font-extrabold text-dark">{packageName}</p>
+              <p className="text-sm text-slate-600">{packageLessons}</p>
               <div className="mt-3 flex items-baseline gap-2">
                 <span className="text-2xl font-black text-dark">{pkg.price.toLocaleString("sv-SE")} kr</span>
                 {pkg.originalPrice && <span className="text-sm text-slate-400 line-through">{pkg.originalPrice.toLocaleString("sv-SE")} kr</span>}
@@ -96,7 +101,7 @@ export function PaymentModal({ pkg, onClose }: { pkg: Package; onClose: () => vo
               <div className="rounded-xl border border-primary-200/60 bg-primary-50/50 p-5 text-center">
                 <p className="text-4xl">📱</p>
                 <p className="mt-3 text-sm font-semibold text-dark">{t.pay.swish}</p>
-                <p className="mt-2 text-sm text-slate-600">Du kommer att omdirigeras till Swish-appen för att slutföra betalningen på <strong>{pkg.price.toLocaleString("sv-SE")} kr</strong>.</p>
+                <p className="mt-2 text-sm text-slate-600">{t.pay.swishRedirect} <strong>{pkg.price.toLocaleString("sv-SE")} kr</strong>.</p>
               </div>
             )}
 
@@ -126,7 +131,7 @@ export function PaymentModal({ pkg, onClose }: { pkg: Package; onClose: () => vo
               {t.pay.thanks}
             </p>
             <div className="mt-6 rounded-xl bg-primary-50 px-5 py-3 text-sm font-bold text-primary">
-              Ordernummer: KN-{Date.now().toString(36).toUpperCase().slice(-6)}
+              {t.pay.orderNumber}: KN-{Date.now().toString(36).toUpperCase().slice(-6)}
             </div>
             <button onClick={onClose} className="mt-8 rounded-xl bg-dark px-8 py-3 text-sm font-bold text-white transition hover:bg-primary-900">
               {t.pay.close}

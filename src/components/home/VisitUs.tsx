@@ -16,7 +16,7 @@ export function VisitUs() {
             {[
               { icon: "pin", title: t.visit.address, text: "Sveavägen 122\n113 50 Stockholm", link: "https://maps.google.com/?q=Sveavägen+122,+Stockholm" },
               { icon: "phone", title: t.visit.contact, text: "031-386 00 86\ninfo@kornu.se", link: "mailto:info@kornu.se" },
-              { icon: "calendar", title: t.visit.hours, text: "Mon-Thu 09:00-18:00\nFriday 09:00-16:00\nSaturday 10:00-14:00", link: "" },
+              { icon: "calendar", title: t.visit.hours, text: t.visit.schedule, link: "" },
             ].map((item) => (
               <div key={item.title} className="rounded-2xl border border-slate-200 bg-slate-50 p-5 shadow-sm">
                 <div className="mb-3 grid h-10 w-10 place-items-center rounded-xl bg-primary-50 text-primary-dark">

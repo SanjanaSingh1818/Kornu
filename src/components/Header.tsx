@@ -118,7 +118,7 @@ export function Header({ path, onNavigate, onBook }: { path: PagePath; onNavigat
             031‑386 00 86
           </a>
           <button onClick={onBook} className="rounded-xl bg-primary px-3.5 py-2.5 text-sm font-bold text-white shadow-[0_10px_28px_rgba(11,132,87,0.25)] transition hover:-translate-y-0.5 hover:bg-primary-600 sm:px-5">
-            <span className="sm:hidden">Boka</span>
+            <span className="sm:hidden">{t.nav.book}</span>
             <span className="hidden sm:inline">{t.nav.book}</span>
           </button>
           <button onClick={() => setOpen(!open)} className="grid h-10 w-10 place-items-center rounded-xl bg-slate-950/[0.04] text-slate-800 transition hover:bg-primary-50 xl:hidden" aria-label="Meny">
