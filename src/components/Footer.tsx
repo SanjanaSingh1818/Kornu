@@ -22,8 +22,8 @@ export function Footer({ onNavigate }: { onNavigate: (path: PagePath) => void })
   const { t } = useLanguage();
   const navLabels: Record<PagePath, string> = {
     "/": t.nav.home,
-    "/courses": t.nav.services,
-    "/packages": t.packages.tag,
+    "/courses": t.nav.courses,
+    "/packages": t.nav.packages,
     "/simulator": t.nav.simulator,
     "/gallery": t.nav.gallery,
     "/about": t.nav.about,

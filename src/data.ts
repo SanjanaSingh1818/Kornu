@@ -1,11 +1,12 @@
 import type { Package, PagePath } from "./types";
 
 export const NAV: { label: string; path: PagePath }[] = [
-  { label: "Home page", path: "/" },
-  { label: "Services", path: "/courses" },
+  { label: "Home", path: "/" },
+  { label: "Courses", path: "/courses" },
+  { label: "Packages", path: "/packages" },
   { label: "Simulator", path: "/simulator" },
   { label: "Gallery", path: "/gallery" },
-  { label: "About Us", path: "/about" },
+  { label: "About", path: "/about" },
   { label: "Kontakt", path: "/contact" },
 ];
 
