@@ -70,7 +70,7 @@ export function Hero({ onBook }: { onBook: () => void }) {
     >
       {/* Background Image */}
       <motion.img
-        src="/images/hero-green.jpg"
+        src="/images/hero-green.png"
         alt="Kör Nu Driving School"
         className="absolute inset-0 h-full w-full object-cover object-center"
         style={{
