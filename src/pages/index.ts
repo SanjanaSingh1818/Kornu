@@ -5,3 +5,4 @@ export { GalleryPage } from "./GalleryPage";
 export { HomePage } from "./HomePage";
 export { PackagesPage } from "./PackagesPage";
 export { SimulatorPage } from "./SimulatorPage";
+export { PaymentCancelledPage, PaymentSuccessPage } from "./PaymentResultPage";

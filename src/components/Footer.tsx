@@ -28,6 +28,8 @@ export function Footer({ onNavigate }: { onNavigate: (path: PagePath) => void })
     "/gallery": t.nav.gallery,
     "/about": t.nav.about,
     "/contact": t.nav.contact,
+    "/payment-success": t.nav.home,
+    "/payment-cancelled": t.nav.home,
   };
   return (
     <footer className="bg-dark px-6 py-16 text-white">
@@ -45,11 +47,11 @@ export function Footer({ onNavigate }: { onNavigate: (path: PagePath) => void })
         </div>
         <FLinks title={t.footer.quick} items={NAV.map((item) => ({ ...item, label: navLabels[item.path] }))} onNavigate={onNavigate} />
         <FLinks title={t.footer.courses} items={[
-          { label: t.packages.items[0][1], path: "/courses" },
+          { label: String(t.packages.items[0][1]), path: "/courses" },
           { label: t.pay.automatic, path: "/courses" },
           { label: "Risk 1", path: "/courses" },
           { label: "Risk 2", path: "/courses" },
-          { label: t.packages.items[2][0], path: "/courses" },
+          { label: String(t.packages.items[2][0]), path: "/courses" },
         ]} onNavigate={onNavigate} />
         <div>
           <h3 className="text-sm font-bold text-white">{t.footer.contact}</h3>

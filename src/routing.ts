@@ -4,7 +4,7 @@ import type { PagePath } from "./types";
 
 export function getPagePath(value: string): PagePath {
   const normalized = value.replace(/\/$/, "") || "/";
-  return NAV.some((item) => item.path === normalized) ? normalized as PagePath : "/";
+  return normalized === "/payment-success" || normalized === "/payment-cancelled" || NAV.some((item) => item.path === normalized) ? normalized as PagePath : "/";
 }
 
 export function handleRouteClick(e: React.MouseEvent<HTMLAnchorElement>, path: PagePath, onNavigate: (path: PagePath) => void) {

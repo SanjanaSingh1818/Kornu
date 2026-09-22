@@ -10,4 +10,5 @@ export { Packages } from "./Packages";
 export { ReviewsCarousel } from "./ReviewsCarousel";
 export { SimulatorSection } from "./SimulatorSection";
 export { TheoryQuiz } from "./TheoryQuiz";
+export { Trainers } from "./Trainers";
 export { VisitUs } from "./VisitUs";

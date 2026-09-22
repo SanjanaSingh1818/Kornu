@@ -20,6 +20,8 @@ export function Header({ path, onNavigate, onBook }: { path: PagePath; onNavigat
     "/gallery": t.nav.gallery,
     "/about": t.nav.about,
     "/contact": t.nav.contact,
+    "/payment-success": t.nav.home,
+    "/payment-cancelled": t.nav.home,
   };
   const activeLanguage = languageOptions.find((item) => item.code === lang) || languageOptions[0];
 
