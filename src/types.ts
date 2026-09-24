@@ -3,6 +3,7 @@ export type PagePath = "/" | "/courses" | "/packages" | "/simulator" | "/gallery
 export type Package = {
   id: string;
   name: string;
+  description?: string;
   lessons: string;
   includes: string[];
   price: number;

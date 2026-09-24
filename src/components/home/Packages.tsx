@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { PACKAGES } from "../../data";
+import { PACKAGES, PAYMENT_TEST_PACKAGE } from "../../data";
 import { useLanguage } from "../../i18n";
 import type { Package } from "../../types";
 import { Icon } from "../Icon";
@@ -12,7 +12,7 @@ function PackageCard({ pkg, index, onSelect, loading }: { pkg: Package; index: n
   const name = typeof translated?.[0] === "string" ? translated[0] : pkg.name;
   const lessons = typeof translated?.[1] === "string" ? translated[1] : pkg.lessons;
   const includes = Array.isArray(translated?.[2]) ? translated[2] : pkg.includes;
-  const description = t.packages.descriptions[index];
+  const description = pkg.description ?? t.packages.descriptions[index];
   const visibleIncludes = includes.slice(0, 3);
 
   return (
@@ -35,5 +35,6 @@ function PackageCard({ pkg, index, onSelect, loading }: { pkg: Package; index: n
 
 export function Packages({ onSelect, loading = false }: { onSelect: (pkg: Package) => void; loading?: boolean }) {
   const { t } = useLanguage();
-  return <section id="paket" className="bg-slate-50 px-4 py-16 sm:px-6 sm:py-20"><div className="mx-auto max-w-7xl"><div className="mx-auto max-w-3xl text-center"><p className="text-xs font-black uppercase tracking-[.22em] text-primary">{t.packages.tag}</p><h2 className="mt-3 text-3xl font-extrabold tracking-tight text-dark sm:text-4xl">{t.packages.title}</h2><p className="mt-4 text-sm leading-7 text-slate-600">{t.packages.text}</p></div><div className="mt-10 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">{PACKAGES.map((pkg, index) => <PackageCard key={pkg.id} pkg={pkg} index={index} onSelect={onSelect} loading={loading} />)}</div><div className="mt-10 rounded-2xl border border-primary-200/40 bg-primary-50/60 p-6 text-center"><p className="text-sm font-semibold text-slate-700"><Icon name="phone" className="mr-2 inline-block h-4 w-4 text-primary" />{t.packages.help} {t.packages.call} <a href="tel:031-3860086" className="font-bold text-primary underline">031‑386 00 86</a> / <a href="mailto:info@kornu.se" className="font-bold text-primary underline">info@kornu.se</a></p></div></div></section>;
+  const visiblePackages = [...PACKAGES, PAYMENT_TEST_PACKAGE];
+  return <section id="paket" className="bg-slate-50 px-4 py-16 sm:px-6 sm:py-20"><div className="mx-auto max-w-7xl"><div className="mx-auto max-w-3xl text-center"><p className="text-xs font-black uppercase tracking-[.22em] text-primary">{t.packages.tag}</p><h2 className="mt-3 text-3xl font-extrabold tracking-tight text-dark sm:text-4xl">{t.packages.title}</h2><p className="mt-4 text-sm leading-7 text-slate-600">{t.packages.text}</p></div><div className="mt-10 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">{visiblePackages.map((pkg, index) => <PackageCard key={pkg.id} pkg={pkg} index={index} onSelect={onSelect} loading={loading} />)}</div><div className="mt-10 rounded-2xl border border-primary-200/40 bg-primary-50/60 p-6 text-center"><p className="text-sm font-semibold text-slate-700"><Icon name="phone" className="mr-2 inline-block h-4 w-4 text-primary" />{t.packages.help} {t.packages.call} <a href="tel:031-3860086" className="font-bold text-primary underline">031‑386 00 86</a> / <a href="mailto:info@kornu.se" className="font-bold text-primary underline">info@kornu.se</a></p></div></div></section>;
 }

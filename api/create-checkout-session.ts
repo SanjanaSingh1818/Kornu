@@ -1,4 +1,4 @@
-import { getStripe } from "./stripe/server.js";
+import { getStripe } from "./stripe/server";
 
 type Request = { method?: string; body?: unknown; headers: Record<string, string | string[] | undefined> };
 type Response = { status: (code: number) => Response; json: (body: unknown) => void };
@@ -10,6 +10,7 @@ const priceEnvByPackage: Record<string, string> = {
   "pkt-mellan": "STRIPE_PRICE_ID_PKT_MELLAN",
   "pkt-stor": "STRIPE_PRICE_ID_PKT_STOR",
   "pkt-intensiv": "STRIPE_PRICE_ID_PKT_INTENSIV",
+  "payment-test": "STRIPE_PRICE_ID_PAYMENT_TEST",
 };
 
 export default async function handler(req: Request, res: Response) {

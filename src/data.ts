@@ -35,6 +35,17 @@ export const PACKAGES: Package[] = [
   { id: "pkt-intensiv", name: "Komplettpaket", lessons: "25 körlektioner (80 min) + Risk 1-2 + Teori", includes: ["25 körlektioner (80 min)", "Risk 1 & Risk 2", "Handledarutbildning", "Prioriterade tider", "Låna bil till uppkörning"], price: 24500, originalPrice: null, popular: false },
 ];
 
+export const PAYMENT_TEST_PACKAGE: Package = {
+  id: "payment-test",
+  name: "Payment Test",
+  description: "Live payment test",
+  lessons: "One-time payment",
+  includes: ["Payment Test", "1 SEK", "SEK"],
+  price: 1,
+  originalPrice: null,
+  popular: false,
+};
+
 export const COURSES = [
   { title: "Manuell körning", text: "Lär dig kopplingskontroll och stadskörning med professionell handledning.", price: "Från 495 kr / lektion", image: "/images/course-city.jpg" },
   { title: "Automat körning", text: "Fokusera på trafikflöde, säkerhet och beslutsfattande utan växelstress.", price: "Från 495 kr / lektion", image: "/images/course-auto.jpg" },

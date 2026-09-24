@@ -1,5 +1,5 @@
 import Stripe from "stripe";
-import { getStripe } from "./server.js";
+import { getStripe } from "./server";
 
 type Request = {
   method?: string;
