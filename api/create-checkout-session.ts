@@ -1,4 +1,4 @@
-import { getStripe } from "./stripe/server";
+import { getStripe } from "./stripe/server.js";
 
 type Request = { method?: string; body?: unknown; headers: Record<string, string | string[] | undefined> };
 type Response = { status: (code: number) => Response; json: (body: unknown) => void };
