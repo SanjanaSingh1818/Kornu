@@ -1,7 +1,6 @@
 import { lazy, Suspense, useCallback, useEffect, useState } from "react";
 import { Footer } from "./components/Footer";
 import { Header } from "./components/Header";
-import { PACKAGES } from "./data";
 import { getPagePath } from "./routing";
 import { LanguageProvider } from "./i18n";
 import type { Package, PagePath } from "./types";
@@ -19,9 +18,23 @@ export default function App() {
   const startCheckout = useCallback(async (pkg: Package) => {
     setCheckoutError(null);
     setCheckoutLoading(true);
-    try { window.location.assign(await createCheckoutSession(pkg.id)); } catch (error) { setCheckoutError(error instanceof Error ? error.message : "Unable to start checkout."); setCheckoutLoading(false); }
+    try {
+      if (!pkg.priceId) {
+        throw new Error("This product is not configured for Stripe Checkout yet.");
+      }
+      window.location.assign(await createCheckoutSession(pkg.priceId, "priceId"));
+    } catch (error) {
+      setCheckoutError(error instanceof Error ? error.message : "Unable to start checkout.");
+      setCheckoutLoading(false);
+    }
   }, []);
-  const openDefaultPackage = () => void startCheckout(PACKAGES[2]);
+
+  const openDefaultPackage = useCallback(() => {
+    const nextPath: PagePath = "/packages";
+    window.history.pushState({}, "", nextPath);
+    setPath(nextPath);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, []);
 
   const navigate = useCallback((nextPath: PagePath) => {
     window.history.pushState({}, "", nextPath);

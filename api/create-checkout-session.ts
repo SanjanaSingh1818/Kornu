@@ -20,10 +20,14 @@ export default async function handler(req: Request, res: Response) {
     const stripe = getStripe();
     const body = typeof req.body === "string" ? JSON.parse(req.body) : req.body;
     const packageId = body && typeof body === "object" && "packageId" in body && typeof body.packageId === "string" ? body.packageId : "";
-    const envName = priceEnvByPackage[packageId];
-    const priceId = envName ? process.env[envName] : undefined;
-    if (!priceId || !/^price_[A-Za-z0-9]+$/.test(priceId)) return res.status(400).json({ error: "This package is not configured for Stripe Checkout yet." });
-    const price = await stripe.prices.retrieve(priceId);
+    const priceIdFromBody = body && typeof body === "object" && "priceId" in body && typeof body.priceId === "string" ? body.priceId : "";
+    const resolvedPriceId = priceIdFromBody || (packageId ? (priceEnvByPackage[packageId] ? process.env[priceEnvByPackage[packageId]] : undefined) : undefined);
+
+    if (!resolvedPriceId || !/^price_[A-Za-z0-9]+$/.test(resolvedPriceId)) {
+      return res.status(400).json({ error: "This package is not configured for Stripe Checkout yet." });
+    }
+
+    const price = await stripe.prices.retrieve(resolvedPriceId);
     if (!price.active || price.currency !== "sek") return res.status(400).json({ error: "The configured Stripe Price must be active and denominated in SEK." });
     const session = await stripe.checkout.sessions.create({
       mode: "payment",
@@ -31,7 +35,7 @@ export default async function handler(req: Request, res: Response) {
       line_items: [{ price: price.id, quantity: 1 }],
       success_url: `${getOrigin(req)}/payment-success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${getOrigin(req)}/payment-cancelled`,
-      metadata: { packageId },
+      metadata: { packageId: packageId || priceIdFromBody },
     });
     console.info("Stripe Checkout Session diagnostics", {
       id: session.id,

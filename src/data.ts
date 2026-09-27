@@ -27,12 +27,12 @@ export const JOURNEY = [
 ];
 
 export const PACKAGES: Package[] = [
-  { id: "pkt-5", name: "Grundpaketet", lessons: "5 körlektioner (80 min)", includes: ["5 körlektioner (80 min)", "Digitalt teoripaket", "Personlig studieplan"], price: 4900, originalPrice: null, popular: false },
-  { id: "pkt-total-5", name: "Mellanpaketet", lessons: "10 körlektioner (80 min) + Risk 1", includes: ["10 körlektioner (80 min)", "Riskettan", "Obegränsade teoriprov", "Låna bil till prov"], price: 9800, originalPrice: null, popular: true },
-  { id: "pkt-10", name: "Intensivpaket", lessons: "15 körlektioner (80 min) + Risk 1 & 2", includes: ["15 körlektioner (80 min)", "Risk 1 & Risk 2", "Komplett teoripaket", "Provförberedelse"], price: 15200, originalPrice: null, popular: false },
-  { id: "pkt-mellan", name: "Mellanpaket", lessons: "10 körlektioner (80 min) + Risk 1-2 + Teori", includes: ["10 körlektioner (80 min)", "Risk 1 & Risk 2", "Teoriutbildning & inskrivning", "Körhäfte ingår"], price: 12999, originalPrice: 14500, popular: false },
-  { id: "pkt-stor", name: "Stort Paket", lessons: "15 körlektioner (80 min) + Risk 1-2 + Teori", includes: ["15 körlektioner (80 min)", "Risk 1 & Risk 2", "Teoriutbildning & inskrivning", "Körhäfte ingår"], price: 19300, originalPrice: null, popular: false },
-  { id: "pkt-intensiv", name: "Komplettpaket", lessons: "25 körlektioner (80 min) + Risk 1-2 + Teori", includes: ["25 körlektioner (80 min)", "Risk 1 & Risk 2", "Handledarutbildning", "Prioriterade tider", "Låna bil till uppkörning"], price: 24500, originalPrice: null, popular: false },
+  { id: "pkt-5", name: "Grundpaketet", description: "Grundpaketet för körkortet.", lessons: "5 körlektioner (80 min)", includes: ["5 körlektioner (80 min)", "Digitalt teoripaket", "Personlig studieplan"], price: 4900, currency: "sek", priceId: "legacy-pkt-5", features: ["5 körlektioner (80 min)", "Digitalt teoripaket", "Personlig studieplan"], originalPrice: null, popular: false, sortOrder: 1, collections: ["driving-lesson-package"] },
+  { id: "pkt-total-5", name: "Mellanpaketet", description: "Mellanpaket med risk 1 inkluderat.", lessons: "10 körlektioner (80 min) + Risk 1", includes: ["10 körlektioner (80 min)", "Riskettan", "Obegränsade teoriprov", "Låna bil till prov"], price: 9800, currency: "sek", priceId: "legacy-pkt-total-5", features: ["10 körlektioner (80 min)", "Riskettan", "Obegränsade teoriprov", "Låna bil till prov"], originalPrice: null, popular: true, sortOrder: 2, collections: ["total-package"] },
+  { id: "pkt-10", name: "Intensivpaket", description: "Intensivpaket för snabbare utveckling.", lessons: "15 körlektioner (80 min) + Risk 1 & 2", includes: ["15 körlektioner (80 min)", "Risk 1 & Risk 2", "Komplett teoripaket", "Provförberedelse"], price: 15200, currency: "sek", priceId: "legacy-pkt-10", features: ["15 körlektioner (80 min)", "Risk 1 & Risk 2", "Komplett teoripaket", "Provförberedelse"], originalPrice: null, popular: false, sortOrder: 3, collections: ["best-prices"] },
+  { id: "pkt-mellan", name: "Mellanpaket", description: "Mellanpaket med teori och risk 1-2.", lessons: "10 körlektioner (80 min) + Risk 1-2 + Teori", includes: ["10 körlektioner (80 min)", "Risk 1 & Risk 2", "Teoriutbildning & inskrivning", "Körhäfte ingår"], price: 12999, currency: "sek", priceId: "legacy-pkt-mellan", features: ["10 körlektioner (80 min)", "Risk 1 & Risk 2", "Teoriutbildning & inskrivning", "Körhäfte ingår"], originalPrice: 14500, popular: false, sortOrder: 4, collections: ["courses"] },
+  { id: "pkt-stor", name: "Stort Paket", description: "Stort paket för ett bredare körkortsuppdrag.", lessons: "15 körlektioner (80 min) + Risk 1-2 + Teori", includes: ["15 körlektioner (80 min)", "Risk 1 & Risk 2", "Teoriutbildning & inskrivning", "Körhäfte ingår"], price: 19300, currency: "sek", priceId: "legacy-pkt-stor", features: ["15 körlektioner (80 min)", "Risk 1 & Risk 2", "Teoriutbildning & inskrivning", "Körhäfte ingår"], originalPrice: null, popular: false, sortOrder: 5, collections: ["start-up-package"] },
+  { id: "pkt-intensiv", name: "Komplettpaket", description: "Komplett paket med intensiv körträning.", lessons: "25 körlektioner (80 min) + Risk 1-2 + Teori", includes: ["25 körlektioner (80 min)", "Risk 1 & Risk 2", "Handledarutbildning", "Prioriterade tider", "Låna bil till uppkörning"], price: 24500, currency: "sek", priceId: "legacy-pkt-intensiv", features: ["25 körlektioner (80 min)", "Risk 1 & Risk 2", "Handledarutbildning", "Prioriterade tider", "Låna bil till uppkörning"], originalPrice: null, popular: false, sortOrder: 6, collections: ["total-package"] },
 ];
 
 export const PAYMENT_TEST_PACKAGE: Package = {
@@ -41,9 +41,14 @@ export const PAYMENT_TEST_PACKAGE: Package = {
   description: "Live payment test",
   lessons: "One-time payment",
   includes: ["Payment Test", "1 SEK", "SEK"],
+  currency: "sek",
+  priceId: "legacy-payment-test",
+  features: ["Payment Test", "1 SEK", "SEK"],
   price: 1,
   originalPrice: null,
   popular: false,
+  sortOrder: 999,
+  collections: [],
 };
 
 export const COURSES = [

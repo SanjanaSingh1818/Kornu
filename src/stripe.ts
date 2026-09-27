@@ -1,7 +1,9 @@
-import type { Package } from "./types";
-
-export async function createCheckoutSession(packageId: Package["id"]): Promise<string> {
-  const response = await fetch("/api/create-checkout-session", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ packageId }) });
+export async function createCheckoutSession(value: string, mode: "packageId" | "priceId" = "packageId"): Promise<string> {
+  const response = await fetch("/api/create-checkout-session", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(mode === "priceId" ? { priceId: value } : { packageId: value }),
+  });
   const body = await response.text();
   let payload: { url?: string; error?: string } = {};
   try {
