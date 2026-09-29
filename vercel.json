@@ -3,6 +3,34 @@
     {
       "source": "/payment-success",
       "destination": "/index.html"
+    },
+    {
+      "source": "/payment-cancelled",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/packages",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/courses",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/simulator",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/gallery",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/about",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/contact",
+      "destination": "/index.html"
     }
   ]
 }

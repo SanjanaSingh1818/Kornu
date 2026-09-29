@@ -34,11 +34,34 @@ export default async function handler(req: Request, res: Response) {
     const catalog: CatalogProductPayload[] = [];
 
     for (const product of products) {
-      if (EXCLUDED_PRODUCT_IDS.has(product.id)) continue;
-      if (!isWebsiteVisible(product.metadata?.website_visible)) continue;
+      const priceInspection = await inspectPrices(stripe, product);
+      const websiteVisibleValue = product.metadata?.website_visible;
+      const websiteVisible = isWebsiteVisible(websiteVisibleValue);
+      const excludedById = EXCLUDED_PRODUCT_IDS.has(product.id);
+      const exclusionReason = excludedById
+        ? "product_id_excluded"
+        : !priceInspection.selectedPrice
+          ? "no_valid_active_one_time_sek_price"
+          : !websiteVisible
+            ? "website_visible_not_true"
+            : null;
 
-      const price = await selectValidPrice(stripe, product);
-      if (!price) continue;
+      console.info("Stripe catalog product diagnostic", {
+        name: product.name,
+        id: product.id,
+        active: product.active,
+        defaultPrice: priceInspection.defaultPriceInfo,
+        activePriceCount: priceInspection.activePriceCount,
+        rejectedActivePriceCounts: priceInspection.rejectedActivePriceCounts,
+        selectedPrice: priceInspection.selectedPrice ? safePriceInfo(priceInspection.selectedPrice) : null,
+        website_visible: websiteVisibleValue ?? null,
+        collections: product.metadata?.collections ?? null,
+        excludedById,
+        exclusionReason,
+      });
+
+      if (exclusionReason) continue;
+      const price = priceInspection.selectedPrice!;
 
       const metadata = product.metadata ?? {};
       const features = collectFeatures(metadata);
@@ -87,31 +110,81 @@ async function listAllProducts(stripe: ReturnType<typeof getStripe>) {
 
     products.push(...page.data);
     if (!page.has_more) break;
-    startingAfter = page.data[page.data.length - 1]?.id;
+    const lastProductId = page.data[page.data.length - 1]?.id;
+    if (!lastProductId) throw new Error("Stripe product pagination returned an empty page with more results.");
+    startingAfter = lastProductId;
   }
 
   return products;
 }
 
-async function selectValidPrice(stripe: ReturnType<typeof getStripe>, product: { id: string; default_price?: string | { id?: string; active?: boolean; type?: string; currency?: string; unit_amount?: number | null } | null }) {
-  const priceList = await stripe.prices.list({ product: product.id, active: true, limit: 100 });
-  const validCandidates = priceList.data.filter((price) => {
-    if (!price.active || price.type !== "one_time" || price.currency !== "sek") return false;
-    if (price.unit_amount == null || price.unit_amount <= 0) return false;
+async function inspectPrices(stripe: ReturnType<typeof getStripe>, product: { id: string; default_price?: string | { id?: string; active?: boolean; type?: string; currency?: string; unit_amount?: number | null } | null }) {
+  const activePrices: Awaited<ReturnType<typeof stripe.prices.list>>["data"] = [];
+  let startingAfter: string | undefined;
+
+  while (true) {
+    const page = await stripe.prices.list({ product: product.id, active: true, limit: 100, starting_after: startingAfter });
+    activePrices.push(...page.data);
+    if (!page.has_more) break;
+    const lastPriceId = page.data[page.data.length - 1]?.id;
+    if (!lastPriceId) throw new Error(`Stripe price pagination returned an empty page for product ${product.id}.`);
+    startingAfter = lastPriceId;
+  }
+
+  const defaultPriceId = typeof product.default_price === "string"
+    ? product.default_price
+    : product.default_price?.id;
+  let defaultPrice = typeof product.default_price === "object" && product.default_price
+    ? product.default_price
+    : activePrices.find((price) => price.id === defaultPriceId) ?? null;
+
+  if (!defaultPrice && defaultPriceId) {
+    try {
+      defaultPrice = await stripe.prices.retrieve(defaultPriceId);
+    } catch {
+      defaultPrice = null;
+    }
+  }
+
+  const rejectedActivePriceCounts = { notOneTime: 0, notSek: 0, missingOrInvalidAmount: 0 };
+  const validCandidates = activePrices.filter((price) => {
+    if (price.type !== "one_time") {
+      rejectedActivePriceCounts.notOneTime += 1;
+      return false;
+    }
+    if (price.currency !== "sek") {
+      rejectedActivePriceCounts.notSek += 1;
+      return false;
+    }
+    if (price.unit_amount == null || price.unit_amount <= 0) {
+      rejectedActivePriceCounts.missingOrInvalidAmount += 1;
+      return false;
+    }
     return true;
   });
 
-  if (validCandidates.length === 0) return null;
-
-  const defaultPrice = typeof product.default_price === "object" && product.default_price ? product.default_price : null;
-  const validDefault = defaultPrice && defaultPrice.active && defaultPrice.type === "one_time" && defaultPrice.currency === "sek" && (defaultPrice.unit_amount ?? 0) > 0 ? defaultPrice : null;
-
-  if (validDefault) {
-    return validDefault;
-  }
+  const validDefault = defaultPrice && defaultPrice.active && defaultPrice.type === "one_time" && defaultPrice.currency === "sek" && (defaultPrice.unit_amount ?? 0) > 0
+    ? activePrices.find((price) => price.id === defaultPrice!.id) ?? null
+    : null;
 
   validCandidates.sort((a, b) => (a.unit_amount ?? 0) - (b.unit_amount ?? 0) || a.id.localeCompare(b.id));
-  return validCandidates[0];
+
+  return {
+    selectedPrice: validDefault ?? validCandidates[0] ?? null,
+    activePriceCount: activePrices.length,
+    defaultPriceInfo: defaultPrice ? safePriceInfo(defaultPrice) : defaultPriceId ? { id: defaultPriceId, unavailable: true } : null,
+    rejectedActivePriceCounts,
+  };
+}
+
+function safePriceInfo(price: { id?: string; type?: string; active?: boolean; currency?: string; unit_amount?: number | null }) {
+  return {
+    id: price.id ?? null,
+    type: price.type ?? null,
+    active: price.active ?? null,
+    currency: price.currency ?? null,
+    unit_amount: price.unit_amount ?? null,
+  };
 }
 
 function collectFeatures(metadata: Record<string, string>) {

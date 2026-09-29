@@ -67,7 +67,18 @@ const sv = {
   final: { tag: "Redo att starta i Stockholm?", title: "Boka din första lektion och få en personlig körkortsplan.", button: "Boka din lektion", location: "Stockholm" },
   pay: { title: "Slutför betalning", successTitle: "Betalning genomförd", selected: "Valt paket", contact: "Kontaktuppgifter", name: "Namn", email: "E-post", phone: "Telefon", personal: "Personnummer (ÅÅÅÅMMDD-XXXX)", transmission: "Välj växellåda", manual: "Manuell", automatic: "Automat", notes: "Anteckningar", method: "Betalningsmetod", card: "Kort", swish: "Swish", cardNumber: "Kortnummer", expiry: "MM / ÅÅ", secure: "Säker betalning", pay: "Betala", openSwish: "Öppna Swish", swishRedirect: "", processing: "", wait: "", done: "", thanks: "", orderNumber: "", close: "Stäng", checkout: "Stripe Checkout", successPending: "Tack för din beställning", successPendingText: "Din betalning behandlas av Stripe. Den bekräftas först när Stripe skickar en webhook till vår server.", cancelled: "Betalningen avbröts", cancelledText: "Ingen betalning har bekräftats. Du kan återvända och försöka igen." },
   footer: { text: "Kornu Trafikskola i Stockholm hjälper nya förare att bli trygga, säkra och självständiga. Utbildning på svenska, engelska och arabiska.", quick: "Snabblänkar", courses: "Kurser", contact: "Kontakt", rights: "Alla rättigheter förbehållna.", city: "Körskola i Stockholm" },
-  about: { eyebrow: "Om oss", title: "Kornu Trafikskola Stockholm", text: "Vi hjälper elever att bli trygga förare med tydliga paket, teoristöd och modern lektionsplanering." },
+  about: {
+    eyebrow: "Om Kör Nu Trafikskola",
+    title: "Kör Nu Trafikskola i Göteborg",
+    text: "Kör Nu Trafikskola i Göteborg erbjuder körkortsutbildning på svenska, engelska, kurdiska och arabiska.",
+    paragraphs: [
+      "Kör Nu Trafikskola i Göteborg erbjuder körkortsutbildning på svenska, engelska, kurdiska och arabiska.",
+      "Skolan har digitala teorimaterial med ljudstöd, över 100 körövningar, samt smidig digital bokning av lektioner.",
+      "Trafikskolan ligger i Västra Frölunda, nära Trafikverket i Högsbo, vilket ger eleverna möjlighet att öva på vanliga teststräckor.",
+    ],
+    findUs: "Hitta oss",
+    imageAlt: "Kör Nu Trafikskolas personal och bilar utanför trafikskolan i Göteborg",
+  },
   pages: {
     courses: ["Kurser", "Körkortsutbildning för din vardag.", "Manuell, automat, intensivkurs och kompletterande körmoment med erfarna lärare."],
     packages: ["Paket & priser", "Tydliga paket utan krångel.", "Välj ett startpaket, totalpaket eller intensivt upplägg. Vi hjälper dig hitta rätt nivå innan du bokar."],
@@ -116,7 +127,18 @@ const en: typeof sv = {
   final: { tag: "Ready to start in Stockholm?", title: "Book your first lesson and get a personal licence plan.", button: "Book your lesson", location: "Stockholm" },
   pay: { title: "Complete payment", successTitle: "Payment completed", selected: "Selected package", contact: "Contact details", name: "Name", email: "Email", phone: "Phone", personal: "Personal identity number (YYYYMMDD-XXXX)", transmission: "Choose transmission", manual: "Manual", automatic: "Automatic", notes: "Notes (optional): have you driven before, booked a test or want to add anything?", method: "Payment method", card: "Card", swish: "Swish", cardNumber: "Card number", expiry: "MM / YY", secure: "Secure SSL-encrypted payment", pay: "Pay", openSwish: "Open Swish", swishRedirect: "", processing: "", wait: "", done: "", thanks: "", orderNumber: "", close: "Close", checkout: "Stripe Checkout", successPending: "Thank you for your order", successPendingText: "Your payment is being handled by Stripe. It is confirmed only after Stripe sends a webhook to our server.", cancelled: "Payment cancelled", cancelledText: "No payment has been confirmed. You can return and try again." },
   footer: { text: "Kornu Traffic School in Stockholm helps new drivers become confident, safe and independent. Training in Swedish, English and Arabic.", quick: "Quick links", courses: "Courses", contact: "Contact", rights: "All rights reserved.", city: "Driving school in Stockholm" },
-  about: { eyebrow: "About", title: "Kornu Traffic School Stockholm", text: "We help students become confident drivers with clear packages, theory support and modern lesson planning." },
+  about: {
+    eyebrow: "About Kör Nu Traffic School",
+    title: "Kör Nu Driving School in Gothenburg",
+    text: "Kör Nu Traffic School in Gothenburg offers driving licence training in Swedish, English, Kurdish and Arabic.",
+    paragraphs: [
+      "Kör Nu Traffic School in Gothenburg offers driving licence training in Swedish, English, Kurdish and Arabic.",
+      "The school provides digital theory materials with audio support, more than 100 driving exercises, and convenient online lesson booking.",
+      "Our school is in Västra Frölunda, near the Swedish Transport Administration office in Högsbo, giving students the chance to practise on common test routes.",
+    ],
+    findUs: "Find us",
+    imageAlt: "Kör Nu Traffic School staff and cars outside the driving school in Gothenburg",
+  },
   pages: {
     courses: ["Courses", "Driving licence training for your everyday life.", "Manual, automatic, intensive courses and extra driving moments with experienced teachers."],
     packages: ["Packages & prices", "Clear packages without hassle.", "Choose a starter, complete or intensive package. We help you find the right level before booking."],
@@ -166,7 +188,18 @@ const ar: typeof sv = {
   final: { tag: "جاهز للبدء في ستوكهولم؟", title: "احجز أول درس واحصل على خطة شخصية لرخصة القيادة.", button: "احجز درسك", location: "ستوكهولم" },
   pay: { ...en.pay, title: "إكمال الدفع", successTitle: "تم الدفع", selected: "الباقة المختارة", contact: "بيانات التواصل", name: "الاسم", email: "البريد الإلكتروني", phone: "الهاتف", personal: "رقم الهوية الشخصية (YYYYMMDD-XXXX)", transmission: "اختر نوع ناقل الحركة", manual: "يدوي", automatic: "أوتوماتيك", notes: "ملاحظات اختيارية: هل قدت سابقاً أو حجزت اختباراً؟", method: "طريقة الدفع", card: "بطاقة", swish: "Swish", cardNumber: "رقم البطاقة", expiry: "MM / YY", secure: "دفع آمن ومشفر", pay: "ادفع", openSwish: "افتح Swish", swishRedirect: "سيتم تحويلك إلى تطبيق Swish لإكمال دفع", processing: "جاري معالجة الدفع...", wait: "يرجى الانتظار أثناء التحقق من الدفع.", done: "تم الدفع!", thanks: "شكراً لحجزك. أرسلنا تأكيداً إلى بريدك الإلكتروني.", orderNumber: "رقم الطلب", close: "إغلاق" },
   footer: { text: "تساعد Kornu Traffic School في ستوكهولم الطلاب الجدد على القيادة بثقة وأمان واستقلالية. التدريب متوفر بالسويدية والإنجليزية والعربية.", quick: "روابط سريعة", courses: "الدورات", contact: "التواصل", rights: "جميع الحقوق محفوظة.", city: "مدرسة قيادة في ستوكهولم" },
-  about: { eyebrow: "من نحن", title: "Kornu Traffic School Stockholm", text: "نساعد الطلاب على أن يصبحوا سائقين واثقين من خلال باقات واضحة ودعم نظري وتخطيط حديث للدروس." },
+  about: {
+    eyebrow: "عن مدرسة Kör Nu لتعليم القيادة",
+    title: "مدرسة Kör Nu لتعليم القيادة في يوتيبوري",
+    text: "تقدم مدرسة Kör Nu في يوتيبوري تدريباً للحصول على رخصة القيادة بالسويدية والإنجليزية والكردية والعربية.",
+    paragraphs: [
+      "تقدم مدرسة Kör Nu في يوتيبوري تدريباً للحصول على رخصة القيادة بالسويدية والإنجليزية والكردية والعربية.",
+      "توفر المدرسة مواد نظرية رقمية مع دعم صوتي وأكثر من 100 تمرين قيادة، بالإضافة إلى حجز الدروس بسهولة عبر الإنترنت.",
+      "تقع المدرسة في Västra Frölunda بالقرب من Trafikverket في Högsbo، مما يتيح للطلاب التدرب على مسارات الاختبار المعتادة.",
+    ],
+    findUs: "اعثر علينا",
+    imageAlt: "فريق مدرسة Kör Nu وسياراتها أمام مدرسة القيادة في يوتيبوري",
+  },
   pages: {
     courses: ["الدورات", "تدريب رخصة القيادة لحياتك اليومية.", "دروس يدوي وأوتوماتيك ودورات مكثفة مع مدربين ذوي خبرة."],
     packages: ["الباقات والأسعار", "باقات واضحة بدون تعقيد.", "اختر باقة بداية أو باقة كاملة أو مكثفة، وسنساعدك في اختيار المستوى المناسب قبل الحجز."],

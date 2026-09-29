@@ -43,9 +43,18 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    const onPop = () => setPath(getPagePath(window.location.pathname));
+    const onPop = () => {
+      setPath(getPagePath(window.location.pathname));
+      setCheckoutLoading(false);
+    };
+    const onPageShow = () => setCheckoutLoading(false);
+
     window.addEventListener("popstate", onPop);
-    return () => window.removeEventListener("popstate", onPop);
+    window.addEventListener("pageshow", onPageShow);
+    return () => {
+      window.removeEventListener("popstate", onPop);
+      window.removeEventListener("pageshow", onPageShow);
+    };
   }, []);
 
   return (

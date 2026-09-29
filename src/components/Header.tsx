@@ -10,7 +10,6 @@ import { Logo } from "./Logo";
 export function Header({ path, onNavigate, onBook }: { path: PagePath; onNavigate: (path: PagePath) => void; onBook: () => void }) {
   const [open, setOpen] = useState(false);
   const [langOpen, setLangOpen] = useState(false);
-  const [loginOpen, setLoginOpen] = useState(false);
   const { lang, setLang, t } = useLanguage();
   const navLabels: Record<PagePath, string> = {
     "/": t.nav.home,
@@ -27,7 +26,6 @@ export function Header({ path, onNavigate, onBook }: { path: PagePath; onNavigat
 
   const closeMenus = () => {
     setLangOpen(false);
-    setLoginOpen(false);
   };
 
   return (
@@ -60,7 +58,6 @@ export function Header({ path, onNavigate, onBook }: { path: PagePath; onNavigat
             <button
               onClick={() => {
                 setLangOpen((value) => !value);
-                setLoginOpen(false);
               }}
               className="flex items-center gap-2 rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-xs font-bold text-slate-700 transition hover:border-primary-100 hover:bg-primary-50 hover:text-primary"
               aria-expanded={langOpen}
@@ -81,38 +78,9 @@ export function Header({ path, onNavigate, onBook }: { path: PagePath; onNavigat
             )}
           </div>
 
-          <div className="relative hidden lg:block">
-            <button
-              onClick={() => {
-                setLoginOpen((value) => !value);
-                setLangOpen(false);
-              }}
-              className="flex items-center gap-2 rounded-xl border border-primary-100 bg-primary-50 px-3.5 py-2 text-xs font-bold text-primary-dark transition hover:bg-primary-100"
-              aria-expanded={loginOpen}
-            >
-              {t.nav.studentLogin}
-              <svg className={`h-3.5 w-3.5 transition ${loginOpen ? "rotate-180" : ""}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.2}><path d="m6 9 6 6 6-6" /></svg>
-            </button>
-            {loginOpen && (
-              <div className="absolute right-0 top-full mt-3 w-64 rounded-2xl border border-slate-200 bg-white p-3 shadow-2xl">
-                <a href="https://www.trafikskolaonline.se/sv/skola/kornu/elevinloggning" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 rounded-xl px-3 py-3 text-sm transition hover:bg-primary-50">
-                  <span className="grid h-9 w-9 place-items-center rounded-lg bg-primary-50 text-lg">🎓</span>
-                  <span className="flex-1">
-                    <span className="block font-extrabold text-primary-dark">{t.nav.pupil}</span>
-                    <span className="block text-xs font-semibold text-slate-400">{t.nav.pupilText}</span>
-                  </span>
-                  <span className="text-slate-400">↗</span>
-                </a>
-                <a href="https://www.trafikskolaonline.se/sv/skola/kornu/ehandel" target="_blank" rel="noopener noreferrer" className="mt-1 flex items-center gap-3 rounded-xl px-3 py-3 text-sm transition hover:bg-primary-50">
-                  <span className="grid h-9 w-9 place-items-center rounded-lg bg-primary-50 text-lg">🛒</span>
-                  <span className="flex-1">
-                    <span className="block font-extrabold text-primary-dark">{t.nav.ecommerce}</span>
-                    <span className="block text-xs font-semibold text-slate-400">{t.nav.ecommerceText}</span>
-                  </span>
-                  <span className="text-slate-400">↗</span>
-                </a>
-              </div>
-            )}
+          <div className="hidden items-center gap-2 whitespace-nowrap lg:flex">
+            <a href="https://www.trafikskolaonline.se/sv/skola/kornu/ehandel" target="_blank" rel="noopener noreferrer" className="rounded-xl px-2.5 py-2 text-xs font-bold text-slate-700 transition hover:bg-primary-50 hover:text-primary">E-Handle</a>
+            <a href="https://www.trafikskolaonline.se/sv/skola/kornu/elevinloggning" target="_blank" rel="noopener noreferrer" className="rounded-xl border border-primary-100 bg-primary-50 px-2.5 py-2 text-xs font-bold text-primary-dark transition hover:bg-primary-100">Elevinloggning</a>
           </div>
 
           <a href="tel:031-3860086" className="hidden items-center gap-2 whitespace-nowrap rounded-xl px-2 py-2 text-sm font-bold text-slate-800 transition hover:bg-primary-50 lg:flex">
@@ -135,8 +103,8 @@ export function Header({ path, onNavigate, onBook }: { path: PagePath; onNavigat
             {NAV.map((item) => (
               <a key={item.path} href={item.path} onClick={(e) => { handleRouteClick(e, item.path, onNavigate); setOpen(false); }} className={`rounded-xl px-4 py-3 text-center text-sm font-semibold transition hover:bg-primary-50 ${path === item.path ? "bg-primary-50 text-primary" : "text-slate-800"}`}>{navLabels[item.path]}</a>
             ))}
-            <a href="https://www.trafikskolaonline.se/sv/skola/kornu/elevinloggning" target="_blank" rel="noopener noreferrer" className="rounded-xl bg-primary-50 px-4 py-3 text-center text-sm font-semibold text-primary">{t.nav.studentLogin}</a>
-            <a href="https://www.trafikskolaonline.se/sv/skola/kornu/ehandel" target="_blank" rel="noopener noreferrer" className="rounded-xl bg-primary-50 px-4 py-3 text-center text-sm font-semibold text-primary">{t.nav.ecommerce}</a>
+            <a href="https://www.trafikskolaonline.se/sv/skola/kornu/ehandel" target="_blank" rel="noopener noreferrer" className="rounded-xl bg-primary-50 px-4 py-3 text-center text-sm font-semibold text-primary">E-Handle</a>
+            <a href="https://www.trafikskolaonline.se/sv/skola/kornu/elevinloggning" target="_blank" rel="noopener noreferrer" className="rounded-xl bg-primary-50 px-4 py-3 text-center text-sm font-semibold text-primary">Elevinloggning</a>
           </motion.nav>
         )}
       </AnimatePresence>
