@@ -79,6 +79,14 @@ export function ContactForm({ presentation = "section", onClose }: ContactFormPr
         <input id={`${formId}-start-date`} name="start_date" type="date" required className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-800 outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/15" />
       </label>
       <label className="sm:col-span-2">
+        <span className="mb-2 block text-xs font-black uppercase tracking-wider text-slate-500">{t.pay.transmission} *</span>
+        <select id={`${formId}-transmission`} name="transmission" required defaultValue="" className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-800 outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/15">
+          <option value="" disabled>{t.pay.transmission}</option>
+          <option value="manual">{t.pay.manual}</option>
+          <option value="automatic">{t.pay.automatic}</option>
+        </select>
+      </label>
+      <label className="sm:col-span-2">
         <span className="mb-2 block text-xs font-black uppercase tracking-wider text-slate-500">{t.contactForm.message} *</span>
         <textarea id={`${formId}-message`} name="message" required rows={3} placeholder={t.contactForm.messagePlaceholder} className="w-full resize-y rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm leading-6 text-slate-800 outline-none transition placeholder:text-slate-400 focus:border-primary focus:ring-2 focus:ring-primary/15" />
       </label>

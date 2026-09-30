@@ -7,7 +7,7 @@ import { languageOptions, useLanguage } from "../i18n";
 import { Icon } from "./Icon";
 import { Logo } from "./Logo";
 
-export function Header({ path, onNavigate, onBook }: { path: PagePath; onNavigate: (path: PagePath) => void; onBook: () => void }) {
+export function Header({ path, onNavigate }: { path: PagePath; onNavigate: (path: PagePath) => void }) {
   const [open, setOpen] = useState(false);
   const [langOpen, setLangOpen] = useState(false);
   const { lang, setLang, t } = useLanguage();
@@ -51,6 +51,7 @@ export function Header({ path, onNavigate, onBook }: { path: PagePath; onNavigat
               {navLabels[item.path]}
             </a>
           ))}
+          <a href="/contact" onClick={(event) => handleRouteClick(event, "/contact", onNavigate)} className={`rounded-lg px-3.5 py-2 transition ${path === "/contact" ? "bg-white text-primary shadow-sm" : "hover:bg-white/70 hover:text-primary"}`}>Skriv in dig</a>
         </nav>
 
         <div className="flex shrink-0 items-center gap-2 sm:gap-3">
@@ -87,10 +88,10 @@ export function Header({ path, onNavigate, onBook }: { path: PagePath; onNavigat
             <Icon name="phone" className="h-4 w-4 text-primary" />
             031‑386 00 86
           </a>
-          <button onClick={onBook} className="rounded-xl bg-primary px-3.5 py-2.5 text-sm font-bold text-white shadow-[0_10px_28px_rgba(11,132,87,0.25)] transition hover:-translate-y-0.5 hover:bg-primary-600 sm:px-5">
+          <a href="https://www.trafikskolaonline.se/sv/skola/kornu/lektioner" target="_blank" rel="noopener noreferrer" className="rounded-xl bg-primary px-3.5 py-2.5 text-sm font-bold text-white shadow-[0_10px_28px_rgba(11,132,87,0.25)] transition hover:-translate-y-0.5 hover:bg-primary-600 sm:px-5">
             <span className="sm:hidden">{t.nav.book}</span>
             <span className="hidden sm:inline">{t.nav.book}</span>
-          </button>
+          </a>
           <button onClick={() => setOpen(!open)} className="grid h-10 w-10 place-items-center rounded-xl bg-slate-950/[0.04] text-slate-800 transition hover:bg-primary-50 xl:hidden" aria-label="Meny">
             <svg className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><path d={open ? "M6 6l12 12M6 18L18 6" : "M4 7h16M4 12h16M4 17h16"} /></svg>
           </button>
@@ -103,6 +104,7 @@ export function Header({ path, onNavigate, onBook }: { path: PagePath; onNavigat
             {NAV.map((item) => (
               <a key={item.path} href={item.path} onClick={(e) => { handleRouteClick(e, item.path, onNavigate); setOpen(false); }} className={`rounded-xl px-4 py-3 text-center text-sm font-semibold transition hover:bg-primary-50 ${path === item.path ? "bg-primary-50 text-primary" : "text-slate-800"}`}>{navLabels[item.path]}</a>
             ))}
+            <a href="/contact" onClick={(event) => { handleRouteClick(event, "/contact", onNavigate); setOpen(false); }} className={`rounded-xl px-4 py-3 text-center text-sm font-semibold transition hover:bg-primary-50 ${path === "/contact" ? "bg-primary-50 text-primary" : "text-slate-800"}`}>Skriv in dig</a>
             <a href="https://www.trafikskolaonline.se/sv/skola/kornu/ehandel" target="_blank" rel="noopener noreferrer" className="rounded-xl bg-primary-50 px-4 py-3 text-center text-sm font-semibold text-primary">E-Handle</a>
             <a href="https://www.trafikskolaonline.se/sv/skola/kornu/elevinloggning" target="_blank" rel="noopener noreferrer" className="rounded-xl bg-primary-50 px-4 py-3 text-center text-sm font-semibold text-primary">Elevinloggning</a>
           </motion.nav>

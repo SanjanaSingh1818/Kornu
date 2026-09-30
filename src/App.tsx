@@ -13,7 +13,6 @@ const DrivingSimulator = lazy(() => import("./DrivingSimulator"));
 export default function App() {
   const [checkoutLoading, setCheckoutLoading] = useState(false);
   const [checkoutError, setCheckoutError] = useState<string | null>(null);
-  const [contactModalOpen, setContactModalOpen] = useState(false);
   const [showSim, setShowSim] = useState(false);
   const [path, setPath] = useState<PagePath>(() => getPagePath(window.location.pathname));
 
@@ -37,9 +36,6 @@ export default function App() {
     setPath(nextPath);
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, []);
-
-  const openContactModal = useCallback(() => setContactModalOpen(true), []);
-  const closeContactModal = useCallback(() => setContactModalOpen(false), []);
 
   const navigate = useCallback((nextPath: PagePath) => {
     window.history.pushState({}, "", nextPath);
@@ -65,9 +61,9 @@ export default function App() {
   return (
     <LanguageProvider>
       <main className="min-h-screen overflow-hidden bg-primary-50 text-slate-950 antialiased">
-        <Header path={path} onNavigate={navigate} onBook={openContactModal} />
+        <Header path={path} onNavigate={navigate} />
         {path === "/" && <HomePage onBook={openDefaultPackage} onSelect={startCheckout} loading={checkoutLoading} onLaunch={() => setShowSim(true)} />}
-        {path === "/courses" && <CoursesPage onSelect={startCheckout} loading={checkoutLoading} />}
+        {path === "/courses" && <CoursesPage />}
         {path === "/packages" && <PackagesPage onSelect={startCheckout} loading={checkoutLoading} />}
         {path === "/payment-success" && <PaymentSuccessPage />}
         {path === "/payment-cancelled" && <PaymentCancelledPage />}
@@ -76,7 +72,6 @@ export default function App() {
         {path === "/about" && <AboutPage />}
         {path === "/contact" && <ContactPage onBook={openDefaultPackage} />}
         <ContactForm />
-        {contactModalOpen && <ContactForm presentation="modal" onClose={closeContactModal} />}
         <Footer onNavigate={navigate} />
         {checkoutError && <div role="alert" className="fixed inset-x-4 bottom-4 z-50 mx-auto max-w-xl rounded-2xl border border-red-200 bg-red-50 p-4 text-center text-sm font-semibold text-red-700">{checkoutError}</div>}
         {showSim && (

@@ -1,5 +1,5 @@
 import type { Package } from "../types";
-import { BenefitBar, BrakingDistanceVisualizer, FinalCta, Gallery, Hero, Journey, Packages, ReviewsCarousel, SimulatorSection, TheoryQuiz, VisitUs } from "../components/home";
+import { BenefitBar, BrakingDistanceVisualizer, FinalCta, Hero, Journey, Packages, ReviewsCarousel, SimulatorSection, TheoryQuiz, VisitUs } from "../components/home";
 
 export function HomePage({ onBook, onSelect, onLaunch, loading }: { onBook: () => void; onSelect: (p: Package) => void; onLaunch: () => void; loading?: boolean }) {
   return (
@@ -13,7 +13,7 @@ export function HomePage({ onBook, onSelect, onLaunch, loading }: { onBook: () =
       <SimulatorSection onLaunch={onLaunch} />
       <BrakingDistanceVisualizer />
       <ReviewsCarousel />
-      <Gallery preview />
+      {/* <Gallery preview /> */}
       <FinalCta onBook={onBook} />
       <VisitUs />
     </>

@@ -110,10 +110,13 @@ const sv = {
     imageCaption: "Vi hjälper dig hela vägen till körkortet.",
   },
   courses: {
-    loading: "Hämtar kurser...",
-    error: "Kurserna kunde inte hämtas just nu.",
-    empty: "Inga kurser är tillgängliga just nu.",
-    book: "Boka kurs",
+    cards: [
+      ["Manuell körning", "Lär dig kopplingskontroll och stadskörning med professionell handledning.", "Från 495 kr / lektion"],
+      ["Automat körning", "Fokusera på trafikflöde, säkerhet och beslutsfattande utan växelstress.", "Från 495 kr / lektion"],
+      ["Intensivkurs", "Strukturerad och snabb väg till körkort med dagliga lektioner.", "Paket från 7 249 kr"],
+      ["Motorvägskörning", "Infarter, hastighetsbedömning och säkra motorvägsrutiner.", "Från 1 450 kr"],
+      ["Mörkerkörning", "Observation, hastighetsval och körning på våt vägbana.", "Från 1 250 kr"],
+    ],
   },
 };
 
@@ -190,10 +193,13 @@ const en: typeof sv = {
     imageCaption: "We will help you all the way to your licence.",
   },
   courses: {
-    loading: "Loading courses...",
-    error: "Courses could not be loaded right now.",
-    empty: "No courses are available right now.",
-    book: "Book course",
+    cards: [
+      ["Manual driving", "Learn clutch control and city driving with professional guidance.", "From 495 kr / lesson"],
+      ["Automatic driving", "Focus on traffic flow, safety and decisions without gear stress.", "From 495 kr / lesson"],
+      ["Intensive course", "A structured and faster route to your licence with daily lessons.", "Packages from 7,249 kr"],
+      ["Motorway driving", "Entrances, speed judgement and safe motorway routines.", "From 1,450 kr"],
+      ["Night driving", "Observation, speed choice and driving on wet roads.", "From 1,250 kr"],
+    ],
   },
 };
 
@@ -271,10 +277,13 @@ const ar: typeof sv = {
     imageCaption: "سنساعدك طوال الطريق حتى الحصول على الرخصة.",
   },
   courses: {
-    loading: "جارٍ تحميل الدورات...",
-    error: "تعذر تحميل الدورات حالياً.",
-    empty: "لا توجد دورات متاحة حالياً.",
-    book: "احجز الدورة",
+    cards: [
+      ["قيادة يدوية", "تعلّم التحكم بالقابض والقيادة داخل المدينة مع إرشاد احترافي.", "من 495 كرونة / درس"],
+      ["قيادة أوتوماتيك", "ركز على حركة المرور والسلامة واتخاذ القرار بدون ضغط تبديل السرعات.", "من 495 كرونة / درس"],
+      ["دورة مكثفة", "طريق منظم وأسرع نحو الرخصة مع دروس يومية.", "باقات من 7,249 كرونة"],
+      ["قيادة الطريق السريع", "الدخول للطريق وتقدير السرعة وروتين الطريق السريع الآمن.", "من 1,450 كرونة"],
+      ["القيادة الليلية", "الملاحظة واختيار السرعة والقيادة على الطرق المبللة.", "من 1,250 كرونة"],
+    ],
   },
 };
 
