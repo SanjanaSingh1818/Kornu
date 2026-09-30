@@ -1,5 +1,8 @@
 import type { Package, PagePath } from "./types";
 
+export const SCHOOL_ADDRESS = "FO Petersons gata 6, 421 31 Västra Frölunda";
+export const SCHOOL_MAPS_URL = "https://maps.google.com/?q=FO+Petersons+gata+6,+421+31+V%C3%A4stra+Fr%C3%B6lunda";
+
 export const NAV: { label: string; path: PagePath }[] = [
   { label: "Home", path: "/" },
   { label: "Courses", path: "/courses" },
@@ -50,14 +53,6 @@ export const PAYMENT_TEST_PACKAGE: Package = {
   sortOrder: 999,
   collections: [],
 };
-
-export const COURSES = [
-  { title: "Manuell körning", text: "Lär dig kopplingskontroll och stadskörning med professionell handledning.", price: "Från 495 kr / lektion", image: "/images/course-city.jpg" },
-  { title: "Automat körning", text: "Fokusera på trafikflöde, säkerhet och beslutsfattande utan växelstress.", price: "Från 495 kr / lektion", image: "/images/course-auto.jpg" },
-  { title: "Intensivkurs", text: "Strukturerad och snabb väg till körkort med dagliga lektioner.", price: "Paket från 7 249 kr", image: "/images/course-intensive.jpg" },
-  { title: "Motorvägskörning", text: "Infarter, hastighetsbedömning och säkra motorvägsrutiner.", price: "Från 1 450 kr", image: "/images/course-motorway.jpg" },
-  { title: "Mörkerkörning", text: "Observation, hastighetval och körning på våt vägbana.", price: "Från 1 250 kr", image: "/images/course-night.jpg" },
-];
 
 export const GALLERY_IMAGES = [
   { src: "/images/gallery1.webp", title: "Kör Nu Trafikskola", tag: "Göteborg" },

@@ -1,4 +1,4 @@
-import { NAV } from "../data";
+import { NAV, SCHOOL_ADDRESS, SCHOOL_MAPS_URL } from "../data";
 import { useLanguage } from "../i18n";
 import { handleRouteClick } from "../routing";
 import type { PagePath } from "../types";
@@ -58,7 +58,7 @@ export function Footer({ onNavigate }: { onNavigate: (path: PagePath) => void })
           <div className="mt-5 space-y-4 text-sm text-white/55">
             <a href="tel:031-3860086" className="flex items-center gap-3 hover:text-white"><Icon name="phone" className="h-4 w-4 text-primary-400" /> 031‑386 00 86</a>
             <a href="mailto:info@kornu.se" className="flex items-center gap-3 hover:text-white"><Icon name="mail" className="h-4 w-4 text-primary-400" /> info@kornu.se</a>
-            <a href="https://maps.app.goo.gl/WvBrSCZimUimjE9x7" target="_blank" rel="noopener" className="flex items-start gap-3 hover:text-white"><Icon name="pin" className="mt-0.5 h-4 w-4 shrink-0 text-primary-400" /> Stockholm</a>
+            <a href={SCHOOL_MAPS_URL} target="_blank" rel="noopener" className="flex items-start gap-3 hover:text-white"><Icon name="pin" className="mt-0.5 h-4 w-4 shrink-0 text-primary-400" /> {SCHOOL_ADDRESS}</a>
           </div>
         </div>
       </div>

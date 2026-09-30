@@ -1,5 +1,6 @@
 import { Icon } from "../Icon";
 import { useLanguage } from "../../i18n";
+import { SCHOOL_ADDRESS, SCHOOL_MAPS_URL } from "../../data";
 
 export function VisitUs() {
   const { t } = useLanguage();
@@ -14,7 +15,7 @@ export function VisitUs() {
         <div className="grid gap-6 lg:grid-cols-3">
           <div className="space-y-4">
             {[
-              { icon: "pin", title: t.visit.address, text: "Sveavägen 122\n113 50 Stockholm", link: "https://maps.google.com/?q=Sveavägen+122,+Stockholm" },
+              { icon: "pin", title: t.visit.address, text: SCHOOL_ADDRESS, link: SCHOOL_MAPS_URL },
               { icon: "phone", title: t.visit.contact, text: "031-386 00 86\ninfo@kornu.se", link: "mailto:info@kornu.se" },
               { icon: "calendar", title: t.visit.hours, text: t.visit.schedule, link: "" },
             ].map((item) => (
@@ -30,8 +31,8 @@ export function VisitUs() {
           </div>
           <div className="min-h-[400px] overflow-hidden rounded-3xl border border-slate-200 bg-slate-100 shadow-md lg:col-span-2">
             <iframe
-              title="Kornu Trafikskola - Sveavägen 122 Stockholm"
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2034.066743296938!2d18.057986!3d59.340086!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x465f9d60a0d8f7a7%3A0x0!2sSveavägen+122%2C+113+50+Stockholm!5e0!3m2!1ssv!2sse!4v1700000000000"
+              title={`Kör Nu Trafikskola - ${SCHOOL_ADDRESS}`}
+              src={`https://www.google.com/maps?q=${encodeURIComponent(SCHOOL_ADDRESS)}&output=embed`}
               width="100%"
               height="100%"
               style={{ border: 0, minHeight: 400 }}
