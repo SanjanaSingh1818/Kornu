@@ -2,7 +2,7 @@ import { lazy, Suspense, useCallback, useEffect, useState } from "react";
 import { Footer } from "./components/Footer";
 import { ContactForm } from "./components/ContactForm";
 import { Header } from "./components/Header";
-import { getPagePath } from "./routing";
+import { getPagePath, NavigateContext } from "./routing";
 import { LanguageProvider } from "./i18n";
 import type { Package, PagePath } from "./types";
 import { createCheckoutSession } from "./stripe";
@@ -30,13 +30,6 @@ export default function App() {
     }
   }, []);
 
-  const openDefaultPackage = useCallback(() => {
-    const nextPath: PagePath = "/packages";
-    window.history.pushState({}, "", nextPath);
-    setPath(nextPath);
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  }, []);
-
   const navigate = useCallback((nextPath: PagePath) => {
     window.history.pushState({}, "", nextPath);
     setPath(nextPath);
@@ -60,9 +53,10 @@ export default function App() {
 
   return (
     <LanguageProvider>
+      <NavigateContext.Provider value={navigate}>
       <main className="min-h-screen overflow-hidden bg-primary-50 text-slate-950 antialiased">
         <Header path={path} onNavigate={navigate} />
-        {path === "/" && <HomePage onBook={openDefaultPackage} onSelect={startCheckout} loading={checkoutLoading} onLaunch={() => setShowSim(true)} />}
+        {path === "/" && <HomePage onSelect={startCheckout} loading={checkoutLoading} onLaunch={() => setShowSim(true)} />}
         {path === "/courses" && <CoursesPage />}
         {path === "/packages" && <PackagesPage onSelect={startCheckout} loading={checkoutLoading} />}
         {path === "/payment-success" && <PaymentSuccessPage />}
@@ -70,7 +64,7 @@ export default function App() {
         {path === "/simulator" && <SimulatorPage onLaunch={() => setShowSim(true)} />}
         {path === "/gallery" && <GalleryPage />}
         {path === "/about" && <AboutPage />}
-        {path === "/contact" && <ContactPage onBook={openDefaultPackage} />}
+        {path === "/contact" && <ContactPage />}
         <ContactForm />
         <Footer onNavigate={navigate} />
         {checkoutError && <div role="alert" className="fixed inset-x-4 bottom-4 z-50 mx-auto max-w-xl rounded-2xl border border-red-200 bg-red-50 p-4 text-center text-sm font-semibold text-red-700">{checkoutError}</div>}
@@ -80,6 +74,7 @@ export default function App() {
           </Suspense>
         )}
       </main>
+      </NavigateContext.Provider>
     </LanguageProvider>
   );
 }

@@ -2,7 +2,7 @@ import { Icon } from "../components/Icon";
 import { useLanguage } from "../i18n";
 
 export function AboutPage() {
-  const { t } = useLanguage();
+  const { t, site } = useLanguage();
   return (
     <section className="bg-white px-6 pb-20 pt-36 sm:pt-40">
       <div className="mx-auto grid max-w-7xl items-center gap-12 lg:grid-cols-[1fr_1.08fr] lg:gap-16">
@@ -15,10 +15,10 @@ export function AboutPage() {
             {t.about.title}
           </h1>
           <div className="mt-6 max-w-2xl space-y-5 text-base leading-8 text-slate-600 sm:text-lg">
-            {t.about.paragraphs.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
+            {t.about.paragraphs.map((paragraph, i) => <p key={i}>{paragraph}</p>)}
           </div>
           <a
-            href="https://www.google.com/maps/search/?api=1&query=K%C3%B6r+Nu+Trafikskola+V%C3%A4stra+Fr%C3%B6lunda+G%C3%B6teborg"
+            href={site.aboutMapsUrl}
             target="_blank"
             rel="noopener noreferrer"
             className="mt-10 inline-flex items-center gap-2 rounded-md bg-black px-7 py-4 text-sm font-bold text-white transition hover:bg-slate-800"
@@ -30,7 +30,7 @@ export function AboutPage() {
         <div className="relative lg:mr-6">
           <div className="absolute -bottom-5 -right-5 h-full w-full rounded-[2rem] bg-primary-300" />
           <img
-            src="/images/kornu-about.webp"
+            src={site.images.about}
             alt={t.about.imageAlt}
             className="relative aspect-[1/1] w-full rounded-[2rem] object-cover shadow-[0_24px_60px_rgba(15,23,42,0.14)]"
           />

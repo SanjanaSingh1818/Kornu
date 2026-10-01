@@ -1,12 +1,10 @@
 import { motion } from "framer-motion";
 import { useLanguage } from "../../i18n";
-import { COURSES } from "../../data";
+import { CmsLink } from "../CmsLink";
 import { Icon } from "../Icon";
 
-const COURSE_BOOKING_URL = "https://www.trafikskolaonline.se/sv/skola/kornu/kurser";
-
 export function Courses() {
-  const { t } = useLanguage();
+  const { t, site } = useLanguage();
 
   return (
     <section className="bg-primary-50 px-6 py-24 sm:py-28">
@@ -16,23 +14,22 @@ export function Courses() {
             <p className="text-sm font-black uppercase tracking-[.26em] text-primary">{t.pages.courses[0]}</p>
             <h2 className="mt-4 text-4xl font-extrabold tracking-[-0.04em] text-dark sm:text-6xl">{t.pages.courses[1]}</h2>
           </div>
-          <a href="#paket" className="inline-flex items-center gap-3 text-sm font-bold text-dark">{t.packages.tag} <Icon name="arrow" className="h-4 w-4" /></a>
+          {site.coursesLinkLabel && <CmsLink href={site.buttons.coursesLink} className="inline-flex items-center gap-3 text-sm font-bold text-dark">{site.coursesLinkLabel} <Icon name="arrow" className="h-4 w-4" /></CmsLink>}
         </div>
 
         <div className="mt-12 grid gap-5 md:grid-cols-2 xl:grid-cols-5">
-          {COURSES.map((course, index) => {
-            const translated = t.courses.cards[index] || [course.title, course.text, course.price];
+          {site.courses.map((course, index) => {
             return (
-              <motion.a href={COURSE_BOOKING_URL} target="_blank" rel="noopener noreferrer" key={course.title} initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} whileHover={{ y: -6 }} viewport={{ once: true, margin: "-60px" }} transition={{ delay: index * .04, duration: .55 }}
+              <motion.a href={course.url} target="_blank" rel="noopener noreferrer" key={`${course.title}-${index}`} initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} whileHover={{ y: -6 }} viewport={{ once: true, margin: "-60px" }} transition={{ delay: index * .04, duration: .55 }}
                 className="group overflow-hidden rounded-2xl bg-white shadow-[0_14px_48px_rgba(6,78,59,0.08)] ring-1 ring-primary-200/50">
                 <div className="h-44 overflow-hidden">
-                  <img src={course.image} alt={translated[0]} className="h-full w-full object-cover transition duration-700 group-hover:scale-105" />
+                  <img src={course.image} alt={course.title} className="h-full w-full object-cover transition duration-700 group-hover:scale-105" />
                 </div>
                 <div className="p-5">
-                  <h3 className="text-lg font-bold tracking-tight text-dark">{translated[0]}</h3>
-                  <p className="mt-3 min-h-14 text-sm leading-6 text-slate-600">{translated[1]}</p>
+                  <h3 className="text-lg font-bold tracking-tight text-dark">{course.title}</h3>
+                  <p className="mt-3 min-h-14 text-sm leading-6 text-slate-600">{course.text}</p>
                   <div className="mt-5 flex items-center justify-between gap-3 text-sm font-bold text-dark">
-                    <span>{translated[2]}</span>
+                    <span>{course.price}</span>
                     <span className="grid h-9 w-9 place-items-center rounded-full bg-dark text-white transition group-hover:bg-primary" aria-hidden="true">
                       <Icon name="arrow" className="h-4 w-4" />
                     </span>

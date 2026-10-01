@@ -57,7 +57,7 @@ function PackageCard({ pkg, index, onSelect, loading }: { pkg: Package; index: n
               {(pkg.badge || pkg.popular) && (
                 <span className="inline-flex max-w-[70%] items-center gap-1 rounded-full border border-primary-50 bg-primary-50 px-2.5 py-1 text-[10px] font-bold text-primary-dark">
                   <Icon name="calendar" className="h-3 w-3 shrink-0 text-primary" />
-                  <span className="truncate">{pkg.badge || (pkg.popular ? "Populärt" : "")}</span>
+                  <span className="truncate">{pkg.badge || (pkg.popular ? t.packages.popular : "")}</span>
                 </span>
               )}
             </div>
@@ -127,7 +127,7 @@ function CatalogSkeleton() {
 }
 
 export function Packages({ onSelect, loading = false }: { onSelect: (pkg: Package) => void; loading?: boolean }) {
-  const { t } = useLanguage();
+  const { t, site } = useLanguage();
   const [catalog, setCatalog] = useState<Package[]>([]);
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState<ProductCategory>("all");
@@ -233,7 +233,7 @@ export function Packages({ onSelect, loading = false }: { onSelect: (pkg: Packag
         )}
 
         <div className="mt-10 rounded-2xl border border-primary-200/40 bg-primary-50/60 p-6 text-center">
-          <p className="text-sm font-semibold text-slate-700"><Icon name="phone" className="mr-2 inline-block h-4 w-4 text-primary" />{t.packages.help} {t.packages.call} <a href="tel:031-3860086" className="font-bold text-primary underline">031‑386 00 86</a> / <a href="mailto:info@kornu.se" className="font-bold text-primary underline">info@kornu.se</a></p>
+          <p className="text-sm font-semibold text-slate-700"><Icon name="phone" className="mr-2 inline-block h-4 w-4 text-primary" />{t.packages.help} {t.packages.call} <a href={site.phone.href} className="font-bold text-primary underline">{site.phone.display}</a> / <a href={`mailto:${site.email}`} className="font-bold text-primary underline">{site.email}</a></p>
         </div>
       </div>
     </section>

@@ -30,7 +30,7 @@ function DesktopMilestone({
   progress: MotionValue<number>;
   step: { label: string; detail: string };
 }) {
-  const position = desktopSteps[index];
+  const position = desktopSteps[Math.min(index, desktopSteps.length - 1)];
   const isTop = position.align === "top";
   const start = Math.max(0, position.threshold - 0.08);
   const active = Math.min(1, position.threshold + 0.035);
@@ -88,7 +88,7 @@ function MobileMilestone({
 }
 
 export function Journey() {
-  const { t } = useLanguage();
+  const { t, site } = useLanguage();
   const steps = t.journey.steps.map(([label, detail]) => ({ label, detail }));
   const ref = useRef<HTMLElement | null>(null);
   const rm = useReducedMotion();
@@ -167,7 +167,7 @@ export function Journey() {
                 }}
               >
                 <image
-                  href="/images/car.png"
+                  href={site.images.car}
                   x="-92"
                   y="-50"
                   width="184"
@@ -179,8 +179,8 @@ export function Journey() {
             </svg>
 
             <div className="absolute inset-0">
-              {steps.map((step, i) => (
-                <DesktopMilestone key={step.label} index={i} progress={progress} step={step} />
+              {steps.slice(0, desktopSteps.length).map((step, i) => (
+                <DesktopMilestone key={`${step.label}-${i}`} index={i} progress={progress} step={step} />
               ))}
             </div>
           </div>
@@ -194,7 +194,7 @@ export function Journey() {
             />
             <ol className="relative space-y-4">
               {steps.map((step, i) => (
-                <MobileMilestone key={step.label} index={i} step={step} />
+                <MobileMilestone key={`${step.label}-${i}`} index={i} step={step} />
               ))}
             </ol>
           </div>

@@ -3,7 +3,7 @@ import { useLanguage } from "../../i18n";
 import { Icon } from "../Icon";
 
 export function ReviewsCarousel() {
-  const { t } = useLanguage();
+  const { t, site } = useLanguage();
   const trackRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -27,7 +27,7 @@ export function ReviewsCarousel() {
     return () => cancelAnimationFrame(raf);
   }, []);
 
-  const reviews = t.reviews.items.map(([author, time, text, avatar]) => ({ author, rating: 5, time, text, avatar }));
+  const reviews = site.reviews.map((review) => ({ ...review, avatar: review.initials }));
   const items = [...reviews, ...reviews];
 
   return (
@@ -37,7 +37,7 @@ export function ReviewsCarousel() {
         <h2 className="mt-2 text-3xl font-black tracking-tight text-primary-dark">{t.reviews.title}</h2>
         <div className="mt-2 flex items-center justify-center gap-2">
           <div className="flex gap-0.5">{[...Array(5)].map((_, i) => <Icon key={i} name="star" className="h-5 w-5 fill-yellow-400 text-yellow-400" />)}</div>
-          <span className="text-xl font-black text-primary-dark">4.9</span>
+          <span className="text-xl font-black text-primary-dark">{site.reviewRating}</span>
           <span className="text-xs font-medium text-slate-400">{t.reviews.based}</span>
         </div>
       </div>

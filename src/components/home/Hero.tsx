@@ -5,6 +5,7 @@ import {
   useScroll,
   useTransform,
 } from "framer-motion";
+import { CmsLink } from "../CmsLink";
 import { Icon } from "../Icon";
 import { useLanguage } from "../../i18n";
 
@@ -27,8 +28,8 @@ function Stat({
   );
 }
 
-export function Hero({ onBook }: { onBook: () => void }) {
-  const { t } = useLanguage();
+export function Hero() {
+  const { t, site } = useLanguage();
   const ref = useRef<HTMLElement | null>(null);
 
   const rm = useReducedMotion();
@@ -70,8 +71,8 @@ export function Hero({ onBook }: { onBook: () => void }) {
     >
       {/* Background Image */}
       <motion.img
-        src="/images/hero-green.png"
-        alt="Kör Nu Driving School"
+        src={site.images.hero}
+        alt={site.images.heroAlt}
         className="absolute inset-0 h-full w-full object-cover object-center"
         style={{
           scale: imgScale,
@@ -148,8 +149,8 @@ export function Hero({ onBook }: { onBook: () => void }) {
             }}
             className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:gap-4"
           >
-            <button
-              onClick={onBook}
+            <CmsLink
+              href={site.buttons.heroBook}
               className="inline-flex items-center justify-center gap-3 rounded-xl bg-primary px-7 py-3.5 text-sm font-semibold text-white shadow-xl transition-all duration-300 hover:-translate-y-1 hover:bg-primary-600 sm:px-8 sm:py-4 sm:text-base"
             >
               {t.hero.book}
@@ -157,14 +158,14 @@ export function Hero({ onBook }: { onBook: () => void }) {
                 name="arrow"
                 className="h-4 w-4"
               />
-            </button>
+            </CmsLink>
 
-            <a
-              href="#paket"
+            <CmsLink
+              href={site.buttons.heroSecondary}
               className="inline-flex items-center justify-center rounded-xl border border-white/20 bg-white/10 px-7 py-3.5 text-sm font-semibold text-white backdrop-blur-lg transition-all duration-300 hover:-translate-y-1 hover:bg-white/15 sm:px-8 sm:py-4 sm:text-base"
             >
               {t.hero.packages}
-            </a>
+            </CmsLink>
           </motion.div>
 
           {/* Stats */}
@@ -179,7 +180,7 @@ export function Hero({ onBook }: { onBook: () => void }) {
             className="mt-9 max-w-md border-t border-white/15 pt-6 sm:mt-10 sm:pt-7"
           >
             <div className="grid grid-cols-3 gap-5 sm:gap-8">
-              {t.hero.stats.map(([value, label]) => <Stat key={label} value={value} label={label} />)}
+              {t.hero.stats.map(([value, label], i) => <Stat key={`${label}-${i}`} value={value} label={label} />)}
             </div>
           </motion.div>
         </div>

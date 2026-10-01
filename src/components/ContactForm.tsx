@@ -9,7 +9,7 @@ type ContactFormProps = {
 };
 
 export function ContactForm({ presentation = "section", onClose }: ContactFormProps) {
-  const { t } = useLanguage();
+  const { t, site } = useLanguage();
   const formId = useId();
   const formRef = useRef<HTMLFormElement>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -120,7 +120,7 @@ export function ContactForm({ presentation = "section", onClose }: ContactFormPr
     <section id="contact-form" className="bg-slate-50 px-4 py-16 sm:px-6 sm:py-20">
       <div className="mx-auto grid max-w-7xl overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm lg:grid-cols-[.9fr_1.1fr]">
         <div className="relative min-h-72 overflow-hidden bg-slate-200 lg:min-h-full">
-          <img src="/images/kornu-about.webp" alt={t.contactForm.imageAlt} className="absolute inset-0 h-full w-full object-cover" />
+          <img src={site.images.contactForm} alt={t.contactForm.imageAlt} className="absolute inset-0 h-full w-full object-cover" />
           <div className="absolute inset-0 bg-linear-to-t from-slate-950/70 via-slate-950/10 to-transparent" />
           <p className="absolute bottom-6 left-6 right-6 text-2xl font-extrabold text-white">{t.contactForm.imageCaption}</p>
         </div>

@@ -10,7 +10,7 @@ export function BenefitBar() {
         <div className="grid grid-cols-1 divide-y divide-white/10 sm:grid-cols-2 sm:divide-x sm:divide-y-0 xl:grid-cols-4">
           {t.benefits.map(([title, text, icon], index) => (
             <motion.div
-              key={title}
+              key={`${title}-${index}`}
               initial={{ opacity: 0, y: 15 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}

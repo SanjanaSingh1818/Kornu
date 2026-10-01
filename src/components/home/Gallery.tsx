@@ -1,11 +1,11 @@
 import { motion } from "framer-motion";
-import { GALLERY_IMAGES } from "../../data";
 import { useLanguage } from "../../i18n";
+import { CmsLink } from "../CmsLink";
 import { Icon } from "../Icon";
 
 export function Gallery({ preview = false }: { preview?: boolean }) {
-  const { t } = useLanguage();
-  const images = preview ? GALLERY_IMAGES.slice(0, 8) : GALLERY_IMAGES;
+  const { t, site } = useLanguage();
+  const images = preview ? site.gallery.slice(0, 8) : site.gallery;
 
   return (
     <section id="gallery" className="bg-primary-50 px-6 py-24 sm:py-28">
@@ -15,12 +15,12 @@ export function Gallery({ preview = false }: { preview?: boolean }) {
             <p className="text-sm font-black uppercase tracking-[.26em] text-primary">{t.pages.gallery[0]}</p>
             <h2 className="mt-4 text-4xl font-extrabold tracking-[-0.04em] text-dark sm:text-6xl">{t.pages.gallery[1]}</h2>
           </div>
-          {preview && <a href="/gallery" className="inline-flex items-center gap-3 text-sm font-bold text-dark">{t.nav.gallery} <Icon name="arrow" className="h-4 w-4" /></a>}
+          {preview && site.galleryLinkLabel && <CmsLink href={site.buttons.galleryLink} className="inline-flex items-center gap-3 text-sm font-bold text-dark">{site.galleryLinkLabel} <Icon name="arrow" className="h-4 w-4" /></CmsLink>}
         </div>
 
         <div className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
           {images.map((image, i) => (
-            <motion.figure key={image.src} initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-60px" }} transition={{ delay: i * .04, duration: .55 }}
+            <motion.figure key={`${image.src}-${i}`} initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-60px" }} transition={{ delay: i * .04, duration: .55 }}
               className={`group overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-primary-200/50 ${i === 0 && !preview ? "sm:col-span-2 sm:row-span-2" : ""}`}>
               <div className={`${i === 0 && !preview ? "h-full min-h-[420px]" : "h-72"} overflow-hidden`}>
                 <img src={image.src} alt={image.title} className="h-full w-full object-cover transition duration-700 group-hover:scale-105" />

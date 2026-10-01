@@ -1,9 +1,8 @@
 import { Icon } from "../Icon";
 import { useLanguage } from "../../i18n";
-import { SCHOOL_ADDRESS, SCHOOL_MAPS_URL } from "../../data";
 
 export function VisitUs() {
-  const { t } = useLanguage();
+  const { t, site } = useLanguage();
   return (
     <section className="relative z-10 border-y border-slate-100 bg-white px-4 py-16 sm:px-6">
       <div className="mx-auto max-w-7xl">
@@ -15,8 +14,8 @@ export function VisitUs() {
         <div className="grid gap-6 lg:grid-cols-3">
           <div className="space-y-4">
             {[
-              { icon: "pin", title: t.visit.address, text: SCHOOL_ADDRESS, link: SCHOOL_MAPS_URL },
-              { icon: "phone", title: t.visit.contact, text: "031-386 00 86\ninfo@kornu.se", link: "mailto:info@kornu.se" },
+              { icon: "pin", title: t.visit.address, text: site.address, link: site.mapsUrl },
+              { icon: "phone", title: t.visit.contact, text: `${site.phone.display}\n${site.email}`, link: `mailto:${site.email}` },
               { icon: "calendar", title: t.visit.hours, text: t.visit.schedule, link: "" },
             ].map((item) => (
               <div key={item.title} className="rounded-2xl border border-slate-200 bg-slate-50 p-5 shadow-sm">
@@ -31,8 +30,8 @@ export function VisitUs() {
           </div>
           <div className="min-h-[400px] overflow-hidden rounded-3xl border border-slate-200 bg-slate-100 shadow-md lg:col-span-2">
             <iframe
-              title={`Kör Nu Trafikskola - ${SCHOOL_ADDRESS}`}
-              src={`https://www.google.com/maps?q=${encodeURIComponent(SCHOOL_ADDRESS)}&output=embed`}
+              title={`${site.siteName} - ${site.address}`}
+              src={`https://www.google.com/maps?q=${encodeURIComponent(site.address)}&output=embed`}
               width="100%"
               height="100%"
               style={{ border: 0, minHeight: 400 }}
