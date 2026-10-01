@@ -92,7 +92,7 @@ async function buildDocuments() {
 
   add({
     _id: "navigation", _type: "navigation",
-    items: keyed(sv.nav.map((item, i) => ({ label: lsSite((s) => s.nav[i].label), path: item.path })), "n"),
+    items: keyed(sv.nav.map((item, i) => ({ label: lsSite((s) => s.nav[i].label), link: item.href })), "n"),
     extraLabel: same(sv.header.extraLabel),
     extraPath: sv.header.extraPath,
     ecommerceLabel: same(sv.header.ecommerce),
@@ -108,7 +108,7 @@ async function buildDocuments() {
     _id: "footer", _type: "footer",
     text: lt((t) => t.footer.text), quick: ls((t) => t.footer.quick), courses: ls((t) => t.footer.courses),
     contact: ls((t) => t.footer.contact), rights: ls((t) => t.footer.rights), city: ls((t) => t.footer.city),
-    courseLinks: keyed(sv.footerCourseLinks.map((item, i) => ({ label: lsSite((s) => s.footerCourseLinks[i].label), path: item.path })), "c"),
+    courseLinks: keyed(sv.footerCourseLinks.map((item, i) => ({ label: lsSite((s) => s.footerCourseLinks[i].label), link: item.href })), "c"),
   });
 
   add({ _id: "homePage", _type: "homePage", sections: sv.homeSections });

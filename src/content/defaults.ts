@@ -7,7 +7,8 @@ import type { Translations } from "./translations";
 export const HOME_SECTION_KEYS = ["hero", "benefits", "journey", "courses", "packages", "quiz", "simulator", "braking", "reviews", "trainers", "gallery", "finalCta", "visit"] as const;
 export type HomeSectionKey = (typeof HOME_SECTION_KEYS)[number];
 
-export type NavItem = { label: string; path: PagePath };
+// href: a site page ("/gallery") or a full URL (opens the external site).
+export type NavItem = { label: string; href: string };
 export type Course = { title: string; text: string; price: string; image: string; url: string };
 export type GalleryItem = { src: string; title: string; tag: string };
 export type Trainer = { name: string; experience: string; role: string; languages: string; quote: string; image: string; position: string };
@@ -90,13 +91,17 @@ export function defaultSite(t: Translations): Site {
       coursesBooking: COURSE_BOOKING_URL,
     },
     header: { ecommerce: "E-Handle", studentLogin: "Elevinloggning", extraLabel: "Skriv in dig", extraPath: "/contact", showLanguage: true },
-    nav: NAV.map((item) => ({ path: item.path, label: navLabels[item.path] ?? item.label })),
+    // "Kontakt" is reached through the "Skriv in dig" link; "Kurser" opens the booking site.
+    nav: NAV.filter((item) => item.path !== "/contact").map((item) => ({
+      href: item.path === "/courses" ? COURSE_BOOKING_URL : item.path,
+      label: navLabels[item.path] ?? item.label,
+    })),
     footerCourseLinks: [
-      { label: String(t.packages.items[0][1]), path: "/courses" },
-      { label: t.pay.automatic, path: "/courses" },
-      { label: "Risk 1", path: "/courses" },
-      { label: "Risk 2", path: "/courses" },
-      { label: String(t.packages.items[2][0]), path: "/courses" },
+      { label: String(t.packages.items[0][1]), href: COURSE_BOOKING_URL },
+      { label: t.pay.automatic, href: COURSE_BOOKING_URL },
+      { label: "Risk 1", href: COURSE_BOOKING_URL },
+      { label: "Risk 2", href: COURSE_BOOKING_URL },
+      { label: String(t.packages.items[2][0]), href: COURSE_BOOKING_URL },
     ],
     copyright: "© 2026 Kör Nu Trafikskola AB.",
     homeSections: ["hero", "benefits", "journey", "packages", "quiz", "simulator", "braking", "reviews", "finalCta", "visit"],

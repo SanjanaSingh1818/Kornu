@@ -66,7 +66,7 @@ export default function App() {
         {path === "/about" && <AboutPage />}
         {path === "/contact" && <ContactPage />}
         <ContactForm />
-        <Footer onNavigate={navigate} />
+        <Footer />
         {checkoutError && <div role="alert" className="fixed inset-x-4 bottom-4 z-50 mx-auto max-w-xl rounded-2xl border border-red-200 bg-red-50 p-4 text-center text-sm font-semibold text-red-700">{checkoutError}</div>}
         {showSim && (
           <Suspense fallback={<div className="fixed inset-0 z-[60] grid place-items-center bg-dark text-white text-lg font-bold">Loading simulator...</div>}>

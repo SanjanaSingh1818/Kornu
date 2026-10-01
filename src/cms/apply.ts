@@ -102,7 +102,8 @@ export function applyCms(lang: Lang, baseT: Translations, baseSite: Site, cms: C
   const bookingUrl = str(navigation?.bookUrl, str(settings?.bookingUrl, baseSite.links.booking));
   const coursesBooking = str(cms.coursesPage?.defaultBookingUrl, str(settings?.coursesBookingUrl, baseSite.links.coursesBooking));
 
-  const navItem = (item: Any, fallback: NavItem): NavItem => ({ label: str(item?.label, fallback.label), path: path(item?.path, fallback.path) });
+  // "link" accepts pages and URLs; older documents only have "path".
+  const navItem = (item: Any, fallback: NavItem): NavItem => ({ label: str(item?.label, fallback.label), href: str(item?.link, str(item?.path, fallback.href)) });
   const sections = (home?.sections ?? []).filter((key: string): key is HomeSectionKey => (HOME_SECTION_KEYS as readonly string[]).includes(key));
 
   const site: Site = {
@@ -130,7 +131,7 @@ export function applyCms(lang: Lang, baseT: Translations, baseSite: Site, cms: C
       showLanguage: navigation?.showLanguage ?? baseSite.header.showLanguage,
     },
     nav: list(navigation?.items, (item: Any, i) => navItem(item, baseSite.nav[i] ?? baseSite.nav[0]), baseSite.nav),
-    footerCourseLinks: list(footer?.courseLinks, (item: Any, i) => navItem(item, baseSite.footerCourseLinks[i] ?? { label: "", path: "/courses" }), baseSite.footerCourseLinks),
+    footerCourseLinks: list(footer?.courseLinks, (item: Any, i) => navItem(item, baseSite.footerCourseLinks[i] ?? { label: "", href: "/courses" }), baseSite.footerCourseLinks),
     copyright: str(settings?.copyright, baseSite.copyright),
     homeSections: sections.length > 0 ? sections : baseSite.homeSections,
     images: {

@@ -3,6 +3,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { handleRouteClick } from "../routing";
 import type { PagePath } from "../types";
 import { languageOptions, useLanguage } from "../i18n";
+import { CmsLink } from "./CmsLink";
 import { Icon } from "./Icon";
 import { Logo } from "./Logo";
 
@@ -35,14 +36,9 @@ export function Header({ path, onNavigate }: { path: PagePath; onNavigate: (path
 
         <nav className="hidden min-w-0 items-center rounded-xl bg-slate-950/[0.035] p-1 text-xs font-semibold text-slate-700 xl:flex">
           {site.nav.map((item) => (
-            <a
-              key={`${item.path}-${item.label}`}
-              href={item.path}
-              onClick={(e) => handleRouteClick(e, item.path, onNavigate)}
-              className={navLinkClass(path === item.path)}
-            >
+            <CmsLink key={`${item.href}-${item.label}`} href={item.href} className={navLinkClass(path === item.href)}>
               {item.label}
-            </a>
+            </CmsLink>
           ))}
           {site.header.extraLabel && <a href={site.header.extraPath} onClick={(event) => handleRouteClick(event, site.header.extraPath, onNavigate)} className={navLinkClass(false)}>{site.header.extraLabel}</a>}
         </nav>
@@ -95,7 +91,7 @@ export function Header({ path, onNavigate }: { path: PagePath; onNavigate: (path
           <motion.nav initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="mx-auto mt-2 max-h-[calc(100vh-6rem)] max-w-7xl overflow-y-auto rounded-2xl border border-white/70 bg-white/96 p-3 shadow-xl backdrop-blur-xl xl:hidden">
             <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
               {site.nav.map((item) => (
-                <a key={`${item.path}-${item.label}`} href={item.path} onClick={(e) => { handleRouteClick(e, item.path, onNavigate); setOpen(false); }} className={mobileLinkClass(path === item.path)}>{item.label}</a>
+                <CmsLink key={`${item.href}-${item.label}`} href={item.href} onClick={() => setOpen(false)} className={mobileLinkClass(path === item.href)}>{item.label}</CmsLink>
               ))}
               {site.header.extraLabel && <a href={site.header.extraPath} onClick={(event) => { handleRouteClick(event, site.header.extraPath, onNavigate); setOpen(false); }} className={mobileLinkClass(false)}>{site.header.extraLabel}</a>}
             </div>

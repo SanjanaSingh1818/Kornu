@@ -1,23 +1,23 @@
 import { useLanguage } from "../i18n";
-import { handleRouteClick } from "../routing";
-import type { PagePath } from "../types";
+import type { NavItem } from "../content/defaults";
+import { CmsLink } from "./CmsLink";
 import { Icon } from "./Icon";
 import { Logo } from "./Logo";
 
-function FLinks({ title, items, onNavigate }: { title: string; items: { label: string; path: PagePath }[]; onNavigate: (path: PagePath) => void }) {
+function FLinks({ title, items }: { title: string; items: NavItem[] }) {
   return (
     <div>
       <h3 className="text-sm font-bold text-white">{title}</h3>
       <ul className="mt-5 space-y-3 text-sm text-white/55">
         {items.map((it) => (
-          <li key={`${title}-${it.label}`}><a href={it.path} onClick={(e) => handleRouteClick(e, it.path, onNavigate)} className="transition hover:text-white">{it.label}</a></li>
+          <li key={`${title}-${it.label}`}><CmsLink href={it.href} className="transition hover:text-white">{it.label}</CmsLink></li>
         ))}
       </ul>
     </div>
   );
 }
 
-export function Footer({ onNavigate }: { onNavigate: (path: PagePath) => void }) {
+export function Footer() {
   const { t, site } = useLanguage();
   return (
     <footer className="bg-dark px-6 py-16 text-white">
@@ -33,8 +33,8 @@ export function Footer({ onNavigate }: { onNavigate: (path: PagePath) => void })
             ))}
           </div>
         </div>
-        <FLinks title={t.footer.quick} items={site.nav} onNavigate={onNavigate} />
-        <FLinks title={t.footer.courses} items={site.footerCourseLinks} onNavigate={onNavigate} />
+        <FLinks title={t.footer.quick} items={site.nav} />
+        <FLinks title={t.footer.courses} items={site.footerCourseLinks} />
         <div>
           <h3 className="text-sm font-bold text-white">{t.footer.contact}</h3>
           <div className="mt-5 space-y-4 text-sm text-white/55">

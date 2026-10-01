@@ -49,8 +49,11 @@ export const siteSettings = defineType({
 
 const linkItem = defineArrayMember({
   type: "object",
-  fields: [ls("label", "Label"), pagePath()],
-  preview: { select: { title: "label.sv", subtitle: "path" } },
+  fields: [
+    ls("label", "Label"),
+    defineField({ ...link("link", "Link"), validation: (rule) => rule.required().custom((value?: string) => !value || /^(\/|#|https?:\/\/|tel:|mailto:)/.test(value) ? true : "Start with /, #, https://, tel: or mailto:") }),
+  ],
+  preview: { select: { title: "label.sv", subtitle: "link" } },
 });
 
 export const navigation = defineType({
@@ -58,7 +61,7 @@ export const navigation = defineType({
   title: "Header & menu",
   type: "document",
   fields: [
-    defineField({ name: "items", title: "Menu links", type: "array", of: [linkItem], description: "Drag to reorder. Remove a link to hide it from the menu and footer." }),
+    defineField({ name: "items", title: "Menu links", type: "array", of: [linkItem], description: "Drag to reorder. Remove a link to hide it from the menu and footer. A full web address (https://…) opens that site." }),
     ls("extraLabel", "Extra menu link label", "e.g. “Skriv in dig”. Leave empty to hide."),
     pagePath("extraPath", "Extra menu link page"),
     ls("ecommerceLabel", "E-handel button text"),
