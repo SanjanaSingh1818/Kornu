@@ -1,5 +1,6 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { motion } from "framer-motion";
+import { PACKAGES } from "../../data";
 import { useLanguage } from "../../i18n";
 import type { Package, ProductCategory } from "../../types";
 import { Icon } from "../Icon";
@@ -150,6 +151,14 @@ export function Packages({ onSelect, loading = false }: { onSelect: (pkg: Packag
       setCatalog(nextCatalog);
       setStatus(nextCatalog.length > 0 ? "ready" : "empty");
     } catch (fetchError) {
+      // `npm run dev` does not run the Vercel /api functions, so show the built-in sample
+      // packages locally. Production always uses Stripe and shows the error instead.
+      if (import.meta.env.DEV) {
+        console.info("[packages] /api/products unavailable in local dev; showing sample packages.", fetchError);
+        setCatalog(PACKAGES.map(normalizePackage));
+        setStatus("ready");
+        return;
+      }
       setCatalog([]);
       setStatus("error");
       setError(fetchError instanceof Error ? fetchError.message : "Kunde inte hämta paket.");
@@ -160,6 +169,21 @@ export function Packages({ onSelect, loading = false }: { onSelect: (pkg: Packag
     void fetchCatalog();
   }, []);
 
+  // Phone carousel: track which card is centred to highlight its dot.
+  const trackRef = useRef<HTMLDivElement>(null);
+  const [activeSlide, setActiveSlide] = useState(0);
+  const onTrackScroll = () => {
+    const track = trackRef.current;
+    const first = track?.firstElementChild as HTMLElement | null;
+    if (!track || !first) return;
+    const step = first.offsetWidth + 16; // card width + gap-4
+    setActiveSlide(Math.round(Math.abs(track.scrollLeft) / step));
+  };
+  const goToSlide = (index: number) => {
+    const card = trackRef.current?.children[index] as HTMLElement | undefined;
+    card?.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
+  };
+
   const visiblePackages = useMemo(() => {
     const normalizedQuery = query.trim().toLowerCase();
     return catalog.filter((pkg) => {
@@ -169,6 +193,11 @@ export function Packages({ onSelect, loading = false }: { onSelect: (pkg: Packag
       return matchesCategory && matchesSearch;
     });
   }, [catalog, category, query]);
+
+  useEffect(() => {
+    trackRef.current?.scrollTo({ left: 0 });
+    setActiveSlide(0);
+  }, [category, query]);
 
   return (
     <section id="paket" className="bg-slate-50 px-4 py-16 sm:px-6 sm:py-20">
@@ -213,8 +242,32 @@ export function Packages({ onSelect, loading = false }: { onSelect: (pkg: Packag
         )}
 
         {status === "ready" && (
-          <div className="mt-10 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {visiblePackages.map((pkg, index) => <PackageCard key={pkg.id} pkg={pkg} index={index} onSelect={onSelect} loading={loading} />)}
+          <div className="-mx-4 mt-10 sm:mx-0">
+            {/* Phones: swipeable carousel. sm and up: the regular grid. */}
+            <div
+              ref={trackRef}
+              onScroll={onTrackScroll}
+              className="flex snap-x snap-mandatory gap-4 overflow-x-auto scroll-px-4 px-4 pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:grid sm:snap-none sm:grid-cols-1 sm:gap-6 sm:overflow-visible sm:px-0 sm:pb-0 md:grid-cols-2 lg:grid-cols-3"
+            >
+              {visiblePackages.map((pkg, index) => (
+                <div key={pkg.id} className="w-[84%] shrink-0 snap-center sm:w-auto">
+                  <PackageCard pkg={pkg} index={index} onSelect={onSelect} loading={loading} />
+                </div>
+              ))}
+            </div>
+            {visiblePackages.length > 1 && (
+              <div className="mt-5 flex items-center justify-center gap-2 sm:hidden">
+                {visiblePackages.map((pkg, index) => (
+                  <button
+                    key={pkg.id}
+                    type="button"
+                    onClick={() => goToSlide(index)}
+                    aria-label={`${index + 1} / ${visiblePackages.length}`}
+                    className={`h-2 rounded-full transition-all duration-300 ${index === activeSlide ? "w-7 bg-primary-dark" : "w-2 bg-slate-300"}`}
+                  />
+                ))}
+              </div>
+            )}
           </div>
         )}
 

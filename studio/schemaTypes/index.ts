@@ -49,15 +49,16 @@ const PAGES: PageFolder[] = [
   },
   { title: "Packages page", icon: "📦", items: [{ id: "packagesPage", title: "Header + texts" }] },
   { title: "Simulator page", icon: "🎮", items: [{ id: "simulatorPage", title: "Header + simulator section" }] },
-  { title: "Gallery page", icon: "🖼️", items: [{ id: "galleryPage", title: "Header + photos" }] },
+  { title: "Gallery page", icon: "🖼️", items: [{ id: "galleryPage", title: "Header, photos & filter texts" }] },
   { title: "About page", icon: "ℹ️", items: [{ id: "aboutPage", title: "Texts + image" }] },
   {
     title: "Contact page",
     icon: "✉️",
     items: [
-      { id: "contactPage", title: "Header + labels" },
+      { id: "contactPage", title: "Header (top banner)" },
       { id: "finalCta", title: "Final call to action (green box)" },
-      { id: "visitSection", title: "Headings & opening hours text" },
+      { id: "contactForm", title: "Contact form + photo" },
+      { id: "visitSection", title: "Visit us: address, hours & map (below the form)" },
     ],
   },
   { title: "Payment result pages", icon: "💳", items: [{ id: "paymentPages", title: "Success & cancelled texts" }] },
@@ -77,5 +78,5 @@ const PAGES: PageFolder[] = [
 // so it is listed last in each page folder as well as under "Every page".
 const CONTACT_FORM_ITEM: Item = { id: "contactForm", title: "Contact form + photo (bottom of every page)" };
 export const PAGE_FOLDERS: PageFolder[] = PAGES.map((folder) =>
-  folder.title === "Every page" || folder.title === "Payment result pages" ? folder : { ...folder, items: [...folder.items, CONTACT_FORM_ITEM] },
+  ["Every page", "Payment result pages", "Contact page"].includes(folder.title) ? folder : { ...folder, items: [...folder.items, CONTACT_FORM_ITEM] },
 );

@@ -108,6 +108,7 @@ const sv = {
     imageAlt: "Kör Nu Trafikskolas personal och bilar i Göteborg",
     imageCaption: "Vi hjälper dig hela vägen till körkortet.",
   },
+  galleryUi: { all: "Alla", photos: "bilder" },
   courses: {
     cards: [
       ["Manuell körning", "Lär dig kopplingskontroll och stadskörning med professionell handledning.", "Från 495 kr / lektion"],
@@ -191,6 +192,7 @@ const en: typeof sv = {
     imageAlt: "Kör Nu Traffic School staff and cars in Gothenburg",
     imageCaption: "We will help you all the way to your licence.",
   },
+  galleryUi: { all: "All", photos: "photos" },
   courses: {
     cards: [
       ["Manual driving", "Learn clutch control and city driving with professional guidance.", "From 495 kr / lesson"],
@@ -275,6 +277,7 @@ const ar: typeof sv = {
     imageAlt: "فريق Kör Nu وسياراتها في يوتيبوري",
     imageCaption: "سنساعدك طوال الطريق حتى الحصول على الرخصة.",
   },
+  galleryUi: { all: "الكل", photos: "صور" },
   courses: {
     cards: [
       ["قيادة يدوية", "تعلّم التحكم بالقابض والقيادة داخل المدينة مع إرشاد احترافي.", "من 495 كرونة / درس"],

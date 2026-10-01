@@ -92,6 +92,7 @@ export function applyCms(lang: Lang, baseT: Translations, baseSite: Site, cms: C
       simulator: header(simulatorPage, baseT.pages.simulator),
       contact: header(contactPage, baseT.pages.contact),
     },
+    galleryUi: { all: str(cms.galleryPage?.allLabel, baseT.galleryUi.all), photos: str(cms.galleryPage?.photosLabel, baseT.galleryUi.photos) },
     contactForm: labels(contactForm, baseT.contactForm, Object.keys(baseT.contactForm) as (keyof Translations["contactForm"])[]),
   };
   t.pay = { ...baseT.pay, ...t.pay };

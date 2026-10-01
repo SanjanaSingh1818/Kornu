@@ -1,6 +1,7 @@
 import { lazy, Suspense, useCallback, useEffect, useState } from "react";
 import { Footer } from "./components/Footer";
 import { ContactForm } from "./components/ContactForm";
+import { VisitUs } from "./components/home";
 import { Header } from "./components/Header";
 import { getPagePath, NavigateContext } from "./routing";
 import { LanguageProvider } from "./i18n";
@@ -66,6 +67,8 @@ export default function App() {
         {path === "/about" && <AboutPage />}
         {path === "/contact" && <ContactPage />}
         <ContactForm />
+        {/* Contact ("Skriv in dig") page: address, hours and map below the form */}
+        {path === "/contact" && <VisitUs />}
         <Footer />
         {checkoutError && <div role="alert" className="fixed inset-x-4 bottom-4 z-50 mx-auto max-w-xl rounded-2xl border border-red-200 bg-red-50 p-4 text-center text-sm font-semibold text-red-700">{checkoutError}</div>}
         {showSim && (

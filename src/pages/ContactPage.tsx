@@ -1,5 +1,5 @@
 import { PageShell } from "../components/PageShell";
-import { ContactDetails, FinalCta } from "../components/home";
+import { FinalCta } from "../components/home";
 import { useLanguage } from "../i18n";
 
 export function ContactPage() {
@@ -7,7 +7,6 @@ export function ContactPage() {
   return (
     <PageShell eyebrow={t.pages.contact[0]} title={t.pages.contact[1]} text={t.pages.contact[2]}>
       <FinalCta />
-      <ContactDetails />
     </PageShell>
   );
 }

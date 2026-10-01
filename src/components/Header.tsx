@@ -18,7 +18,7 @@ export function Header({ path, onNavigate }: { path: PagePath; onNavigate: (path
   };
 
   const navLinkClass = (active: boolean) =>
-    `whitespace-nowrap rounded-lg px-2 py-2 transition 2xl:px-3.5 ${active ? "bg-white text-primary shadow-sm" : "hover:bg-white/70 hover:text-primary"}`;
+    `whitespace-nowrap rounded-lg px-2 py-2 outline-none transition focus-visible:ring-2 focus-visible:ring-primary 2xl:px-3.5 ${active ? "bg-white text-primary shadow-sm" : "hover:bg-white/70 hover:text-primary"}`;
   const mobileLinkClass = (active: boolean) =>
     `rounded-xl px-4 py-3 text-center text-sm font-semibold transition hover:bg-primary-50 ${active ? "bg-primary-50 text-primary" : "text-slate-800"}`;
 
@@ -40,7 +40,7 @@ export function Header({ path, onNavigate }: { path: PagePath; onNavigate: (path
               {item.label}
             </CmsLink>
           ))}
-          {site.header.extraLabel && <a href={site.header.extraPath} onClick={(event) => handleRouteClick(event, site.header.extraPath, onNavigate)} className={navLinkClass(false)}>{site.header.extraLabel}</a>}
+          {site.header.extraLabel && <a href={site.header.extraPath} onClick={(event) => handleRouteClick(event, site.header.extraPath, onNavigate)} className={navLinkClass(path === site.header.extraPath)}>{site.header.extraLabel}</a>}
         </nav>
 
         <div className="flex min-w-0 shrink-0 items-center gap-2 sm:gap-3 xl:gap-1.5 2xl:gap-3">
@@ -93,7 +93,7 @@ export function Header({ path, onNavigate }: { path: PagePath; onNavigate: (path
               {site.nav.map((item) => (
                 <CmsLink key={`${item.href}-${item.label}`} href={item.href} onClick={() => setOpen(false)} className={mobileLinkClass(path === item.href)}>{item.label}</CmsLink>
               ))}
-              {site.header.extraLabel && <a href={site.header.extraPath} onClick={(event) => { handleRouteClick(event, site.header.extraPath, onNavigate); setOpen(false); }} className={mobileLinkClass(false)}>{site.header.extraLabel}</a>}
+              {site.header.extraLabel && <a href={site.header.extraPath} onClick={(event) => { handleRouteClick(event, site.header.extraPath, onNavigate); setOpen(false); }} className={mobileLinkClass(path === site.header.extraPath)}>{site.header.extraLabel}</a>}
             </div>
             <div className="mt-2 grid grid-cols-2 gap-2 border-t border-slate-100 pt-3 sm:grid-cols-3 lg:hidden">
               <a href={site.links.ecommerce} target="_blank" rel="noopener noreferrer" className="rounded-xl bg-primary-50 px-4 py-3 text-center text-sm font-semibold text-primary">{site.header.ecommerce}</a>

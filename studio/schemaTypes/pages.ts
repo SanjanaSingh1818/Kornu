@@ -92,6 +92,8 @@ export const coursesPage = single("coursesPage", "Courses", [
 
 export const galleryPage = single("galleryPage", "Gallery", [
   pageHeader,
+  ls("photosLabel", "Label under the photo count", "e.g. “bilder” in “11 bilder”."),
+  ls("allLabel", "“All” filter text", "The filter buttons are made from the photo tags below."),
   ls("linkLabel", "“See all” link text (home page preview)"),
   link("link", "“See all” link"),
   defineField({
