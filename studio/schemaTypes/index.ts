@@ -49,7 +49,7 @@ const PAGES: PageFolder[] = [
   },
   { title: "Packages page", icon: "📦", items: [{ id: "packagesPage", title: "Header + texts" }] },
   { title: "Simulator page", icon: "🎮", items: [{ id: "simulatorPage", title: "Header + simulator section" }] },
-  { title: "Gallery page", icon: "🖼️", items: [{ id: "galleryPage", title: "Header, photos & filter texts" }] },
+  { title: "Gallery page", icon: "🖼️", items: [{ id: "galleryPage", title: "Header + photos" }] },
   { title: "About page", icon: "ℹ️", items: [{ id: "aboutPage", title: "Texts + image" }] },
   {
     title: "Contact page",

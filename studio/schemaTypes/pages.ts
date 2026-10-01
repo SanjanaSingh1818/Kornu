@@ -93,7 +93,6 @@ export const coursesPage = single("coursesPage", "Courses", [
 export const galleryPage = single("galleryPage", "Gallery", [
   pageHeader,
   ls("photosLabel", "Label under the photo count", "e.g. “bilder” in “11 bilder”."),
-  ls("allLabel", "“All” filter text", "The filter buttons are made from the photo tags below."),
   ls("linkLabel", "“See all” link text (home page preview)"),
   link("link", "“See all” link"),
   defineField({
@@ -105,7 +104,7 @@ export const galleryPage = single("galleryPage", "Gallery", [
     of: [defineArrayMember({
       type: "object",
       name: "galleryPhoto",
-      fields: [defineField({ ...img("image", "Photo"), validation: (rule) => rule.required() }), ls("title", "Caption"), ls("tag", "Tag")],
+      fields: [defineField({ ...img("image", "Photo"), validation: (rule) => rule.required() }), ls("title", "Caption", "Shown in the full-screen viewer and used as the image description."), ls("tag", "Tag", "Small label on the photo, e.g. “Godkänd elev”.")],
       preview: { select: { title: "title.sv", subtitle: "tag.sv", media: "image" } },
     })],
   }),

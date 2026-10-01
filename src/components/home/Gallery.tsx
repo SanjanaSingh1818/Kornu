@@ -1,11 +1,11 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import type { GalleryItem } from "../../content/defaults";
 import { useLanguage } from "../../i18n";
 import { CmsLink } from "../CmsLink";
 import { Icon } from "../Icon";
 
-// Screen-reader labels only; visible texts ("Alla", "bilder") come from Sanity via t.galleryUi.
+// Screen-reader labels only; the visible "bilder" label comes from Sanity via t.galleryUi.
 const UI = {
   sv: { open: "Visa bild", close: "Stäng", prev: "Föregående bild", next: "Nästa bild" },
   en: { open: "View photo", close: "Close", prev: "Previous photo", next: "Next photo" },
@@ -28,7 +28,7 @@ function Tile({ image, index, onOpen, label }: { image: GalleryItem; index: numb
         className="group relative block aspect-[4/5] w-full overflow-hidden rounded-2xl sm:rounded-[1.75rem] bg-primary-900 text-left shadow-[0_18px_50px_rgba(6,78,59,0.14)] ring-1 ring-black/5 transition duration-500 hover:-translate-y-1.5 hover:shadow-[0_30px_70px_rgba(6,78,59,0.24)] focus:outline-none focus-visible:ring-4 focus-visible:ring-primary-300"
       >
         <img src={image.src} alt={image.title} loading="lazy" className="absolute inset-0 h-full w-full object-cover transition duration-[900ms] ease-out group-hover:scale-110" />
-        <div className="absolute inset-0 bg-gradient-to-t from-dark/90 via-dark/15 to-transparent opacity-80 transition duration-500 group-hover:opacity-100" />
+        <div className="absolute inset-0 bg-gradient-to-t from-dark/35 via-transparent to-dark/20 opacity-70 transition duration-500 group-hover:opacity-100" />
         {image.tag && (
           <span className="absolute left-2.5 top-2.5 max-w-[calc(100%-1.25rem)] truncate rounded-full border border-white/25 bg-white/15 px-2.5 py-1 text-[9px] font-bold uppercase tracking-[.14em] text-white backdrop-blur-md sm:left-4 sm:top-4 sm:px-3 sm:text-[10px] sm:tracking-[.18em]">
             {image.tag}
@@ -36,10 +36,6 @@ function Tile({ image, index, onOpen, label }: { image: GalleryItem; index: numb
         )}
         <span className="absolute right-4 top-4 grid h-10 w-10 scale-75 place-items-center rounded-full bg-white text-dark opacity-0 shadow-lg transition duration-300 group-hover:scale-100 group-hover:opacity-100" aria-hidden>
           <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.2} strokeLinecap="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7" /></svg>
-        </span>
-        <span className="absolute inset-x-3 bottom-3 translate-y-1 transition duration-500 group-hover:translate-y-0 sm:inset-x-5 sm:bottom-5">
-          <span className="block text-sm font-extrabold leading-tight tracking-tight text-white sm:text-xl">{image.title}</span>
-          <span className="mt-2 block h-0.5 w-10 rounded-full bg-primary-400 transition-all duration-500 group-hover:w-20" />
         </span>
       </button>
     </motion.li>
@@ -134,9 +130,7 @@ export function Gallery({ preview = false }: { preview?: boolean }) {
   const { t, site, lang } = useLanguage();
   const ui = UI[lang] ?? UI.sv;
   const all = preview ? site.gallery.slice(0, 8) : site.gallery;
-  const tags = useMemo(() => Array.from(new Set(all.map((image) => image.tag).filter(Boolean))), [all]);
-  const [filter, setFilter] = useState<string | null>(null);
-  const images = filter ? all.filter((image) => image.tag === filter) : all;
+  const images = all;
   const [open, setOpen] = useState<number | null>(null);
   const move = useCallback((step: number) => setOpen((current) => (current === null ? null : (current + step + images.length) % images.length)), [images.length]);
   const close = useCallback(() => setOpen(null), []);
@@ -238,25 +232,6 @@ export function Gallery({ preview = false }: { preview?: boolean }) {
 
       <section id="gallery" className="scroll-mt-28 bg-primary-50 px-4 py-14 sm:px-6 sm:py-20">
         <div className="mx-auto max-w-7xl">
-          {tags.length > 1 && (
-            <div className="-mx-4 mb-8 flex gap-2 overflow-x-auto px-4 pb-1 [scrollbar-width:none] sm:mx-0 sm:flex-wrap sm:px-0">
-              {[null, ...tags].map((tag) => {
-                const active = filter === tag;
-                const count = tag ? all.filter((image) => image.tag === tag).length : all.length;
-                return (
-                  <button
-                    key={tag ?? "all"}
-                    type="button"
-                    onClick={() => setFilter(tag)}
-                    className={`inline-flex shrink-0 items-center gap-2 rounded-full px-4 py-2 text-sm font-bold transition ${active ? "bg-dark text-white shadow-lg" : "bg-white text-slate-700 ring-1 ring-primary-200/60 hover:ring-primary-300"}`}
-                  >
-                    {tag ?? t.galleryUi.all}
-                    <span className={`rounded-full px-2 py-0.5 text-[11px] ${active ? "bg-primary-400 text-dark" : "bg-primary-50 text-primary-dark"}`}>{count}</span>
-                  </button>
-                );
-              })}
-            </div>
-          )}
           {grid}
         </div>
         {lightbox}

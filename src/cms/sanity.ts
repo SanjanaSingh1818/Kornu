@@ -29,7 +29,7 @@ export const SITE_QUERY = `{
   },
   "coursesPage": *[_id == "coursesPage"][0]{${header}, linkLabel, link, defaultBookingUrl},
   "courses": *[_id == "coursesPage"][0].courses[]{..., ${img("image")}},
-  "galleryPage": *[_id == "galleryPage"][0]{${header}, linkLabel, link, allLabel, photosLabel},
+  "galleryPage": *[_id == "galleryPage"][0]{${header}, linkLabel, link, photosLabel},
   "gallery": *[_id == "galleryPage"][0].photos[]{..., ${img("image")}},
   "simulatorPage": *[_id == "simulatorPage"][0]{..., ${img("image")}},
   "aboutPage": *[_id == "aboutPage"][0]{..., ${img("image")}},

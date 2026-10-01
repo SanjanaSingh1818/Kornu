@@ -150,7 +150,7 @@ async function buildDocuments() {
   add({
     _id: "galleryPage", _type: "galleryPage", header: header("gallery"),
     linkLabel: lsSite((s) => s.galleryLinkLabel), link: sv.buttons.galleryLink, photos,
-    allLabel: ls((t) => t.galleryUi.all), photosLabel: ls((t) => t.galleryUi.photos),
+    photosLabel: ls((t) => t.galleryUi.photos),
   });
   add({
     _id: "packagesPage", _type: "packagesPage", header: header("packages"),
