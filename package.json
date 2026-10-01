@@ -8,7 +8,9 @@
     "build": "vite build",
     "preview": "vite preview",
     "seed:sanity": "tsx scripts/seed-sanity.ts",
-    "studio": "npm --prefix studio run dev"
+    "studio": "npm --prefix studio run dev",
+    "build:studio": "npm --prefix studio ci && npm --prefix studio run build -- ../dist/studio --yes",
+    "build:all": "vite build && npm run build:studio"
   },
   "dependencies": {
     "@emailjs/browser": "^4.4.1",
