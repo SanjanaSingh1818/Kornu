@@ -19,7 +19,7 @@ export type PageFolder = { title: string; icon: string; items: Item[] };
 
 // The sidebar mirrors the website: one folder per page with its sections in page order.
 // A shared section (e.g. the green call-to-action box) is listed on every page that shows it.
-export const PAGE_FOLDERS: PageFolder[] = [
+const PAGES: PageFolder[] = [
   {
     title: "Home page",
     icon: "🏠",
@@ -67,8 +67,15 @@ export const PAGE_FOLDERS: PageFolder[] = [
     items: [
       { id: "navigation", title: "Header & menu (links + buttons)" },
       { id: "footer", title: "Footer" },
-      { id: "contactForm", title: "Contact form (bottom of every page)" },
+      { id: "contactForm", title: "Contact form + photo (bottom of every page)" },
       { id: "siteSettings", title: "Site settings (logo, phone, email, address, Google)" },
     ],
   },
 ];
+
+// The contact form (photo + "Boka din första lektion") sits at the bottom of every page,
+// so it is listed last in each page folder as well as under "Every page".
+const CONTACT_FORM_ITEM: Item = { id: "contactForm", title: "Contact form + photo (bottom of every page)" };
+export const PAGE_FOLDERS: PageFolder[] = PAGES.map((folder) =>
+  folder.title === "Every page" || folder.title === "Payment result pages" ? folder : { ...folder, items: [...folder.items, CONTACT_FORM_ITEM] },
+);

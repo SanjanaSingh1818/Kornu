@@ -102,7 +102,7 @@ export const finalCta = single("finalCta", "Final call to action (green box)", [
 
 export const contactForm = single("contactForm", "Contact form (bottom of every page)", [
   ls("eyebrow", "Small label"), ls("title", "Title"), lt("text", "Text"),
-  img("image", "Side image"), ls("imageAlt", "Image description (accessibility)"), ls("imageCaption", "Text on image"),
+  img("image", "Photo (left of the form)"), ls("imageCaption", "Text on the photo"), ls("imageAlt", "Photo description (accessibility)"),
   ls("fullName", "Name label"), ls("namePlaceholder", "Name placeholder"),
   ls("email", "Email label"), ls("emailPlaceholder", "Email placeholder"),
   ls("phone", "Phone label"), ls("phonePlaceholder", "Phone placeholder"),
