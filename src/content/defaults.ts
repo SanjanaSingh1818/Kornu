@@ -1,7 +1,7 @@
 // Non-translation content (images, links, contact details, lists) with the
 // original hard-coded values as fallback. Sanity overrides these when configured.
 import { COURSES, GALLERY_IMAGES, NAV } from "../data";
-import type { PagePath } from "../types";
+import type { InfoPagePath, PagePath } from "../types";
 import type { Translations } from "./translations";
 
 export const HOME_SECTION_KEYS = ["hero", "benefits", "journey", "courses", "packages", "quiz", "simulator", "braking", "reviews", "trainers", "gallery", "finalCta", "visit"] as const;
@@ -15,6 +15,18 @@ export type Trainer = { name: string; experience: string; role: string; language
 export type Review = { author: string; time: string; text: string; initials: string; rating: number };
 export type OpeningHour = { days: string; hours: string };
 export type SocialLink = { platform: string; url: string };
+export type InfoPage = { path: InfoPagePath; title: string; paragraphs: string[] };
+
+export const DEFAULT_INFO_PAGES: InfoPage[] = [
+  { path: "/vanliga-fragor", title: "Vanliga frågor", paragraphs: ["Här samlar vi svar på vanliga frågor om körkortsutbildningen.", "Har du frågor om bokning eller din utbildning? Kontakta oss på info@kornu.se eller 031-386 00 86."] },
+  { path: "/villkor-och-info", title: "Villkor & information", paragraphs: ["Här hittar du viktig information och villkor för Kör Nu Trafikskolas tjänster.", "Kontakta oss om du behöver hjälp eller vill veta mer innan du bokar."] },
+  { path: "/integritetspolicy", title: "Integritetspolicy", paragraphs: ["Här publicerar vi information om hur Kör Nu Trafikskola hanterar personuppgifter, varför uppgifterna behandlas och vilka rättigheter du har.", "Kontakta oss på info@kornu.se om du har frågor om personuppgifter."] },
+  { path: "/kontaktinformation", title: "Kontaktinformation", paragraphs: ["Kör Nu Trafikskola, FO Petersons gata 6, 421 31 Västra Frölunda.", "Telefon: 031-386 00 86. E-post: info@kornu.se. Organisationsnummer: 559288-1386."] },
+  { path: "/anvandarvillkor", title: "Användarvillkor", paragraphs: ["Här publicerar vi de fullständiga användarvillkoren för Kör Nu Trafikskolas webbplats och tjänster.", "Kontakta oss på info@kornu.se om du har frågor om villkoren."] },
+  { path: "/fraktpolicy", title: "Fraktpolicy", paragraphs: ["Här publicerar vi information om leverans och eventuell frakt för produkter och tjänster.", "Kontakta oss på info@kornu.se om du har frågor om en beställning."] },
+  { path: "/rattsligt-meddelande", title: "Rättsligt meddelande", paragraphs: ["Webbplatsen drivs av Kör Nu Trafikskola, organisationsnummer 559288-1386.", "Frågor om webbplatsen kan skickas till info@kornu.se."] },
+  { path: "/aterbetalningspolicy", title: "Återbetalningspolicy", paragraphs: ["Här publicerar vi information om avbokning, återbetalning och eventuella undantag.", "Kontakta oss på info@kornu.se om du har frågor om en betalning."] },
+];
 
 export type Site = {
   siteName: string;
@@ -31,6 +43,10 @@ export type Site = {
   header: { ecommerce: string; studentLogin: string; extraLabel: string; extraPath: PagePath; showLanguage: boolean };
   nav: NavItem[];
   footerCourseLinks: NavItem[];
+  footerHelpLinks: NavItem[];
+  footerLegalLinks: NavItem[];
+  drivingLicenceUrl: string;
+  infoPages: InfoPage[];
   copyright: string;
   homeSections: HomeSectionKey[];
   images: { hero: string; heroAlt: string; simulator: string; simulatorAlt: string; car: string; about: string; contactForm: string };
@@ -83,7 +99,7 @@ export function defaultSite(t: Translations): Site {
     mapsUrl: "https://maps.google.com/?q=FO+Petersons+gata+6,+421+31+V%C3%A4stra+Fr%C3%B6lunda",
     aboutMapsUrl: "https://www.google.com/maps/search/?api=1&query=K%C3%B6r+Nu+Trafikskola+V%C3%A4stra+Fr%C3%B6lunda+G%C3%B6teborg",
     orgNumber: "559288-1386",
-    social: [{ platform: "facebook", url: "#" }, { platform: "instagram", url: "#" }],
+    social: [{ platform: "facebook", url: "" }, { platform: "instagram", url: "" }],
     links: {
       ecommerce: "https://www.trafikskolaonline.se/sv/skola/kornu/ehandel",
       studentLogin: "https://www.trafikskolaonline.se/sv/skola/kornu/elevinloggning",
@@ -103,6 +119,13 @@ export function defaultSite(t: Translations): Site {
       { label: "Risk 2", href: COURSE_BOOKING_URL },
       { label: String(t.packages.items[2][0]), href: COURSE_BOOKING_URL },
     ],
+    footerHelpLinks: [
+      { label: "Vanliga frågor", href: "/vanliga-fragor" },
+      { label: "Villkor & info", href: "/villkor-och-info" },
+    ],
+    footerLegalLinks: DEFAULT_INFO_PAGES.slice(2).map(({ path, title }) => ({ label: title, href: path })),
+    drivingLicenceUrl: "https://www.transportstyrelsen.se/sv/vagtrafik/e-tjanster-och-blanketter/blanketter-for-vagtrafik/korkort/privatperson/ansok-om-korkortstillstand-grupp-i/",
+    infoPages: DEFAULT_INFO_PAGES,
     copyright: "© 2026 Kör Nu Trafikskola AB.",
     homeSections: ["hero", "benefits", "journey", "packages", "quiz", "simulator", "braking", "reviews", "finalCta", "visit"],
     images: {

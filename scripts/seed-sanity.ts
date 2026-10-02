@@ -15,6 +15,7 @@ import { translations, type Translations } from "../src/content/translations";
 import { defaultSite, type Site } from "../src/content/defaults";
 
 const dryRun = process.argv.includes("--dry-run");
+const policiesOnly = process.argv.includes("--policies-only");
 const projectId = process.env.SANITY_PROJECT_ID || process.env.VITE_SANITY_PROJECT_ID;
 const dataset = process.env.SANITY_DATASET || process.env.VITE_SANITY_DATASET || "production";
 const token = process.env.SANITY_WRITE_TOKEN;
@@ -37,6 +38,7 @@ const ls = (get: Get<Translations>) => locale("localeString", T, get);
 const lt = (get: Get<Translations>) => locale("localeText", T, get);
 const lsSite = (get: Get<Site>) => locale("localeString", SITE, get);
 const same = (value: string) => ({ _type: "localeString", sv: value, en: value, ar: value });
+const swedishOnly = (type: "localeString" | "localeText", value: string) => ({ _type: type, sv: value, en: "", ar: "" });
 const keyed = <V extends object>(items: V[], prefix: string) => items.map((item, i) => ({ _key: `${prefix}${i}`, ...item }));
 const header = (key: keyof Translations["pages"]) => ({
   eyebrow: ls((t) => t.pages[key][0]), title: ls((t) => t.pages[key][1]), text: lt((t) => t.pages[key][2]),
@@ -109,6 +111,18 @@ async function buildDocuments() {
     text: lt((t) => t.footer.text), quick: ls((t) => t.footer.quick), courses: ls((t) => t.footer.courses),
     contact: ls((t) => t.footer.contact), rights: ls((t) => t.footer.rights), city: ls((t) => t.footer.city),
     courseLinks: keyed(sv.footerCourseLinks.map((item, i) => ({ label: lsSite((s) => s.footerCourseLinks[i].label), link: item.href })), "c"),
+    helpLinks: keyed(sv.footerHelpLinks.map((item, i) => ({ label: same(item.label), link: item.href })), "h"),
+    legalLinks: keyed(sv.footerLegalLinks.map((item, i) => ({ label: same(item.label), link: item.href })), "l"),
+    social: [],
+    drivingLicenceUrl: sv.drivingLicenceUrl,
+  });
+  add({
+    _id: "policyPages", _type: "policyPages",
+    pages: keyed(sv.infoPages.map((page) => ({
+      slug: page.path.slice(1),
+      title: same(page.title),
+      paragraphs: keyed(page.paragraphs.map((paragraph) => ({ _type: "localeText", sv: paragraph, en: "", ar: "" })), "p"),
+    })), "page"),
   });
 
   add({ _id: "homePage", _type: "homePage", sections: sv.homeSections });
@@ -236,8 +250,30 @@ async function buildDocuments() {
   return docs;
 }
 
+function buildPolicyPagesDocument() {
+  return {
+    _id: "policyPages",
+    _type: "policyPages",
+    pages: keyed(SITE.sv.infoPages.map((page) => ({
+      slug: page.path.slice(1),
+      title: swedishOnly("localeString", page.title),
+      paragraphs: keyed(page.paragraphs.map((paragraph) => swedishOnly("localeText", paragraph)), "p"),
+    })), "page"),
+  };
+}
+
 async function main() {
   console.log(dryRun ? "Dry run: nothing is written." : `Seeding ${projectId}/${dataset}…`);
+  if (policiesOnly) {
+    const document = buildPolicyPagesDocument();
+    if (!client) {
+      console.log(`Would create policyPages with ${document.pages.length} Swedish pages if it does not already exist.`);
+      return;
+    }
+    await client.createIfNotExists(document);
+    console.log(`Done: initialized ${document.pages.length} Swedish pages if policyPages was missing; existing content was preserved.`);
+    return;
+  }
   const docs = await buildDocuments();
   if (!client) {
     const out = path.join(process.cwd(), "sanity-seed-preview.json");

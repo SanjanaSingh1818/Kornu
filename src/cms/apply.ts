@@ -35,6 +35,11 @@ export function applyCms(lang: Lang, baseT: Translations, baseSite: Site, cms: C
   const { settings, navigation, footer, home, packagesPage, quizSection, brakingSection, reviewsSection, visitSection, finalCta, aboutPage, contactForm, paymentPages, simulatorPage, contactPage, trainersSection } = cms;
   const hero = home?.hero;
   const journey = home?.journey;
+  const socialLinks = list(
+    footer?.social,
+    (s: Any) => ({ platform: s?.platform || "facebook", url: s?.url || "" }),
+    list(settings?.social, (s: Any) => ({ platform: s?.platform || "facebook", url: s?.url || "" }), baseSite.social),
+  );
 
   const t: Translations = {
     ...baseT,
@@ -122,7 +127,9 @@ export function applyCms(lang: Lang, baseT: Translations, baseSite: Site, cms: C
     mapsUrl: str(settings?.mapsUrl, baseSite.mapsUrl),
     aboutMapsUrl: str(aboutPage?.mapsUrl, baseSite.aboutMapsUrl),
     orgNumber: str(settings?.orgNumber, baseSite.orgNumber),
-    social: list(settings?.social, (s: Any) => ({ platform: s?.platform || "facebook", url: s?.url || "#" }), baseSite.social),
+    social: ["facebook", "instagram"].map((platform) =>
+      socialLinks.find((item) => item.platform === platform && item.url && item.url !== "#") ?? { platform, url: "" },
+    ),
     links: { ecommerce: ecommerceUrl, studentLogin: studentLoginUrl, booking: bookingUrl, coursesBooking },
     header: {
       ecommerce: str(navigation?.ecommerceLabel, baseSite.header.ecommerce),
@@ -133,6 +140,17 @@ export function applyCms(lang: Lang, baseT: Translations, baseSite: Site, cms: C
     },
     nav: list(navigation?.items, (item: Any, i) => navItem(item, baseSite.nav[i] ?? baseSite.nav[0]), baseSite.nav),
     footerCourseLinks: list(footer?.courseLinks, (item: Any, i) => navItem(item, baseSite.footerCourseLinks[i] ?? { label: "", href: "/courses" }), baseSite.footerCourseLinks),
+    footerHelpLinks: list(footer?.helpLinks, (item: Any, i) => navItem(item, baseSite.footerHelpLinks[i] ?? { label: "", href: "/vanliga-fragor" }), baseSite.footerHelpLinks),
+    footerLegalLinks: list(footer?.legalLinks, (item: Any, i) => navItem(item, baseSite.footerLegalLinks[i] ?? { label: "", href: "/integritetspolicy" }), baseSite.footerLegalLinks),
+    drivingLicenceUrl: str(footer?.drivingLicenceUrl, baseSite.drivingLicenceUrl),
+    infoPages: list(cms.policyPages?.pages, (page: Any) => {
+      const fallback = baseSite.infoPages.find((item) => item.path === `/${page?.slug}`) ?? baseSite.infoPages[0];
+      return {
+        path: fallback.path,
+        title: str(page?.title, fallback.title),
+        paragraphs: list(page?.paragraphs, loc, fallback.paragraphs),
+      };
+    }, baseSite.infoPages),
     copyright: str(settings?.copyright, baseSite.copyright),
     homeSections: sections.length > 0 ? sections : baseSite.homeSections,
     images: {

@@ -7,7 +7,8 @@ import { getPagePath, NavigateContext } from "./routing";
 import { LanguageProvider } from "./i18n";
 import type { Package, PagePath } from "./types";
 import { createCheckoutSession } from "./stripe";
-import { AboutPage, ContactPage, CoursesPage, GalleryPage, HomePage, PackagesPage, PaymentCancelledPage, PaymentSuccessPage, SimulatorPage } from "./pages";
+import { AboutPage, ContactPage, CoursesPage, GalleryPage, HomePage, InfoPage, PackagesPage, PaymentCancelledPage, PaymentSuccessPage, SimulatorPage } from "./pages";
+import { isInfoPagePath } from "./routing";
 
 const DrivingSimulator = lazy(() => import("./DrivingSimulator"));
 
@@ -66,6 +67,7 @@ export default function App() {
         {path === "/gallery" && <GalleryPage />}
         {path === "/about" && <AboutPage />}
         {path === "/contact" && <ContactPage />}
+        {isInfoPagePath(path) && <InfoPage path={path} />}
         <ContactForm />
         {/* Contact ("Skriv in dig") page: address, hours and map below the form */}
         {path === "/contact" && <VisitUs />}

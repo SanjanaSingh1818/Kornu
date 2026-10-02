@@ -1,5 +1,5 @@
 import { localeString, localeText } from "./helpers";
-import { aboutPage, benefitsSection, contactPage, coursesPage, galleryPage, heroSection, homePage, journeySection, packagesPage, paymentPages, simulatorPage } from "./pages";
+import { aboutPage, benefitsSection, contactPage, coursesPage, galleryPage, heroSection, homePage, journeySection, packagesPage, paymentPages, policyPages, simulatorPage } from "./pages";
 import { brakingSection, contactForm, finalCta, quizSection, reviewsSection, trainersSection, visitSection } from "./sections";
 import { footer, navigation, siteSettings } from "./settings";
 
@@ -7,7 +7,7 @@ export const schemaTypes = [
   localeString, localeText,
   siteSettings, navigation, footer, contactForm,
   homePage, heroSection, benefitsSection, journeySection,
-  coursesPage, packagesPage, simulatorPage, galleryPage, aboutPage, contactPage, paymentPages,
+  coursesPage, packagesPage, simulatorPage, galleryPage, aboutPage, contactPage, paymentPages, policyPages,
   quizSection, brakingSection, reviewsSection, visitSection, finalCta, trainersSection,
 ];
 
@@ -62,12 +62,13 @@ const PAGES: PageFolder[] = [
     ],
   },
   { title: "Payment result pages", icon: "💳", items: [{ id: "paymentPages", title: "Success & cancelled texts" }] },
+  { title: "Informationssidor", icon: "⚖️", items: [{ id: "policyPages", title: "Hjälp-, kontakt- och policysidor" }] },
   {
     title: "Every page",
     icon: "⚙️",
     items: [
       { id: "navigation", title: "Header & menu (links + buttons)" },
-      { id: "footer", title: "Footer" },
+      { id: "footer", title: "Sidfot (länkar och sociala medier)" },
       { id: "contactForm", title: "Contact form + photo (bottom of every page)" },
       { id: "siteSettings", title: "Site settings (logo, phone, email, address, Google)" },
     ],

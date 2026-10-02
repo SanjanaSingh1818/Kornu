@@ -156,3 +156,27 @@ export const paymentPages = single("paymentPages", "Payment result pages", [
   ls("cancelled", "Cancelled title"),
   lt("cancelledText", "Cancelled text"),
 ]);
+
+export const policyPages = single("policyPages", "Informationssidor", [
+  defineField({
+    name: "pages",
+    title: "Sidor",
+    type: "array",
+    of: [defineArrayMember({
+      type: "object",
+      name: "infoPage",
+      fields: [
+        defineField({
+          name: "slug",
+          title: "Sidadress",
+          type: "string",
+          options: { list: ["vanliga-fragor", "villkor-och-info", "integritetspolicy", "kontaktinformation", "anvandarvillkor", "fraktpolicy", "rattsligt-meddelande", "aterbetalningspolicy"].map((value) => ({ title: `/${value}`, value })) },
+          validation: (rule) => rule.required(),
+        }),
+        ls("title", "Sidrubrik"),
+        defineField({ name: "paragraphs", title: "Textstycken", type: "array", of: [defineArrayMember({ type: "localeText" })] }),
+      ],
+      preview: { select: { title: "title.sv", subtitle: "slug" } },
+    })],
+  }),
+], "Redigera innehållet för hjälp-, kontakt- och policysidorna. Sidadresserna är fasta.");

@@ -21,6 +21,7 @@ export const SITE_QUERY = `{
   "settings": *[_id == "siteSettings"][0]{..., ${img("logo")}, ${img("seoImage")}},
   "navigation": *[_id == "navigation"][0],
   "footer": *[_id == "footer"][0],
+  "policyPages": *[_id == "policyPages"][0],
   "home": {
     "sections": *[_id == "homePage"][0].sections,
     "hero": *[_id == "heroSection"][0]{..., ${img("image")}},
@@ -51,7 +52,7 @@ export const SITE_QUERY = `{
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type CmsData = Record<string, any>;
 
-const CACHE_KEY = "kornu-cms-v2"; // bump when SITE_QUERY changes shape
+const CACHE_KEY = "kornu-cms-v3"; // bump when SITE_QUERY changes shape
 
 export function readCachedCms(): CmsData | null {
   try {

@@ -1,14 +1,20 @@
 import { createContext, type MouseEvent } from "react";
 import { NAV } from "./data";
-import type { PagePath } from "./types";
+import { INFO_PAGE_PATHS, type InfoPagePath, type PagePath } from "./types";
+
+const INFO_PATHS: readonly string[] = INFO_PAGE_PATHS;
 
 export function getPagePath(value: string): PagePath {
   const normalized = value.replace(/\/$/, "") || "/";
-  return normalized === "/payment-success" || normalized === "/payment-cancelled" || NAV.some((item) => item.path === normalized) ? normalized as PagePath : "/";
+  return normalized === "/payment-success" || normalized === "/payment-cancelled" || NAV.some((item) => item.path === normalized) || INFO_PATHS.includes(normalized) ? normalized as PagePath : "/";
 }
 
 export function isPagePath(value: string): value is PagePath {
-  return NAV.some((item) => item.path === value);
+  return NAV.some((item) => item.path === value) || INFO_PATHS.includes(value);
+}
+
+export function isInfoPagePath(value: PagePath): value is InfoPagePath {
+  return INFO_PATHS.includes(value);
 }
 
 export function handleRouteClick(e: MouseEvent<HTMLAnchorElement>, path: PagePath, onNavigate: (path: PagePath) => void) {

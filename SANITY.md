@@ -34,6 +34,12 @@ If Sanity is not configured, or a field is left empty, the website shows the ori
    This uploads the images in `public/images` and creates every document. Running it again **overwrites** the Sanity content with the local content, so only run it once (or when you intentionally want to reset).
    Delete the token from `.env` afterwards if you like; the website never needs it.
 
+   To initialize only the new help and policy pages without replacing any existing website content, run:
+   ```sh
+   npm run seed:sanity -- --policies-only
+   ```
+   This creates the `policyPages` document only if it does not already exist.
+
 5. **Put the Studio online** so editors can log in from anywhere:
    ```sh
    cd studio
@@ -53,11 +59,14 @@ The sidebar mirrors the website: one folder per page, with that page's sections 
 | 🎮 Simulator / 🖼️ Gallery / ℹ️ About page | Header, texts, images, photos |
 | ✉️ Contact page | Header + labels, Final call to action, Visit-us headings |
 | 💳 Payment result pages | Success and cancelled texts |
-| ⚙️ Every page | Header & menu (links, buttons + their links), Footer, Contact form, Site settings (logo, phone, email, address, opening hours, social, Google) |
+| ⚙️ Every page | Header & menu, Footer (including social links and legal links), Contact form, Site settings |
+| ⚖️ Informationssidor | Swedish page titles and text for FAQ, terms, privacy, contact information, shipping, legal notice and refunds |
 
 A section used on several pages (e.g. the green call-to-action box) is listed in each of those folders, but it is the same content: editing it once changes it everywhere.
 
 Button links accept a site page (`/packages`, `/contact`, `/`), a section on the same page (`#paket`), a full address (`https://…`), or `tel:` / `mailto:`.
+
+The footer's help links, six legal links, Facebook and Instagram URLs, and application link for a driving licence permit are edited under **Every page → Footer**. Page text is edited under **Information pages**. The driving licence link defaults to Transportstyrelsen.
 
 Every text field has **Svenska / English / العربية**. If a language is left empty, the site shows the Swedish text.
 

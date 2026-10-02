@@ -1,4 +1,16 @@
-export type PagePath = "/" | "/courses" | "/packages" | "/simulator" | "/gallery" | "/contact" | "/about" | "/payment-success" | "/payment-cancelled";
+export const INFO_PAGE_PATHS = [
+  "/vanliga-fragor",
+  "/villkor-och-info",
+  "/integritetspolicy",
+  "/kontaktinformation",
+  "/anvandarvillkor",
+  "/fraktpolicy",
+  "/rattsligt-meddelande",
+  "/aterbetalningspolicy",
+] as const;
+
+export type InfoPagePath = (typeof INFO_PAGE_PATHS)[number];
+export type PagePath = "/" | "/courses" | "/packages" | "/simulator" | "/gallery" | "/contact" | "/about" | "/payment-success" | "/payment-cancelled" | InfoPagePath;
 
 export type ProductCategory = "all" | "driving-lesson-package" | "best-prices" | "courses" | "start-up-package" | "total-package";
 
