@@ -127,7 +127,7 @@ export function applyCms(lang: Lang, baseT: Translations, baseSite: Site, cms: C
     mapsUrl: str(settings?.mapsUrl, baseSite.mapsUrl),
     aboutMapsUrl: str(aboutPage?.mapsUrl, baseSite.aboutMapsUrl),
     orgNumber: str(settings?.orgNumber, baseSite.orgNumber),
-    social: ["facebook", "instagram"].map((platform) =>
+    social: ["facebook", "instagram", "tiktok"].map((platform) =>
       socialLinks.find((item) => item.platform === platform && item.url && item.url !== "#") ?? { platform, url: "" },
     ),
     links: { ecommerce: ecommerceUrl, studentLogin: studentLoginUrl, booking: bookingUrl, coursesBooking },
@@ -143,14 +143,16 @@ export function applyCms(lang: Lang, baseT: Translations, baseSite: Site, cms: C
     footerHelpLinks: list(footer?.helpLinks, (item: Any, i) => navItem(item, baseSite.footerHelpLinks[i] ?? { label: "", href: "/vanliga-fragor" }), baseSite.footerHelpLinks),
     footerLegalLinks: list(footer?.legalLinks, (item: Any, i) => navItem(item, baseSite.footerLegalLinks[i] ?? { label: "", href: "/integritetspolicy" }), baseSite.footerLegalLinks),
     drivingLicenceUrl: str(footer?.drivingLicenceUrl, baseSite.drivingLicenceUrl),
-    infoPages: list(cms.policyPages?.pages, (page: Any) => {
-      const fallback = baseSite.infoPages.find((item) => item.path === `/${page?.slug}`) ?? baseSite.infoPages[0];
+    infoPages: baseSite.infoPages.map((fallback) => {
+      const page = (cms.policyPages ?? []).find((item: Any) => item?._id === fallback.id);
+      const legacy = cms.legacyPolicyPages?.pages?.find((item: Any) => item?.slug === fallback.path.slice(1));
+      const content = page ?? legacy;
       return {
-        path: fallback.path,
-        title: str(page?.title, fallback.title),
-        paragraphs: list(page?.paragraphs, loc, fallback.paragraphs),
+        ...fallback,
+        title: str(content?.title, fallback.title),
+        paragraphs: list(content?.paragraphs, loc, fallback.paragraphs),
       };
-    }, baseSite.infoPages),
+    }),
     copyright: str(settings?.copyright, baseSite.copyright),
     homeSections: sections.length > 0 ? sections : baseSite.homeSections,
     images: {

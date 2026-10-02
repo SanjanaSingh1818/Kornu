@@ -1,6 +1,7 @@
 import { defineConfig } from "sanity";
 import { structureTool } from "sanity/structure";
 import { visionTool } from "@sanity/vision";
+import { svSELocale } from "@sanity/locale-sv-se";
 import { schemaTypes, SINGLETON_IDS } from "./schemaTypes";
 import { structure } from "./structure";
 
@@ -13,7 +14,7 @@ export default defineConfig({
   basePath: "/studio",
   projectId: process.env.SANITY_STUDIO_PROJECT_ID || "s9tltfth",
   dataset: process.env.SANITY_STUDIO_DATASET || "production",
-  plugins: [structureTool({ structure }), visionTool()],
+  plugins: [structureTool({ structure }), visionTool(), svSELocale({ title: "Svenska" })],
   schema: {
     types: schemaTypes,
     // Singletons can't be created from the "+" menu; they are opened from the sidebar.

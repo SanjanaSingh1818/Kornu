@@ -1,75 +1,77 @@
-# Editing the website with Sanity
+# Redigera webbplatsen i Sanity
 
-All texts (Swedish, English, Arabic), images, links, contact details, the menu, the footer and the home page section order are editable in Sanity Studio.
-**Packages and prices are not in Sanity.** They still come from Stripe (`api/products.ts`). Only the texts around them (headings, button labels) are in Sanity.
+Alla texter (svenska, engelska och arabiska), bilder, länkar, kontaktuppgifter, menyer, sidfoten och startsidans sektionsordning redigeras i Sanity Studio.
+**Paket och priser hanteras inte i Sanity.** De hämtas från Stripe (`api/products.ts`). Texterna runt paketen, som rubriker och knapptexter, redigeras i Sanity.
 
-If Sanity is not configured, or a field is left empty, the website shows the original built-in content, so nothing breaks.
+Om Sanity inte är konfigurerat eller ett fält lämnas tomt visas webbplatsens standardinnehåll.
 
-## One-time setup
+## Kom igång
 
-1. **Create the Sanity project**
+1. **Skapa Sanity-projektet**
    ```sh
    cd studio
    npm install
    npx sanity login
-   npx sanity init --bare        # creates a project and prints its project ID
+   npx sanity init --bare        # skapar ett projekt och visar projektets ID
    ```
-   Copy `studio/.env.example` to `studio/.env` and fill in `SANITY_STUDIO_PROJECT_ID`.
+   Kopiera `studio/.env.example` till `studio/.env` och fyll i `SANITY_STUDIO_PROJECT_ID`.
 
-2. **Connect the website.** In the root `.env`:
+2. **Anslut webbplatsen.** Lägg till följande i rotmappens `.env`:
    ```
    VITE_SANITY_PROJECT_ID=<your project id>
    VITE_SANITY_DATASET=production
    ```
-   Add the same two variables in Vercel → Project → Settings → Environment Variables.
+   Lägg till samma variabler i Vercel under Project → Settings → Environment Variables.
 
-3. **Allow the website to read from Sanity.** At sanity.io/manage → your project → API → CORS origins, add
-   `http://localhost:5173` and your live domain (e.g. `https://kornu.se`). No credentials needed.
+3. **Tillåt webbplatsen att läsa från Sanity.** Gå till sanity.io/manage → ditt projekt → API → CORS origins och lägg till
+   `http://localhost:5173` samt webbplatsens domän, till exempel `https://kornu.se`. Inga inloggningsuppgifter behövs.
 
-4. **Copy the current content into Sanity.** Create a token at sanity.io/manage → API → Tokens (permission: *Editor*), put it in the root `.env` as `SANITY_WRITE_TOKEN`, then from the project root:
+4. **Kopiera standardinnehållet till Sanity.** Skapa en token på sanity.io/manage → API → Tokens med behörigheten *Editor*. Lägg den i rotmappens `.env` som `SANITY_WRITE_TOKEN` och kör från projektets rotmapp:
    ```sh
    npm run seed:sanity -- --dry-run   # optional preview → sanity-seed-preview.json
    npm run seed:sanity
    ```
-   This uploads the images in `public/images` and creates every document. Running it again **overwrites** the Sanity content with the local content, so only run it once (or when you intentionally want to reset).
-   Delete the token from `.env` afterwards if you like; the website never needs it.
+   Kommandot laddar upp bilderna i `public/images` och skapar alla dokument. Om du kör det igen **skrivs Sanity-innehållet över** med standardinnehållet från projektet. Kör det därför bara vid första installationen eller när du avsiktligt vill återställa innehållet.
+   Webbplatsen behöver inte skrivtokenen. Ta bort den från `.env` när du är klar.
 
-   To initialize only the new help and policy pages without replacing any existing website content, run:
+   För att skapa de åtta separata hjälp- och policysidorna utan att ersätta befintligt innehåll, kör:
    ```sh
    npm run seed:sanity -- --policies-only
    ```
-   This creates the `policyPages` document only if it does not already exist.
+      Kommandot skapar varje sid-dokument om det saknas och kopierar eventuell text från den äldre samlingssidan. Befintliga sid-dokument skrivs inte över.
 
-5. **Put the Studio online** so editors can log in from anywhere:
+   5. **Publicera Studio** så redaktörer kan logga in:
    ```sh
    cd studio
-   npm run deploy               # hosted at https://<name>.sanity.studio
+   npm run deploy               # publiceras på https://<name>.sanity.studio
    ```
-   Or run it locally with `npm run dev` (http://localhost:3333).
+   Du kan också starta Studio lokalt med `npm run dev` (http://localhost:3333).
 
-## Where things are in the Studio
+## Innehåll i Studio
 
-The sidebar mirrors the website: one folder per page, with that page's sections in the order they appear. Each section holds everything it shows: texts, images, button **text and link**, and its list items (photos, reviews, quiz questions, trainers, course cards). Drag list items to reorder.
+Sidomenyn följer webbplatsens struktur. Varje mapp innehåller sidans sektioner och deras texter, bilder, knapptexter, länkar och listor. Dra listobjekt för att ändra ordning.
 
-| Sidebar folder | Sections inside |
+| Mapp i sidomenyn | Innehåll |
 |---|---|
-| 🏠 Home page | ① Section order (show/hide/reorder), Hero, Benefits bar, Journey, Packages texts, Theory quiz + questions, Simulator, Braking visualizer, Reviews, Final call to action, Visit us, Trainers, Gallery preview |
-| 📚 Courses page | Header + course cards, Journey |
-| 📦 Packages page | Header + texts (packages and prices themselves stay in Stripe) |
-| 🎮 Simulator / 🖼️ Gallery / ℹ️ About page | Header, texts, images, photos |
-| ✉️ Contact page | Header + labels, Final call to action, Visit-us headings |
-| 💳 Payment result pages | Success and cancelled texts |
-| ⚙️ Every page | Header & menu, Footer (including social links and legal links), Contact form, Site settings |
-| ⚖️ Informationssidor | Swedish page titles and text for FAQ, terms, privacy, contact information, shipping, legal notice and refunds |
+| 🏠 Startsida | Startsidessektioner, toppsektion, fördelar, vägen till körkortet, pakettexter, teorifrågor, simulator, bromssträcka, recensioner, avslutande uppmaning, karta, trafiklärare och galleri |
+| 📚 Kurssida | Sidhuvud, kurskort och vägen till körkortet |
+| 📦 Paketsida | Sidhuvud och texter. Paket och priser hanteras i Stripe. |
+| 🎮 Simulatorsida / 🖼️ Gallerisida / ℹ️ Om oss | Sidhuvud, texter, bilder och foton |
+| ✉️ Kontaktsida | Sidhuvud, etiketter, avslutande uppmaning, kontaktformulär och karta |
+| 💳 Betalningssidor | Texter för genomförd och avbruten betalning |
+| ⚖️ Hjälp och juridik | Åtta separata dokument: Vanliga frågor, Villkor & information, Integritetspolicy, Kontaktinformation, Användarvillkor, Fraktpolicy, Rättsligt meddelande och Återbetalningspolicy |
+| ⚙️ Alla sidor | Sidhuvud och meny, sidfot med sociala medier och juridiska länkar, kontaktformulär samt webbplatsinställningar |
 
-A section used on several pages (e.g. the green call-to-action box) is listed in each of those folders, but it is the same content: editing it once changes it everywhere.
+En sektion som används på flera sidor, till exempel den gröna avslutande uppmaningen, kan visas i flera mappar. Det är samma innehåll, så en ändring uppdateras överallt.
 
-Button links accept a site page (`/packages`, `/contact`, `/`), a section on the same page (`#paket`), a full address (`https://…`), or `tel:` / `mailto:`.
+Länkar kan peka till en sida (`/packages`, `/contact`, `/vanliga-fragor`), en sektion på samma sida (`#paket`), en webbadress (`https://…`) eller `tel:` / `mailto:`.
 
-The footer's help links, six legal links, Facebook and Instagram URLs, and application link for a driving licence permit are edited under **Every page → Footer**. Page text is edited under **Information pages**. The driving licence link defaults to Transportstyrelsen.
+Sidfotens hjälplänkar, juridiska länkar, Facebook-, Instagram- och TikTok-adresser samt länken till körkortstillstånd ändras under **Alla sidor → Sidfot**. Varje sida har ett eget dokument i **Hjälp och juridik**. Länken till körkortstillstånd går som standard till Transportstyrelsen.
 
-Every text field has **Svenska / English / العربية**. If a language is left empty, the site shows the Swedish text.
+Sanitys svenska gränssnitt aktiveras via användarmenyn: välj **Svenska** under språk. Sidomenyer, fält och hjälptexter i projektet är översatta till svenska.
 
-## How updates reach the site
+Textfält har **Svenska / English / العربية**. Om ett språk lämnas tomt visas den svenska texten på webbplatsen.
 
-The site reads published content from Sanity's CDN when a visitor opens it, and remembers it in the browser for the next visit. After you click **Publish**, the change shows on the next page load (the CDN can take up to about a minute). No rebuild or redeploy is needed.
+## Publicera ändringar
+
+Webbplatsen hämtar publicerat innehåll från Sanitys CDN och sparar det i webbläsaren inför nästa besök. När du klickar på **Publish** visas ändringen vid nästa sidladdning. CDN:en kan behöva upp till en minut för att uppdateras. Webbplatsen behöver inte byggas om eller publiceras på nytt.

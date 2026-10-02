@@ -1,83 +1,82 @@
 import { localeString, localeText } from "./helpers";
-import { aboutPage, benefitsSection, contactPage, coursesPage, galleryPage, heroSection, homePage, journeySection, packagesPage, paymentPages, policyPages, simulatorPage } from "./pages";
+import { aboutPage, benefitsSection, contactPage, coursesPage, galleryPage, heroSection, homePage, infoPageSchemas, journeySection, packagesPage, paymentPages, simulatorPage } from "./pages";
 import { brakingSection, contactForm, finalCta, quizSection, reviewsSection, trainersSection, visitSection } from "./sections";
 import { footer, navigation, siteSettings } from "./settings";
+import { DEFAULT_INFO_PAGES } from "../../src/content/defaults";
 
 export const schemaTypes = [
   localeString, localeText,
   siteSettings, navigation, footer, contactForm,
   homePage, heroSection, benefitsSection, journeySection,
-  coursesPage, packagesPage, simulatorPage, galleryPage, aboutPage, contactPage, paymentPages, policyPages,
+  coursesPage, packagesPage, simulatorPage, galleryPage, aboutPage, contactPage, paymentPages, ...infoPageSchemas,
   quizSection, brakingSection, reviewsSection, visitSection, finalCta, trainersSection,
 ];
 
-// Every document is a singleton with a fixed ID (= its type name). The site reads them by these IDs.
+// Varje dokument har ett fast ID som motsvarar dess schematyp.
 export const SINGLETON_IDS = schemaTypes.map((type) => type.name).filter((name) => !name.startsWith("locale"));
 
 type Item = { id: string; title: string };
 export type PageFolder = { title: string; icon: string; items: Item[] };
 
-// The sidebar mirrors the website: one folder per page with its sections in page order.
-// A shared section (e.g. the green call-to-action box) is listed on every page that shows it.
+// Sidomenyn följer webbplatsens sidstruktur. Delade sektioner visas där de används.
 const PAGES: PageFolder[] = [
   {
-    title: "Home page",
+    title: "Startsida",
     icon: "🏠",
     items: [
-      { id: "homePage", title: "① Section order (show / hide / reorder)" },
-      { id: "heroSection", title: "Hero (top image, title, buttons)" },
-      { id: "benefitsSection", title: "Benefits bar" },
-      { id: "journeySection", title: "Journey (road to licence)" },
-      { id: "packagesPage", title: "Packages & prices texts" },
-      { id: "quizSection", title: "Theory quiz + questions" },
+      { id: "homePage", title: "① Startsidessektioner (visa, dölj och sortera)" },
+      { id: "heroSection", title: "Toppsektion (bild, rubrik och knappar)" },
+      { id: "benefitsSection", title: "Fördelar" },
+      { id: "journeySection", title: "Vägen till körkortet" },
+      { id: "packagesPage", title: "Paket och priser" },
+      { id: "quizSection", title: "Teorifrågor och quiz" },
       { id: "simulatorPage", title: "Simulator" },
-      { id: "brakingSection", title: "Braking distance visualizer" },
-      { id: "reviewsSection", title: "Reviews" },
-      { id: "finalCta", title: "Final call to action (green box)" },
-      { id: "visitSection", title: "Visit us (map)" },
-      { id: "trainersSection", title: "Trainers (hidden unless added in Section order)" },
-      { id: "galleryPage", title: "Gallery preview (hidden unless added in Section order)" },
+      { id: "brakingSection", title: "Bromssträcka" },
+      { id: "reviewsSection", title: "Recensioner" },
+      { id: "finalCta", title: "Avslutande uppmaning" },
+      { id: "visitSection", title: "Hitta hit och karta" },
+      { id: "trainersSection", title: "Trafiklärare (visas om sektionen aktiveras)" },
+      { id: "galleryPage", title: "Galleri (visas om sektionen aktiveras)" },
     ],
   },
   {
-    title: "Courses page",
+    title: "Kurssida",
     icon: "📚",
     items: [
-      { id: "coursesPage", title: "Header + course cards" },
-      { id: "journeySection", title: "Journey (road to licence)" },
+      { id: "coursesPage", title: "Sidhuvud och kurskort" },
+      { id: "journeySection", title: "Vägen till körkortet" },
     ],
   },
-  { title: "Packages page", icon: "📦", items: [{ id: "packagesPage", title: "Header + texts" }] },
-  { title: "Simulator page", icon: "🎮", items: [{ id: "simulatorPage", title: "Header + simulator section" }] },
-  { title: "Gallery page", icon: "🖼️", items: [{ id: "galleryPage", title: "Header + photos" }] },
-  { title: "About page", icon: "ℹ️", items: [{ id: "aboutPage", title: "Texts + image" }] },
+  { title: "Paketsida", icon: "📦", items: [{ id: "packagesPage", title: "Sidhuvud och texter" }] },
+  { title: "Simulatorsida", icon: "🎮", items: [{ id: "simulatorPage", title: "Sidhuvud och simulator" }] },
+  { title: "Gallerisida", icon: "🖼️", items: [{ id: "galleryPage", title: "Sidhuvud och bilder" }] },
+  { title: "Om oss", icon: "ℹ️", items: [{ id: "aboutPage", title: "Texter och bild" }] },
   {
-    title: "Contact page",
+    title: "Kontaktsida",
     icon: "✉️",
     items: [
-      { id: "contactPage", title: "Header (top banner)" },
-      { id: "finalCta", title: "Final call to action (green box)" },
-      { id: "contactForm", title: "Contact form + photo" },
-      { id: "visitSection", title: "Visit us: address, hours & map (below the form)" },
+      { id: "contactPage", title: "Sidhuvud och etiketter" },
+      { id: "finalCta", title: "Avslutande uppmaning" },
+      { id: "contactForm", title: "Kontaktformulär och foto" },
+      { id: "visitSection", title: "Adress, öppettider och karta" },
     ],
   },
-  { title: "Payment result pages", icon: "💳", items: [{ id: "paymentPages", title: "Success & cancelled texts" }] },
-  { title: "Informationssidor", icon: "⚖️", items: [{ id: "policyPages", title: "Hjälp-, kontakt- och policysidor" }] },
+  { title: "Betalningssidor", icon: "💳", items: [{ id: "paymentPages", title: "Texter för genomförd eller avbruten betalning" }] },
+  { title: "Hjälp och juridik", icon: "⚖️", items: DEFAULT_INFO_PAGES.map((page) => ({ id: page.id, title: page.title })) },
   {
-    title: "Every page",
+    title: "Alla sidor",
     icon: "⚙️",
     items: [
-      { id: "navigation", title: "Header & menu (links + buttons)" },
-      { id: "footer", title: "Sidfot (länkar och sociala medier)" },
-      { id: "contactForm", title: "Contact form + photo (bottom of every page)" },
-      { id: "siteSettings", title: "Site settings (logo, phone, email, address, Google)" },
+      { id: "navigation", title: "Sidhuvud och meny" },
+      { id: "footer", title: "Sidfot, länkar och sociala medier" },
+      { id: "contactForm", title: "Kontaktformulär och foto längst ned" },
+      { id: "siteSettings", title: "Webbplatsinställningar, logotyp och kontaktuppgifter" },
     ],
   },
 ];
 
-// The contact form (photo + "Boka din första lektion") sits at the bottom of every page,
-// so it is listed last in each page folder as well as under "Every page".
-const CONTACT_FORM_ITEM: Item = { id: "contactForm", title: "Contact form + photo (bottom of every page)" };
+// Kontaktformuläret visas längst ned på alla sidor.
+const CONTACT_FORM_ITEM: Item = { id: "contactForm", title: "Kontaktformulär och foto längst ned" };
 export const PAGE_FOLDERS: PageFolder[] = PAGES.map((folder) =>
-  ["Every page", "Payment result pages", "Contact page"].includes(folder.title) ? folder : { ...folder, items: [...folder.items, CONTACT_FORM_ITEM] },
+  ["Alla sidor", "Betalningssidor", "Kontaktsida", "Hjälp och juridik"].includes(folder.title) ? folder : { ...folder, items: [...folder.items, CONTACT_FORM_ITEM] },
 );

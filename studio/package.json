@@ -10,6 +10,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@sanity/locale-sv-se": "^1.2.38",
     "@sanity/vision": "^4.0.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",

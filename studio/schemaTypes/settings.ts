@@ -3,81 +3,81 @@ import { img, link, ls, lt, pagePath } from "./helpers";
 
 export const siteSettings = defineType({
   name: "siteSettings",
-  title: "Site settings",
+  title: "Webbplatsinställningar",
   type: "document",
   groups: [
-    { name: "brand", title: "Brand & Google", default: true },
-    { name: "contact", title: "Contact details" },
+    { name: "brand", title: "Varumärke och Google", default: true },
+    { name: "contact", title: "Kontaktuppgifter" },
   ],
   fields: [
-    defineField({ name: "siteName", title: "School name", type: "string", group: "brand" }),
-    defineField({ ...img("logo", "Logo", "Also used as the browser tab icon."), group: "brand" }),
-    defineField({ ...ls("seoTitle", "Browser tab / Google title"), group: "brand" }),
-    defineField({ ...lt("seoDescription", "Google description"), group: "brand" }),
-    defineField({ ...img("seoImage", "Share image (Facebook, WhatsApp, etc.)"), group: "brand" }),
-    defineField({ name: "copyright", title: "Copyright line (footer)", type: "string", group: "brand" }),
-    defineField({ name: "phoneDisplay", title: "Phone (as shown)", type: "string", group: "contact", description: "e.g. 031-386 00 86" }),
-    defineField({ name: "phoneLink", title: "Phone link", type: "string", group: "contact", description: "e.g. tel:031-3860086" }),
-    defineField({ name: "email", title: "Email", type: "string", group: "contact" }),
-    defineField({ name: "address", title: "Address", type: "string", group: "contact", description: "Also used for the embedded map." }),
-    defineField({ name: "mapsUrl", title: "Google Maps link", type: "url", group: "contact" }),
-    defineField({ name: "orgNumber", title: "Org. number", type: "string", group: "contact" }),
+    defineField({ name: "siteName", title: "Trafikskolans namn", type: "string", group: "brand" }),
+    defineField({ ...img("logo", "Logotyp", "Används även som webbplatsens ikon i webbläsaren."), group: "brand" }),
+    defineField({ ...ls("seoTitle", "Webbläsar- och Google-rubrik"), group: "brand" }),
+    defineField({ ...lt("seoDescription", "Beskrivning för Google"), group: "brand" }),
+    defineField({ ...img("seoImage", "Delningsbild för sociala medier"), group: "brand" }),
+    defineField({ name: "copyright", title: "Upphovsrättstext i sidfoten", type: "string", group: "brand" }),
+    defineField({ name: "phoneDisplay", title: "Telefonnummer som visas", type: "string", group: "contact", description: "Till exempel 031-386 00 86." }),
+    defineField({ name: "phoneLink", title: "Länk till telefonnummer", type: "string", group: "contact", description: "Till exempel tel:031-3860086." }),
+    defineField({ name: "email", title: "E-postadress", type: "string", group: "contact" }),
+    defineField({ name: "address", title: "Adress", type: "string", group: "contact", description: "Används även på den inbäddade kartan." }),
+    defineField({ name: "mapsUrl", title: "Länk till Google Maps", type: "url", group: "contact" }),
+    defineField({ name: "orgNumber", title: "Organisationsnummer", type: "string", group: "contact" }),
     defineField({
       name: "openingHours",
-      title: "Opening hours (contact page)",
+      title: "Öppettider på kontaktsidan",
       type: "array",
       group: "contact",
-      of: [defineArrayMember({ type: "object", fields: [ls("days", "Days"), ls("hours", "Hours")], preview: { select: { title: "days.sv", subtitle: "hours.sv" } } })],
+      of: [defineArrayMember({ type: "object", fields: [ls("days", "Dagar"), ls("hours", "Tider")], preview: { select: { title: "days.sv", subtitle: "hours.sv" } } })],
     }),
     defineField({
       name: "social",
-      title: "Social media (footer)",
+      title: "Sociala medier (äldre inställning)",
       type: "array",
       group: "contact",
       of: [defineArrayMember({
         type: "object",
         fields: [
-          defineField({ name: "platform", title: "Platform", type: "string", options: { list: ["facebook", "instagram"] } }),
-          defineField({ name: "url", title: "URL", type: "url" }),
+          defineField({ name: "platform", title: "Plattform", type: "string", options: { list: [{ title: "Facebook", value: "facebook" }, { title: "Instagram", value: "instagram" }, { title: "TikTok", value: "tiktok" }] } }),
+          defineField({ name: "url", title: "Länk", type: "url" }),
         ],
         preview: { select: { title: "platform", subtitle: "url" } },
       })],
     }),
   ],
-  preview: { prepare: () => ({ title: "Site settings" }) },
+  preview: { prepare: () => ({ title: "Webbplatsinställningar" }) },
 });
 
 const linkItem = defineArrayMember({
   type: "object",
   fields: [
-    ls("label", "Label"),
-    defineField({ ...link("link", "Link"), validation: (rule) => rule.required().custom((value?: string) => !value || /^(\/|#|https?:\/\/|tel:|mailto:)/.test(value) ? true : "Start with /, #, https://, tel: or mailto:") }),
+    ls("label", "Länktext"),
+    defineField({ ...link("link", "Länkadress"), validation: (rule) => rule.required().custom((value?: string) => !value || /^(\/|#|https?:\/\/|tel:|mailto:)/.test(value) ? true : "Börja med /, #, https://, tel: eller mailto:") }),
   ],
   preview: { select: { title: "label.sv", subtitle: "link" } },
 });
 
 export const navigation = defineType({
   name: "navigation",
-  title: "Header & menu",
+  title: "Sidhuvud och meny",
   type: "document",
   fields: [
-    defineField({ name: "items", title: "Menu links", type: "array", of: [linkItem], description: "Drag to reorder. Remove a link to hide it from the menu and footer. A full web address (https://…) opens that site." }),
-    ls("extraLabel", "Extra menu link label", "e.g. “Skriv in dig”. Leave empty to hide."),
-    pagePath("extraPath", "Extra menu link page"),
-    ls("ecommerceLabel", "E-handel button text"),
-    link("ecommerceUrl", "E-handel button link"),
-    ls("studentLoginLabel", "Student login button text"),
-    link("studentLoginUrl", "Student login button link"),
-    ls("bookLabel", "Green booking button text"),
-    link("bookUrl", "Green booking button link"),
-    defineField({ name: "showLanguage", title: "Show language picker", type: "boolean", initialValue: true }),
+    defineField({ name: "items", title: "Menylänkar", type: "array", of: [linkItem], description: "Dra för att ändra ordning. Ta bort en länk för att dölja den i menyn och sidfoten. En fullständig webbadress (https://…) öppnar den webbplatsen." }),
+    ls("extraLabel", "Text för extra menylänk", "Till exempel Skriv in dig. Lämna tomt för att dölja."),
+    pagePath("extraPath", "Sida för extra menylänk"),
+    ls("ecommerceLabel", "Text på e-handelsknappen"),
+    link("ecommerceUrl", "Länk för e-handelsknappen"),
+    ls("studentLoginLabel", "Text på elevinloggningen"),
+    link("studentLoginUrl", "Länk till elevinloggningen"),
+    ls("bookLabel", "Text på bokningsknappen"),
+    link("bookUrl", "Länk för bokningsknappen"),
+    defineField({ name: "showLanguage", title: "Visa språkval", type: "boolean", initialValue: true }),
   ],
-  preview: { prepare: () => ({ title: "Header & menu" }) },
+  preview: { prepare: () => ({ title: "Sidhuvud och meny" }) },
 });
 
 export const footer = defineType({
   name: "footer",
-  title: "Footer",
+  title: "Sidfot",
   type: "document",
   fields: [
     lt("text", "Text under logotypen"),
@@ -93,7 +93,7 @@ export const footer = defineType({
       of: [defineArrayMember({
         type: "object",
         fields: [
-          defineField({ name: "platform", title: "Plattform", type: "string", options: { list: [{ title: "Facebook", value: "facebook" }, { title: "Instagram", value: "instagram" }] } }),
+          defineField({ name: "platform", title: "Plattform", type: "string", options: { list: [{ title: "Facebook", value: "facebook" }, { title: "Instagram", value: "instagram" }, { title: "TikTok", value: "tiktok" }] } }),
           defineField({ name: "url", title: "Länk", type: "url" }),
         ],
         preview: { select: { title: "platform", subtitle: "url" } },
@@ -104,5 +104,5 @@ export const footer = defineType({
     ls("rights", "Text efter upphovsrätt"),
     ls("city", "Text nere till höger"),
   ],
-  preview: { prepare: () => ({ title: "Footer" }) },
+  preview: { prepare: () => ({ title: "Sidfot" }) },
 });

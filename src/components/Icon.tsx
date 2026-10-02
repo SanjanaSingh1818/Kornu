@@ -14,6 +14,7 @@ export function Icon({ name, className = "" }: { name: string; className?: strin
     case "star": return <svg className={className} viewBox="0 0 24 24" aria-hidden><path d="m12 2.8 2.84 5.75 6.34.92-4.59 4.47 1.08 6.31L12 17.27l-5.67 2.98 1.08-6.31-4.59-4.47 6.34-.92L12 2.8Z" /></svg>;
     case "facebook": return <svg {...p}><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3Z" /></svg>;
     case "instagram": return <svg {...p}><rect x="2" y="2" width="20" height="20" rx="5" /><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37Z" /><path d="M17.5 6.5h.01" /></svg>;
+    case "tiktok": return <svg {...p}><path d="M15 3v11.5a4 4 0 1 1-4-4" /><path d="M15 3c.6 3.1 2.3 4.9 5 5.3" /></svg>;
     default: return null;
   }
 }

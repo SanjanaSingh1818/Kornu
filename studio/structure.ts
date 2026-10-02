@@ -5,7 +5,7 @@ const emoji = (char: string) => () => char;
 
 export const structure: StructureResolver = (S) =>
   S.list()
-    .title("Kör Nu website")
+    .title("Kör Nu Trafikskola")
     .items(
       PAGE_FOLDERS.map((folder, index) =>
         S.listItem()

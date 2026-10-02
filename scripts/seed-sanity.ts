@@ -116,14 +116,13 @@ async function buildDocuments() {
     social: [],
     drivingLicenceUrl: sv.drivingLicenceUrl,
   });
-  add({
-    _id: "policyPages", _type: "policyPages",
-    pages: keyed(sv.infoPages.map((page) => ({
-      slug: page.path.slice(1),
+  for (const page of sv.infoPages) {
+    add({
+      _id: page.id, _type: page.id,
       title: same(page.title),
       paragraphs: keyed(page.paragraphs.map((paragraph) => ({ _type: "localeText", sv: paragraph, en: "", ar: "" })), "p"),
-    })), "page"),
-  });
+    });
+  }
 
   add({ _id: "homePage", _type: "homePage", sections: sv.homeSections });
   add({
@@ -250,28 +249,26 @@ async function buildDocuments() {
   return docs;
 }
 
-function buildPolicyPagesDocument() {
-  return {
-    _id: "policyPages",
-    _type: "policyPages",
-    pages: keyed(SITE.sv.infoPages.map((page) => ({
-      slug: page.path.slice(1),
-      title: swedishOnly("localeString", page.title),
-      paragraphs: keyed(page.paragraphs.map((paragraph) => swedishOnly("localeText", paragraph)), "p"),
-    })), "page"),
-  };
-}
-
 async function main() {
   console.log(dryRun ? "Dry run: nothing is written." : `Seeding ${projectId}/${dataset}…`);
   if (policiesOnly) {
-    const document = buildPolicyPagesDocument();
     if (!client) {
-      console.log(`Would create policyPages with ${document.pages.length} Swedish pages if it does not already exist.`);
+      console.log(`Would create ${SITE.sv.infoPages.length} separate Swedish page documents if they do not already exist.`);
       return;
     }
-    await client.createIfNotExists(document);
-    console.log(`Done: initialized ${document.pages.length} Swedish pages if policyPages was missing; existing content was preserved.`);
+    const legacy = await client.fetch<{ pages?: Array<{ slug?: string; title?: unknown; paragraphs?: unknown[] }> } | null>("*[_id == 'policyPages'][0]{pages}");
+    for (const page of SITE.sv.infoPages) {
+      const previous = legacy?.pages?.find((item) => item.slug === page.path.slice(1));
+      await client.createIfNotExists({
+        _id: page.id,
+        _type: page.id,
+        title: previous?.title ?? swedishOnly("localeString", page.title),
+        paragraphs: previous?.paragraphs?.length
+          ? previous.paragraphs
+          : keyed(page.paragraphs.map((paragraph) => swedishOnly("localeText", paragraph)), "p"),
+      });
+    }
+    console.log(`Done: initialized ${SITE.sv.infoPages.length} separate pages if missing; existing page documents and legacy text were preserved.`);
     return;
   }
   const docs = await buildDocuments();
