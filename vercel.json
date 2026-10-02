@@ -41,6 +41,38 @@
     {
       "source": "/contact",
       "destination": "/index.html"
+    },
+    {
+      "source": "/vanliga-fragor",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/villkor-och-info",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/integritetspolicy",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/kontaktinformation",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/anvandarvillkor",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/fraktpolicy",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/rattsligt-meddelande",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/aterbetalningspolicy",
+      "destination": "/index.html"
     }
   ]
 }
