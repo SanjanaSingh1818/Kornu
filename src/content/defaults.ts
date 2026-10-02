@@ -2,6 +2,7 @@
 // original hard-coded values as fallback. Sanity overrides these when configured.
 import { COURSES, GALLERY_IMAGES, NAV } from "../data";
 import type { InfoPagePath, PagePath } from "../types";
+import { contactInformationParagraphs, legalNoticeParagraphs, privacyPolicyParagraphs, refundPolicyParagraphs, shippingPolicyParagraphs, userTermsParagraphs } from "./policies";
 import type { Translations } from "./translations";
 
 export const HOME_SECTION_KEYS = ["hero", "benefits", "journey", "courses", "packages", "quiz", "simulator", "braking", "reviews", "trainers", "gallery", "finalCta", "visit"] as const;
@@ -20,12 +21,12 @@ export type InfoPage = { id: string; path: InfoPagePath; title: string; paragrap
 export const DEFAULT_INFO_PAGES: InfoPage[] = [
   { id: "faqPage", path: "/vanliga-fragor", title: "Vanliga frågor", paragraphs: ["Här samlar vi svar på vanliga frågor om körkortsutbildningen.", "Har du frågor om bokning eller din utbildning? Kontakta oss på info@kornu.se eller 031-386 00 86."] },
   { id: "termsInfoPage", path: "/villkor-och-info", title: "Villkor & information", paragraphs: ["Här hittar du viktig information och villkor för Kör Nu Trafikskolas tjänster.", "Kontakta oss om du behöver hjälp eller vill veta mer innan du bokar."] },
-  { id: "privacyPolicyPage", path: "/integritetspolicy", title: "Integritetspolicy", paragraphs: ["Här publicerar vi information om hur Kör Nu Trafikskola hanterar personuppgifter, varför uppgifterna behandlas och vilka rättigheter du har.", "Kontakta oss på info@kornu.se om du har frågor om personuppgifter."] },
-  { id: "contactInformationPage", path: "/kontaktinformation", title: "Kontaktinformation", paragraphs: ["Kör Nu Trafikskola, FO Petersons gata 6, 421 31 Västra Frölunda.", "Telefon: 031-386 00 86. E-post: info@kornu.se. Organisationsnummer: 559288-1386."] },
-  { id: "userTermsPage", path: "/anvandarvillkor", title: "Användarvillkor", paragraphs: ["Här publicerar vi de fullständiga användarvillkoren för Kör Nu Trafikskolas webbplats och tjänster.", "Kontakta oss på info@kornu.se om du har frågor om villkoren."] },
-  { id: "shippingPolicyPage", path: "/fraktpolicy", title: "Fraktpolicy", paragraphs: ["Här publicerar vi information om leverans och eventuell frakt för produkter och tjänster.", "Kontakta oss på info@kornu.se om du har frågor om en beställning."] },
-  { id: "legalNoticePage", path: "/rattsligt-meddelande", title: "Rättsligt meddelande", paragraphs: ["Webbplatsen drivs av Kör Nu Trafikskola, organisationsnummer 559288-1386.", "Frågor om webbplatsen kan skickas till info@kornu.se."] },
-  { id: "refundPolicyPage", path: "/aterbetalningspolicy", title: "Återbetalningspolicy", paragraphs: ["Här publicerar vi information om avbokning, återbetalning och eventuella undantag.", "Kontakta oss på info@kornu.se om du har frågor om en betalning."] },
+  { id: "privacyPolicyPage", path: "/integritetspolicy", title: "Integritetspolicy", paragraphs: privacyPolicyParagraphs },
+  { id: "contactInformationPage", path: "/kontaktinformation", title: "Kontaktinformation", paragraphs: contactInformationParagraphs },
+  { id: "userTermsPage", path: "/anvandarvillkor", title: "Användarvillkor", paragraphs: userTermsParagraphs },
+  { id: "shippingPolicyPage", path: "/fraktpolicy", title: "Fraktpolicy", paragraphs: shippingPolicyParagraphs },
+  { id: "legalNoticePage", path: "/rattsligt-meddelande", title: "Rättsligt meddelande", paragraphs: legalNoticeParagraphs },
+  { id: "refundPolicyPage", path: "/aterbetalningspolicy", title: "Återbetalningspolicy", paragraphs: refundPolicyParagraphs },
 ];
 
 export type Site = {
