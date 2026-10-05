@@ -188,6 +188,7 @@ export function applyCms(lang: Lang, baseT: Translations, baseSite: Site, cms: C
     trainersText: labels(trainersSection, baseSite.trainersText, ["tag", "title", "highlight", "languagesLabel"]),
     reviews: list(cms.reviews, (r: Any) => ({ author: loc(r?.author), time: loc(r?.time), text: loc(r?.text), initials: loc(r?.initials), rating: Math.min(5, Math.max(1, Number(r?.rating ?? 5))) }), baseSite.reviews),
     reviewRating: str(reviewsSection?.rating, baseSite.reviewRating),
+    reviewsUrl: str(reviewsSection?.googleUrl, baseSite.reviewsUrl),
     openingHours: list(settings?.openingHours, (h: Any) => ({ days: loc(h?.days), hours: loc(h?.hours) }), baseSite.openingHours),
     contactLabels: {
       phone: t.pay.phone,

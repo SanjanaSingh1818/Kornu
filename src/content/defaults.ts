@@ -58,6 +58,7 @@ export type Site = {
   trainersText: { tag: string; title: string; highlight: string; languagesLabel: string };
   reviews: Review[];
   reviewRating: string;
+  reviewsUrl: string;
   openingHours: OpeningHour[];
   contactLabels: { phone: string; email: string; org: string };
   // Where each CMS-editable button goes: a page ("/packages"), an anchor ("#paket") or a URL.
@@ -148,6 +149,7 @@ export function defaultSite(t: Translations): Site {
     trainersText: { tag: "Våra trafiklärare", title: "Människor du faktiskt vill sitta", highlight: "bredvid.", languagesLabel: "Språk" },
     reviews: t.reviews.items.map(([author, time, text, initials]) => ({ author, time, text, initials, rating: 5 })),
     reviewRating: "4.9",
+    reviewsUrl: "https://www.google.com/maps/search/?api=1&query=K%C3%B6r+Nu+Trafikskola+F+O+Petersons+Gata+6+V%C3%A4stra+Fr%C3%B6lunda",
     openingHours: DEFAULT_OPENING_HOURS,
     contactLabels: { phone: t.pay.phone, email: t.pay.email, org: "Org.nr" },
     buttons: { heroBook: "/packages", heroSecondary: "#paket", finalCta: "/packages", coursesLink: "/packages", galleryLink: "/gallery" },

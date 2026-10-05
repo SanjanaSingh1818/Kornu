@@ -35,11 +35,11 @@ export function ReviewsCarousel() {
       <div className="mx-auto mb-8 max-w-6xl px-4 text-center sm:px-6 lg:px-8">
         <span className="text-xs font-black uppercase tracking-wider text-slate-500">{t.reviews.tag}</span>
         <h2 className="mt-2 text-3xl font-black tracking-tight text-primary-dark">{t.reviews.title}</h2>
-        <div className="mt-2 flex items-center justify-center gap-2">
+        <a href={site.reviewsUrl} target="_blank" rel="noopener noreferrer" className="mt-2 flex items-center justify-center gap-2 hover:underline">
           <div className="flex gap-0.5">{[...Array(5)].map((_, i) => <Icon key={i} name="star" className="h-5 w-5 fill-yellow-400 text-yellow-400" />)}</div>
           <span className="text-xl font-black text-primary-dark">{site.reviewRating}</span>
           <span className="text-xs font-medium text-slate-400">{t.reviews.based}</span>
-        </div>
+        </a>
       </div>
 
       <div className="pointer-events-none absolute bottom-0 left-0 top-0 z-10 w-16 bg-gradient-to-r from-white to-transparent md:w-24" />
@@ -60,7 +60,7 @@ export function ReviewsCarousel() {
                 <div className="flex gap-0.5">{[...Array(review.rating)].map((_, j) => <Icon key={j} name="star" className="h-3 w-3 fill-yellow-400 text-yellow-400" />)}</div>
               </div>
               <p className="flex-1 text-xs font-medium italic leading-relaxed text-slate-600">&ldquo;{review.text}&rdquo;</p>
-              <div className="border-t border-slate-100 pt-2 text-[10px] font-black text-primary-dark">{t.reviews.verified}</div>
+              <a href={site.reviewsUrl} target="_blank" rel="noopener noreferrer" className="border-t border-slate-100 pt-2 text-[10px] font-black text-primary-dark hover:underline">{t.reviews.verified}</a>
             </article>
           ))}
         </div>

@@ -47,6 +47,7 @@ export const reviewsSection = single("reviewsSection", "Recensioner", [
   ls("tag", "Liten etikett"), ls("title", "Rubrik"),
   defineField({ name: "rating", title: "Visat genomsnittsbetyg", type: "string", description: "Till exempel 4,9" }),
   ls("based", "Text om antal recensioner"), ls("verified", "Text längst ned på kortet"),
+  defineField({ name: "googleUrl", title: "Länk till recensionerna på Google", type: "url", description: "Öppna företaget på Google Maps, klicka på Recensioner och kopiera adressen. Betyget och korten länkar hit." }),
   defineField({
     name: "items",
     title: "Recensioner",
