@@ -1,4 +1,4 @@
-import { sendResendEmail } from "./resend.js";
+import { ResendError, sanitizeResendText, sendResendEmail } from "./resend.js";
 
 type Request = { method?: string; headers: Record<string, string | string[] | undefined> };
 type Response = { status: (code: number) => Response; json: (body: unknown) => void };
@@ -18,6 +18,11 @@ export default async function handler(req: Request, res: Response) {
     return res.status(200).json({ accepted: true, emailId: result.id });
   } catch (error) {
     console.error("Resend delivery test failed", { error: error instanceof Error ? error.message : "Unknown error" });
-    return res.status(502).json({ accepted: false, error: "Resend test send failed." });
+    // Temporary: surfaces Resend's sanitized status/message so the failure can be diagnosed from curl.
+    if (error instanceof ResendError) {
+      return res.status(502).json({ accepted: false, error: "Resend test send failed.", resendStatus: error.resendStatus, resendMessage: error.resendMessage, resendName: error.resendName });
+    }
+    // Network/runtime failure before Resend answered (e.g. DNS, timeout).
+    return res.status(502).json({ accepted: false, error: "Resend test send failed.", resendStatus: null, resendMessage: sanitizeResendText(error instanceof Error ? error.message : "Unknown error") });
   }
 }
