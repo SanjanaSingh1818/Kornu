@@ -33,12 +33,17 @@ function normalizePackage(product: Partial<Package>): Package {
     features,
     popular: Boolean(product.popular),
     badge: product.badge,
-    sortOrder: Number(product.sortOrder ?? 0),
+    offer: typeof product.offer === "string" && product.offer.trim() ? product.offer.trim() : undefined,
+    sortOrder: Number.isFinite(Number(product.sortOrder)) ? Number(product.sortOrder) : Number.MAX_SAFE_INTEGER,
     collections: Array.isArray(product.collections) ? product.collections : [],
     image: product.image ?? null,
     originalPrice: typeof product.originalPrice === "number" ? product.originalPrice : null,
     includes: Array.isArray(product.includes) && product.includes.length > 0 ? product.includes : features,
   };
+}
+
+function byPriority(a: Package, b: Package) {
+  return (a.sortOrder ?? Number.MAX_SAFE_INTEGER) - (b.sortOrder ?? Number.MAX_SAFE_INTEGER) || a.name.localeCompare(b.name, "sv");
 }
 
 function PackageCard({ pkg, index, onSelect, loading }: { pkg: Package; index: number; onSelect: (pkg: Package) => void; loading: boolean }) {
@@ -55,12 +60,19 @@ function PackageCard({ pkg, index, onSelect, loading }: { pkg: Package; index: n
           <div>
             <div className="mb-4 flex items-center justify-between gap-3">
               <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary-50 text-primary-dark"><Icon name={index % 2 ? "calendar" : "car"} className="h-5 w-5" /></div>
-              {(pkg.badge || pkg.popular) && (
-                <span className="inline-flex max-w-[70%] items-center gap-1 rounded-full border border-primary-50 bg-primary-50 px-2.5 py-1 text-[10px] font-bold text-primary-dark">
-                  <Icon name="calendar" className="h-3 w-3 shrink-0 text-primary" />
-                  <span className="truncate">{pkg.badge || (pkg.popular ? t.packages.popular : "")}</span>
-                </span>
-              )}
+              <div className="flex min-w-0 items-center justify-end gap-1.5">
+                {pkg.offer && (
+                  <span className="inline-flex max-w-[60%] shrink-0 items-center rounded-full bg-red-600 px-2.5 py-1 text-[10px] font-black uppercase tracking-wide text-white shadow-sm">
+                    <span className="truncate">{pkg.offer}</span>
+                  </span>
+                )}
+                {(pkg.badge || pkg.popular) && (
+                  <span className="inline-flex min-w-0 items-center gap-1 rounded-full border border-primary-50 bg-primary-50 px-2.5 py-1 text-[10px] font-bold text-primary-dark">
+                    <Icon name="calendar" className="h-3 w-3 shrink-0 text-primary" />
+                    <span className="truncate">{pkg.badge || (pkg.popular ? t.packages.popular : "")}</span>
+                  </span>
+                )}
+              </div>
             </div>
             <button type="button" onClick={() => setFlipped(true)} className="group/title text-left"><h3 className="inline-flex items-start gap-1 text-lg font-extrabold leading-snug text-primary-dark transition group-hover/title:text-primary">{pkg.name}<span className="mt-1 text-primary opacity-0 transition group-hover/title:opacity-100">↗</span></h3></button>
             <p className="mt-3 line-clamp-3 text-xs font-medium leading-relaxed text-slate-500">{pkg.description}</p>
@@ -147,7 +159,7 @@ export function Packages({ onSelect, loading = false }: { onSelect: (pkg: Packag
         throw new Error(payload.error || "Kunde inte hämta paket från Stripe.");
       }
 
-      const nextCatalog = payload.products.map(normalizePackage).filter((product) => product.id !== "payment-test");
+      const nextCatalog = payload.products.map(normalizePackage).filter((product) => product.id !== "payment-test").sort(byPriority);
       setCatalog(nextCatalog);
       setStatus(nextCatalog.length > 0 ? "ready" : "empty");
     } catch (fetchError) {
@@ -155,7 +167,7 @@ export function Packages({ onSelect, loading = false }: { onSelect: (pkg: Packag
       // packages locally. Production always uses Stripe and shows the error instead.
       if (import.meta.env.DEV) {
         console.info("[packages] /api/products unavailable in local dev; showing sample packages.", fetchError);
-        setCatalog(PACKAGES.map(normalizePackage));
+        setCatalog(PACKAGES.map(normalizePackage).sort(byPriority));
         setStatus("ready");
         return;
       }

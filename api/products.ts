@@ -15,6 +15,7 @@ type CatalogProductPayload = {
   features: string[];
   popular: boolean;
   badge?: string;
+  offer?: string;
   sortOrder: number;
   collections: string[];
   image?: string | null;
@@ -23,6 +24,8 @@ type CatalogProductPayload = {
 
 const EXCLUDED_PRODUCT_IDS = new Set(["payment-test"]);
 const TRUE_VALUES = new Set(["true", "1", "yes", "on"]);
+// Products without a valid sort_order/priority are listed after all prioritised ones.
+const UNSORTED_ORDER = Number.MAX_SAFE_INTEGER;
 
 export default async function handler(req: Request, res: Response) {
   if (req.method !== "GET") return res.status(405).json({ error: "Method not allowed." });
@@ -80,7 +83,8 @@ export default async function handler(req: Request, res: Response) {
         features,
         popular: isTrue(metadata.popular),
         badge: metadata.badge || undefined,
-        sortOrder: parseSortOrder(metadata.sort_order),
+        offer: parseOffer(metadata.offer ?? metadata.discount),
+        sortOrder: parseSortOrder(metadata.sort_order ?? metadata.priority),
         collections,
         image: product.images?.[0] || null,
         originalPrice: originalPrice ?? undefined,
@@ -220,8 +224,19 @@ function normalizeList(value: unknown): string[] {
 }
 
 function parseSortOrder(value: unknown): number {
-  const parsed = Number(value ?? 0);
-  return Number.isFinite(parsed) ? parsed : 0;
+  if (value === undefined || value === null || String(value).trim() === "") return UNSORTED_ORDER;
+  const parsed = Number(String(value).trim());
+  return Number.isFinite(parsed) ? parsed : UNSORTED_ORDER;
+}
+
+// Accepts free text ("10% OFF", "Kampanj") or a bare number ("10" / "10%"), which becomes "10% OFF".
+function parseOffer(value: unknown): string | undefined {
+  if (typeof value !== "string") return undefined;
+  const trimmed = value.trim();
+  if (!trimmed) return undefined;
+  const percent = trimmed.match(/^(\d+(?:[.,]\d+)?)\s*%?$/);
+  if (percent) return Number(percent[1].replace(",", ".")) > 0 ? `${percent[1]}% OFF` : undefined;
+  return trimmed;
 }
 
 function isTrue(value: unknown): boolean {

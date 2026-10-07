@@ -26,6 +26,7 @@ export type CatalogProduct = {
   features: string[];
   popular?: boolean;
   badge?: string;
+  offer?: string;
   sortOrder?: number;
   collections: string[];
   image?: string | null;
