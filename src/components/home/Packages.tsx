@@ -42,6 +42,11 @@ function normalizePackage(product: Partial<Package>): Package {
   };
 }
 
+// A product counts as popular when flagged in Stripe metadata (popular=true) or given a "Popular"/"Populär" badge.
+function isPopular(pkg: Package) {
+  return Boolean(pkg.popular) || /popul/i.test(pkg.badge ?? "");
+}
+
 function byPriority(a: Package, b: Package) {
   return (a.sortOrder ?? Number.MAX_SAFE_INTEGER) - (b.sortOrder ?? Number.MAX_SAFE_INTEGER) || a.name.localeCompare(b.name, "sv");
 }
@@ -198,12 +203,14 @@ export function Packages({ onSelect, loading = false }: { onSelect: (pkg: Packag
 
   const visiblePackages = useMemo(() => {
     const normalizedQuery = query.trim().toLowerCase();
-    return catalog.filter((pkg) => {
+    const matches = catalog.filter((pkg) => {
       const matchesCategory = category === "all" || pkg.collections.includes(category);
       const searchSource = [pkg.name, pkg.description, pkg.lessons, pkg.duration, pkg.features.join(" "), pkg.collections.join(" ")].filter(Boolean).join(" ").toLowerCase();
       const matchesSearch = !normalizedQuery || searchSource.includes(normalizedQuery);
       return matchesCategory && matchesSearch;
     });
+    // "Alla" leads with the popular product(s), like the shorter filtered lists do; the stable sort keeps priority order otherwise.
+    return category === "all" ? [...matches].sort((a, b) => Number(isPopular(b)) - Number(isPopular(a))) : matches;
   }, [catalog, category, query]);
 
   useEffect(() => {
