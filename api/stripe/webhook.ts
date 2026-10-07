@@ -19,6 +19,7 @@ export default async function handler(req: Request, res: Response) {
   if (req.method !== "POST") return res.status(405).json({ error: "Method not allowed." });
   const signature = req.headers["stripe-signature"];
   const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
+  console.info("Stripe webhook request received", { hasWebhookSecret: Boolean(webhookSecret), hasSignature: typeof signature === "string" });
   if (!webhookSecret || typeof signature !== "string") return res.status(400).json({ error: "Webhook verification is not configured." });
   let event: Stripe.Event;
   try {
@@ -26,8 +27,11 @@ export default async function handler(req: Request, res: Response) {
     const rawBody = await readRawBody(req);
     event = stripe.webhooks.constructEvent(rawBody, signature, webhookSecret);
   } catch (error) {
+    console.warn("Stripe webhook signature verification failed", { error: error instanceof Error ? error.message : "Invalid webhook" });
     return res.status(400).json({ error: error instanceof Error ? error.message : "Invalid webhook." });
   }
+
+  console.info("Stripe webhook verified", { eventId: event.id, type: event.type });
 
   try {
     // Runtime-only retry guard. This is not durable idempotency across deployments or serverless instances.
@@ -111,7 +115,7 @@ async function sendOrderNotification(session: Stripe.Checkout.Session) {
   const apiKey = process.env.RESEND_API_KEY;
   if (!apiKey) {
     console.warn("Order notification skipped: RESEND_API_KEY is missing.", { id: session.id });
-    return;
+    throw new Error("RESEND_API_KEY is missing.");
   }
 
   // Line items are not included in the webhook payload, so read them from Stripe.
@@ -148,6 +152,7 @@ async function sendOrderNotification(session: Stripe.Checkout.Session) {
     <p style="margin:16px 0 0;color:#666;font-size:13px">Stripe Checkout Session: ${escapeHtml(session.id)}</p>
   </div>`;
 
+  console.info("Resend send starting", { kind: "order_notification", checkoutSessionId: session.id });
   const response = await fetch("https://api.resend.com/emails", {
     method: "POST",
     headers: {
@@ -165,8 +170,20 @@ async function sendOrderNotification(session: Stripe.Checkout.Session) {
     }),
   });
 
-  if (!response.ok) throw new Error(`Resend responded with ${response.status}: ${await response.text()}`);
-  console.info("Order notification sent", { id: session.id });
+  const responseText = await response.text();
+  let responseBody: unknown = responseText;
+  try {
+    responseBody = responseText ? JSON.parse(responseText) : null;
+  } catch {
+    // Non-JSON response is retained as truncated text below.
+  }
+  const safeResponse = typeof responseBody === "string" ? responseBody.slice(0, 1_000) : responseBody;
+  if (!response.ok) {
+    console.error("Resend send failed", { kind: "order_notification", checkoutSessionId: session.id, status: response.status, response: safeResponse });
+    throw new Error(`Resend responded with ${response.status}.`);
+  }
+  const emailId = responseBody && typeof responseBody === "object" && "id" in responseBody ? responseBody.id : undefined;
+  console.info("Resend send accepted", { kind: "order_notification", checkoutSessionId: session.id, status: response.status, emailId });
 }
 
 function formatMoney(amountInMinorUnits: number, currency: string) {
