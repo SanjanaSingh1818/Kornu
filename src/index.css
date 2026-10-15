@@ -40,6 +40,10 @@ body {
   color: #022c22;
 }
 
+.home-reviews-widget a[href*="elfsight.com"][href*="utm_medium=clients"] {
+  display: none !important;
+}
+
 /* Logo wheel */
 .logo-wheel {
   position: relative;
