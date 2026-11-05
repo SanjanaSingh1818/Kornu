@@ -1,6 +1,18 @@
 {
   "buildCommand": "npm run build:all",
   "outputDirectory": "dist",
+  "redirects": [
+    {
+      "source": "/sv",
+      "destination": "/",
+      "statusCode": 301
+    },
+    {
+      "source": "/sv/",
+      "destination": "/",
+      "statusCode": 301
+    }
+  ],
   "rewrites": [
     {
       "source": "/studio",
