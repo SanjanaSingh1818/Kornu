@@ -13,7 +13,7 @@ export default async function handler(req: Request, res: Response) {
     const recipient = process.env.CLIENT_EMAIL || process.env.DOCTOR_EMAIL || "info@kornu.se";
     const result = await sendResendEmail(
       {
-        from: process.env.RESEND_FROM_EMAIL || process.env.ORDER_NOTIFICATION_FROM || "Kör Nu webbshop <order@kornu.se>",
+        from: process.env.RESEND_FROM_EMAIL || process.env.ORDER_NOTIFICATION_FROM || "Kör Nu Trafikskola <info@kornu.se>",
         to: [recipient],
         subject: "Kör Nu Resend delivery test",
         html: "<p>This is a server-side Resend delivery test from Kör Nu.</p>",

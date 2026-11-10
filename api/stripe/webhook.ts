@@ -11,8 +11,8 @@ type Request = {
 type Response = { status: (code: number) => Response; json: (body: unknown) => void };
 
 const maxRuntimeProcessedEvents = 500;
-const orderNotificationTo = process.env.CLIENT_EMAIL || process.env.DOCTOR_EMAIL || "info@kornu.se";
-const defaultOrderNotificationFrom = "Kör Nu webbshop <order@kornu.se>";
+const orderNotificationTo = process.env.CLIENT_EMAIL || "info@kornu.se";
+const defaultOrderNotificationFrom = "Kör Nu Trafikskola <info@kornu.se>";
 const runtimeProcessedEventIds = new Set<string>();
 export const config = { api: { bodyParser: false } };
 
