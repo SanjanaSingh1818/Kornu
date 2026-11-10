@@ -108,7 +108,7 @@ export function defaultSite(t: Translations): Site {
       booking: "https://www.trafikskolaonline.se/sv/skola/kornu/lektioner",
       coursesBooking: COURSE_BOOKING_URL,
     },
-    header: { ecommerce: "E-Handle", studentLogin: "Elevinloggning", extraLabel: "Skriv in dig", extraPath: "/contact", showLanguage: true },
+    header: { ecommerce: "E-Handel", studentLogin: "Elevinloggning", extraLabel: "Skriv in dig", extraPath: "/contact", showLanguage: true },
     // "Kontakt" is reached through the "Skriv in dig" link; "Kurser" opens the booking site.
     nav: NAV.filter((item) => item.path !== "/contact").map((item) => ({
       href: item.path === "/courses" ? COURSE_BOOKING_URL : item.path,
