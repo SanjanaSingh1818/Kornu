@@ -42,9 +42,24 @@ function normalizePackage(product: Partial<Package>): Package {
   };
 }
 
-// A product counts as popular when flagged in Stripe metadata (popular=true) or given a "Popular"/"Populär" badge.
-function isPopular(pkg: Package) {
-  return Boolean(pkg.popular) || /popul/i.test(pkg.badge ?? "");
+function isPercentageBadge(badge: string | undefined) {
+  return Boolean(badge && /^\d+(?:[.,]\d+)?\s*%\s*(?:off)?$/i.test(badge.trim()));
+}
+
+function PackagePrice({ pkg, unitLabel }: { pkg: Package; unitLabel: string }) {
+  const originalPrice = typeof pkg.originalPrice === "number" && pkg.originalPrice > pkg.price && pkg.price > 0
+    ? pkg.originalPrice
+    : null;
+  return (
+    <span className="flex flex-col items-end">
+      {originalPrice !== null && (
+        <span className="text-xs font-semibold text-slate-400 line-through">
+          {originalPrice.toLocaleString("sv-SE")} {unitLabel}
+        </span>
+      )}
+      <span className="text-xl font-black text-primary-dark">{pkg.price.toLocaleString("sv-SE")} {unitLabel}</span>
+    </span>
+  );
 }
 
 function byPriority(a: Package, b: Package) {
@@ -57,6 +72,8 @@ function PackageCard({ pkg, index, onSelect, loading }: { pkg: Package; index: n
   const unitLabel = pkg.currency?.toUpperCase() === "SEK" ? "SEK" : pkg.currency?.toUpperCase() ?? "SEK";
   const features = pkg.features.length > 0 ? pkg.features : pkg.includes;
   const visibleIncludes = features.slice(0, 3);
+  const offerBadge = pkg.offer || (isPercentageBadge(pkg.badge) ? pkg.badge : undefined);
+  const detailBadge = isPercentageBadge(pkg.badge) ? undefined : pkg.badge;
 
   return (
     <motion.article initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-60px" }} transition={{ delay: index * .04, duration: .55 }} className={`group h-[430px] rounded-3xl border bg-white shadow-sm transition hover:-translate-y-0.5 hover:border-primary-300 hover:shadow-lg [perspective:1200px] ${pkg.popular ? "border-primary-300 ring-1 ring-primary-300" : "border-slate-200"}`}>
@@ -66,15 +83,15 @@ function PackageCard({ pkg, index, onSelect, loading }: { pkg: Package; index: n
             <div className="mb-4 flex items-center justify-between gap-3">
               <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary-50 text-primary-dark"><Icon name={index % 2 ? "calendar" : "car"} className="h-5 w-5" /></div>
               <div className="flex min-w-0 items-center justify-end gap-1.5">
-                {pkg.offer && (
+                {offerBadge && (
                   <span className="inline-flex max-w-[60%] shrink-0 items-center rounded-full bg-red-600 px-2.5 py-1 text-[10px] font-black uppercase tracking-wide text-white shadow-sm">
-                    <span className="truncate">{pkg.offer}</span>
+                    <span className="truncate">{offerBadge}</span>
                   </span>
                 )}
-                {(pkg.badge || pkg.popular) && (
+                {(detailBadge || pkg.popular) && (
                   <span className="inline-flex min-w-0 items-center gap-1 rounded-full border border-primary-50 bg-primary-50 px-2.5 py-1 text-[10px] font-bold text-primary-dark">
                     <Icon name="calendar" className="h-3 w-3 shrink-0 text-primary" />
-                    <span className="truncate">{pkg.badge || (pkg.popular ? t.packages.popular : "")}</span>
+                    <span className="truncate">{detailBadge || t.packages.popular}</span>
                   </span>
                 )}
               </div>
@@ -86,7 +103,7 @@ function PackageCard({ pkg, index, onSelect, loading }: { pkg: Package; index: n
           <div className="border-t border-slate-100 pt-4">
             <div className="mb-4 flex items-baseline justify-between gap-4">
               <span className="text-[10px] font-bold uppercase text-slate-400">{t.packages.price}</span>
-              <span className="text-xl font-black text-primary-dark">{pkg.price.toLocaleString("sv-SE")} {unitLabel}</span>
+              <PackagePrice pkg={pkg} unitLabel={unitLabel} />
             </div>
             <div className="flex gap-2">
               <button type="button" onClick={() => setFlipped(true)} className="flex-1 rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-xs font-bold text-slate-700 transition hover:bg-slate-50">{t.packages.readMore}</button>
@@ -113,7 +130,7 @@ function PackageCard({ pkg, index, onSelect, loading }: { pkg: Package; index: n
           <div className="border-t border-slate-100 pt-4">
             <div className="mb-4 flex items-baseline justify-between gap-4">
               <span className="text-[10px] font-bold uppercase text-slate-400">{t.packages.price}</span>
-              <span className="text-xl font-black text-primary-dark">{pkg.price.toLocaleString("sv-SE")} {unitLabel}</span>
+              <PackagePrice pkg={pkg} unitLabel={unitLabel} />
             </div>
             <button type="button" disabled={loading} onClick={() => onSelect(pkg)} className="flex w-full items-center justify-center gap-1.5 rounded-xl bg-primary-dark px-3 py-2.5 text-xs font-bold text-white shadow transition hover:bg-primary disabled:cursor-not-allowed disabled:opacity-60">{loading ? "..." : t.packages.buy}<Icon name="arrow" className="h-3.5 w-3.5 text-primary-300" /></button>
           </div>
@@ -209,8 +226,7 @@ export function Packages({ onSelect, loading = false }: { onSelect: (pkg: Packag
       const matchesSearch = !normalizedQuery || searchSource.includes(normalizedQuery);
       return matchesCategory && matchesSearch;
     });
-    // "Alla" leads with the popular product(s), like the shorter filtered lists do; the stable sort keeps priority order otherwise.
-    return category === "all" ? [...matches].sort((a, b) => Number(isPopular(b)) - Number(isPopular(a))) : matches;
+    return matches.sort(byPriority);
   }, [catalog, category, query]);
 
   useEffect(() => {

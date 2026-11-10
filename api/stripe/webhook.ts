@@ -1,4 +1,5 @@
 import Stripe from "stripe";
+import { sendResendEmail } from "../resend.js";
 import { getStripe } from "./server.js";
 
 type Request = {
@@ -10,7 +11,7 @@ type Request = {
 type Response = { status: (code: number) => Response; json: (body: unknown) => void };
 
 const maxRuntimeProcessedEvents = 500;
-const orderNotificationTo = "info@kornu.se";
+const orderNotificationTo = process.env.CLIENT_EMAIL || process.env.DOCTOR_EMAIL || "info@kornu.se";
 const defaultOrderNotificationFrom = "Kör Nu webbshop <order@kornu.se>";
 const runtimeProcessedEventIds = new Set<string>();
 export const config = { api: { bodyParser: false } };
@@ -112,18 +113,18 @@ function getCheckoutSessionLogPayload(session: Stripe.Checkout.Session) {
 }
 
 async function sendOrderNotification(session: Stripe.Checkout.Session) {
-  const apiKey = process.env.RESEND_API_KEY;
-  if (!apiKey) {
-    console.warn("Order notification skipped: RESEND_API_KEY is missing.", { id: session.id });
-    throw new Error("RESEND_API_KEY is missing.");
-  }
-
   // Line items are not included in the webhook payload, so read them from Stripe.
   const lineItems = await getStripe().checkout.sessions.listLineItems(session.id, { limit: 100 });
   const customerName = session.customer_details?.name || "Okänt namn";
   const customerEmail = session.customer_details?.email || session.customer_email || "";
   const currency = (session.currency || "sek").toUpperCase();
   const formatAmount = (amount: number | null) => formatMoney(amount ?? 0, currency);
+  const paymentIntentId = typeof session.payment_intent === "string"
+    ? session.payment_intent
+    : session.payment_intent?.id;
+  const customerAddress = formatAddress(session.customer_details?.address);
+  const customerPhone = session.customer_details?.phone;
+  const orderDate = new Date(session.created * 1_000).toLocaleString("sv-SE", { timeZone: "Europe/Stockholm" });
 
   const rows = lineItems.data
     .map(
@@ -139,6 +140,8 @@ async function sendOrderNotification(session: Stripe.Checkout.Session) {
     <h2 style="margin:0 0 16px">Ny beställning på kornu.se</h2>
     <p style="margin:0 0 4px"><strong>Kund:</strong> ${escapeHtml(customerName)}</p>
     <p style="margin:0 0 16px"><strong>E-post:</strong> ${escapeHtml(customerEmail || "Saknas")}</p>
+    ${customerPhone ? `<p style="margin:0 0 4px"><strong>Telefon:</strong> ${escapeHtml(customerPhone)}</p>` : ""}
+    ${customerAddress ? `<p style="margin:0 0 16px"><strong>Faktureringsadress:</strong> ${escapeHtml(customerAddress)}</p>` : ""}
     <table style="border-collapse:collapse;margin:0 0 16px">
       <thead><tr>
         <th style="padding:6px 12px 6px 0;text-align:left">Produkt</th>
@@ -149,45 +152,76 @@ async function sendOrderNotification(session: Stripe.Checkout.Session) {
     </table>
     <p style="margin:0 0 4px"><strong>Totalt:</strong> ${formatAmount(session.amount_total)} (${escapeHtml(currency)})</p>
     <p style="margin:0 0 4px"><strong>Betalningsstatus:</strong> ${escapeHtml(session.payment_status)}</p>
-    <p style="margin:16px 0 0;color:#666;font-size:13px">Stripe Checkout Session: ${escapeHtml(session.id)}</p>
+    ${session.total_details?.amount_tax ? `<p style="margin:0 0 4px"><strong>Moms:</strong> ${formatAmount(session.total_details.amount_tax)}</p>` : ""}
+    ${session.total_details?.amount_shipping ? `<p style="margin:0 0 4px"><strong>Frakt:</strong> ${formatAmount(session.total_details.amount_shipping)}</p>` : ""}
+    ${session.total_details?.amount_discount ? `<p style="margin:0 0 4px"><strong>Rabatt:</strong> −${formatAmount(session.total_details.amount_discount)}</p>` : ""}
+    <p style="margin:16px 0 0;color:#666;font-size:13px">Orderdatum: ${escapeHtml(orderDate)}<br>
+      Stripe Checkout Session: ${escapeHtml(session.id)}<br>
+      Stripe PaymentIntent: ${escapeHtml(paymentIntentId || "Saknas")}
+    </p>
   </div>`;
 
-  console.info("Resend send starting", { kind: "order_notification", checkoutSessionId: session.id });
-  const response = await fetch("https://api.resend.com/emails", {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${apiKey}`,
-      "Content-Type": "application/json",
-      // One email per Checkout Session, even if Stripe retries the event.
-      "Idempotency-Key": `order-notification/${session.id}`,
-    },
-    body: JSON.stringify({
-      from: process.env.ORDER_NOTIFICATION_FROM || defaultOrderNotificationFrom,
-      to: [orderNotificationTo],
-      subject: `Ny beställning: ${formatAmount(session.amount_total)} från ${customerName}`,
-      html,
-      ...(customerEmail ? { reply_to: customerEmail } : {}),
-    }),
-  });
+  const emails = [
+    sendResendEmail(
+      {
+        from: process.env.RESEND_FROM_EMAIL || process.env.ORDER_NOTIFICATION_FROM || defaultOrderNotificationFrom,
+        to: [orderNotificationTo],
+        subject: `Ny beställning: ${formatAmount(session.amount_total)} (${session.id})`,
+        html,
+        ...(customerEmail ? { reply_to: customerEmail } : {}),
+      },
+      `order-notification/${session.id}`,
+      { kind: "order_notification", checkoutSessionId: session.id },
+    ),
+  ];
 
-  const responseText = await response.text();
-  let responseBody: unknown = responseText;
-  try {
-    responseBody = responseText ? JSON.parse(responseText) : null;
-  } catch {
-    // Non-JSON response is retained as truncated text below.
+  if (customerEmail) {
+    const receiptHtml = `<div style="font-family:Arial,sans-serif;font-size:15px;color:#111">
+      <h2 style="margin:0 0 16px">Tack för ditt köp!</h2>
+      <p style="margin:0 0 16px">Hej ${escapeHtml(customerName)}, vi har tagit emot din betalning.</p>
+      <table style="border-collapse:collapse;margin:0 0 16px">
+        <thead><tr>
+          <th style="padding:6px 12px 6px 0;text-align:left">Produkt</th>
+          <th style="padding:6px 12px">Antal</th>
+          <th style="padding:6px 0 6px 12px;text-align:right">Belopp</th>
+        </tr></thead>
+        <tbody>${rows}</tbody>
+      </table>
+      <p style="margin:0 0 4px"><strong>Totalt betalat:</strong> ${formatAmount(session.amount_total)} (${escapeHtml(currency)})</p>
+      <p style="margin:0 0 4px"><strong>Betalningsstatus:</strong> Betald</p>
+      <p style="margin:0 0 4px"><strong>Datum:</strong> ${escapeHtml(orderDate)}</p>
+      <p style="margin:16px 0 0;color:#666;font-size:13px">Spara detta mejl som bekräftelse på ditt köp.</p>
+    </div>`;
+    emails.push(sendResendEmail(
+      {
+        from: process.env.RESEND_FROM_EMAIL || process.env.ORDER_NOTIFICATION_FROM || defaultOrderNotificationFrom,
+        to: [customerEmail],
+        subject: `Kvitto för ditt köp hos Kör Nu – ${formatAmount(session.amount_total)}`,
+        html: receiptHtml,
+      },
+      `customer-receipt/${session.id}`,
+      { kind: "customer_payment_receipt", checkoutSessionId: session.id },
+    ));
+  } else {
+    console.warn("Customer payment receipt skipped: Stripe did not provide a customer email.", { checkoutSessionId: session.id });
   }
-  const safeResponse = typeof responseBody === "string" ? responseBody.slice(0, 1_000) : responseBody;
-  if (!response.ok) {
-    console.error("Resend send failed", { kind: "order_notification", checkoutSessionId: session.id, status: response.status, response: safeResponse });
-    throw new Error(`Resend responded with ${response.status}.`);
-  }
-  const emailId = responseBody && typeof responseBody === "object" && "id" in responseBody ? responseBody.id : undefined;
-  console.info("Resend send accepted", { kind: "order_notification", checkoutSessionId: session.id, status: response.status, emailId });
+
+  await Promise.all(emails);
 }
 
 function formatMoney(amountInMinorUnits: number, currency: string) {
   return new Intl.NumberFormat("sv-SE", { style: "currency", currency }).format(amountInMinorUnits / 100);
+}
+
+function formatAddress(address: Stripe.Address | null | undefined) {
+  if (!address) return "";
+  return [
+    address.line1,
+    address.line2,
+    [address.postal_code, address.city].filter(Boolean).join(" "),
+    address.state,
+    address.country,
+  ].filter(Boolean).join(", ");
 }
 
 function escapeHtml(value: string) {
