@@ -10,10 +10,16 @@ export default async function handler(req: Request, res: Response) {
   const suppliedSecret = req.headers["x-resend-test-secret"];
   if (!expectedSecret || typeof suppliedSecret !== "string" || suppliedSecret !== expectedSecret) return res.status(404).json({ error: "Not found." });
   try {
+    const recipient = process.env.CLIENT_EMAIL || process.env.DOCTOR_EMAIL || "info@kornu.se";
     const result = await sendResendEmail(
-      { from: process.env.ORDER_NOTIFICATION_FROM || "Kör Nu webbshop <order@kornu.se>", to: ["delivered@resend.dev"], subject: "Kornu Resend delivery test", html: "<p>This is a server-side Resend delivery test from Kornu.</p>" },
+      {
+        from: process.env.RESEND_FROM_EMAIL || process.env.ORDER_NOTIFICATION_FROM || "Kör Nu webbshop <order@kornu.se>",
+        to: [recipient],
+        subject: "Kör Nu Resend delivery test",
+        html: "<p>This is a server-side Resend delivery test from Kör Nu.</p>",
+      },
       `resend-delivery-test/${Date.now()}`,
-      { kind: "resend_delivery_test" },
+      { kind: "resend_delivery_test", recipient },
     );
     return res.status(200).json({ accepted: true, emailId: result.id });
   } catch (error) {

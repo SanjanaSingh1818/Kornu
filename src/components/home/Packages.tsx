@@ -82,10 +82,10 @@ function PackageCard({ pkg, index, onSelect, loading }: { pkg: Package; index: n
           <div>
             <div className="mb-4 flex items-center justify-between gap-3">
               <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary-50 text-primary-dark"><Icon name={index % 2 ? "calendar" : "car"} className="h-5 w-5" /></div>
-              <div className="flex min-w-0 items-center justify-end gap-1.5">
+              <div className="flex shrink-0 items-center justify-end gap-1.5">
                 {offerBadge && (
-                  <span className="inline-flex max-w-[60%] shrink-0 items-center rounded-full bg-red-600 px-2.5 py-1 text-[10px] font-black uppercase tracking-wide text-white shadow-sm">
-                    <span className="truncate">{offerBadge}</span>
+                  <span className="inline-flex shrink-0 items-center whitespace-nowrap rounded-full bg-red-600 px-2.5 py-1 text-[10px] font-black uppercase tracking-wide text-white shadow-sm">
+                    {offerBadge}
                   </span>
                 )}
                 {(detailBadge || pkg.popular) && (

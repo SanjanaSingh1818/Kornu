@@ -250,7 +250,9 @@ function isWebsiteVisible(value: unknown): boolean {
 
 function parsePriceNumber(value: unknown): number | undefined {
   if (value === undefined || value === null || value === "") return undefined;
-  const normalized = typeof value === "string" ? value.trim() : String(value);
+  const normalized = typeof value === "string"
+    ? value.trim().replace(/\s*(?:sek|kr\.?)\s*$/i, "").replace(/\s/g, "").replace(",", ".")
+    : String(value);
   const parsed = Number(normalized);
   if (!Number.isFinite(parsed)) return undefined;
   return parsed > 0 ? parsed : undefined;
