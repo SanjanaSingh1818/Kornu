@@ -1,11 +1,13 @@
 import { useEffect, type FormEvent } from "react";
 import { useLanguage } from "../i18n";
 import type { Package } from "../types";
+import { normalizeSwedishPersonalNumber } from "../utils/swedish-personal-number";
 
 export type CheckoutCustomerDetails = {
   name: string;
   email: string;
   phone: string;
+  personalNumber: string;
 };
 
 type CheckoutDetailsModalProps = {
@@ -16,9 +18,9 @@ type CheckoutDetailsModalProps = {
 };
 
 const checkoutCopy = {
-  sv: { title: "Dina uppgifter", text: "Fyll i dina kontaktuppgifter innan du fortsätter till säker betalning.", continue: "Fortsätt till betalning", submitting: "Öppnar betalning...", required: "Obligatoriskt", privacy: "Vi använder uppgifterna för att hantera ditt köp och kontakta dig om din beställning." },
-  en: { title: "Your details", text: "Enter your contact details before continuing to secure payment.", continue: "Continue to payment", submitting: "Opening payment...", required: "Required", privacy: "We use these details to process your purchase and contact you about your order." },
-  ar: { title: "بياناتك", text: "أدخل بيانات الاتصال قبل الانتقال إلى الدفع الآمن.", continue: "متابعة إلى الدفع", submitting: "جارٍ فتح الدفع...", required: "مطلوب", privacy: "نستخدم هذه البيانات لمعالجة طلبك والتواصل معك بشأنه." },
+  sv: { title: "Dina uppgifter", text: "Fyll i dina kontaktuppgifter innan du fortsätter till säker betalning.", continue: "Fortsätt till betalning", submitting: "Öppnar betalning...", required: "Obligatoriskt", privacy: "Vi använder uppgifterna för att hantera ditt köp och kontakta dig om din beställning.", personalNumberPrivacy: "Personnumret sparas i Stripe och inkluderas i ordermejlet till trafikskolan. E-post är inte en krypterad kanal för känsliga uppgifter.", invalidPersonalNumber: "Ange ett giltigt svenskt personnummer, till exempel ÅÅÅÅMMDD-XXXX." },
+  en: { title: "Your details", text: "Enter your contact details before continuing to secure payment.", continue: "Continue to payment", submitting: "Opening payment...", required: "Required", privacy: "We use these details to process your purchase and contact you about your order.", personalNumberPrivacy: "Your personal identity number is stored in Stripe and included in the order email to the driving school. Email is not an encrypted channel for sensitive information.", invalidPersonalNumber: "Enter a valid Swedish personal identity number, for example YYYYMMDD-XXXX." },
+  ar: { title: "بياناتك", text: "أدخل بيانات الاتصال قبل الانتقال إلى الدفع الآمن.", continue: "متابعة إلى الدفع", submitting: "جارٍ فتح الدفع...", required: "مطلوب", privacy: "نستخدم هذه البيانات لمعالجة طلبك والتواصل معك بشأنه.", personalNumberPrivacy: "يُحفظ رقم الهوية في Stripe ويُدرج في رسالة الطلب إلى مدرسة القيادة. البريد الإلكتروني ليس قناة مشفرة للمعلومات الحساسة.", invalidPersonalNumber: "أدخل رقم هوية سويديًا صالحًا، مثل YYYYMMDD-XXXX." },
 } as const;
 
 export function CheckoutDetailsModal({ product, loading, onClose, onSubmit }: CheckoutDetailsModalProps) {
@@ -37,10 +39,19 @@ export function CheckoutDetailsModal({ product, loading, onClose, onSubmit }: Ch
     event.preventDefault();
     if (loading) return;
     const formData = new FormData(event.currentTarget);
+    const personalNumber = normalizeSwedishPersonalNumber(String(formData.get("personalNumber") ?? ""));
+    const personalNumberInput = event.currentTarget.elements.namedItem("personalNumber");
+    if (!(personalNumberInput instanceof HTMLInputElement)) return;
+    personalNumberInput.setCustomValidity(personalNumber ? "" : copy.invalidPersonalNumber);
+    if (!personalNumber) {
+      personalNumberInput.reportValidity();
+      return;
+    }
     onSubmit({
       name: String(formData.get("name") ?? "").trim(),
       email: String(formData.get("email") ?? "").trim(),
       phone: String(formData.get("phone") ?? "").trim(),
+      personalNumber,
     });
   };
 
@@ -86,6 +97,20 @@ export function CheckoutDetailsModal({ product, loading, onClose, onSubmit }: Ch
             <span className="mb-1.5 block text-sm font-bold text-slate-700">{t.contactForm.phone} *</span>
             <input name="phone" type="tel" autoComplete="tel" required minLength={7} maxLength={25} pattern="[+0-9() .-]{7,25}" className="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/15" />
           </label>
+          <label className="block">
+            <span className="mb-1.5 block text-sm font-bold text-slate-700">{t.contactForm.personalNumber} *</span>
+            <input
+              name="personalNumber"
+              type="text"
+              inputMode="numeric"
+              autoComplete="off"
+              required
+              maxLength={15}
+              placeholder={t.contactForm.personalNumberPlaceholder}
+              onInput={(event) => event.currentTarget.setCustomValidity("")}
+              className="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/15"
+            />
+          </label>
           <button type="submit" disabled={loading} className="w-full rounded-xl bg-primary-dark px-5 py-3 font-bold text-white transition hover:bg-primary disabled:cursor-wait disabled:opacity-60">
             {loading ? copy.submitting : copy.continue}
           </button>
@@ -94,6 +119,7 @@ export function CheckoutDetailsModal({ product, loading, onClose, onSubmit }: Ch
             {copy.privacy}{" "}
             <a href="/integritetspolicy" className="font-semibold text-primary-dark underline">{lang === "sv" ? "Läs integritetspolicyn." : lang === "en" ? "Read the privacy policy." : "اقرأ سياسة الخصوصية."}</a>
           </p>
+          <p className="text-center text-xs leading-5 text-slate-500">{copy.personalNumberPrivacy}</p>
         </form>
       </section>
     </div>

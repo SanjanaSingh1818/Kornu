@@ -128,6 +128,7 @@ async function sendOrderNotification(session: Stripe.Checkout.Session) {
     : session.payment_intent?.id;
   const customerAddress = formatAddress(session.customer_details?.address);
   const customerPhone = session.customer_details?.phone || savedCustomer?.phone;
+  const personalNumber = savedCustomer?.metadata?.personal_number;
   const orderDate = new Date(session.created * 1_000).toLocaleString("sv-SE", { timeZone: "Europe/Stockholm" });
 
   const rows = lineItems.data
@@ -145,6 +146,7 @@ async function sendOrderNotification(session: Stripe.Checkout.Session) {
     <p style="margin:0 0 4px"><strong>Kund:</strong> ${escapeHtml(customerName)}</p>
     <p style="margin:0 0 16px"><strong>E-post:</strong> ${escapeHtml(customerEmail || "Saknas")}</p>
     ${customerPhone ? `<p style="margin:0 0 4px"><strong>Telefon:</strong> ${escapeHtml(customerPhone)}</p>` : ""}
+    ${personalNumber ? `<p style="margin:0 0 4px"><strong>Personnummer:</strong> ${escapeHtml(personalNumber)}</p>` : ""}
     ${customerAddress ? `<p style="margin:0 0 16px"><strong>Faktureringsadress:</strong> ${escapeHtml(customerAddress)}</p>` : ""}
     <table style="border-collapse:collapse;margin:0 0 16px">
       <thead><tr>

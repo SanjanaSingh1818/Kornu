@@ -15,6 +15,7 @@ export const privacyPolicyParagraphs: string[] = [
   "## Uppgifter vi samlar in direkt från dig",
   "Uppgifter som du själv skickar till oss via våra tjänster kan innefatta:",
   "- Kontaktuppgifter till exempel namn, adress, telefonnummer och e-postadress.",
+  "- Personnummer, som samlas in i samband med köp, sparas i kundposten hos Stripe och inkluderas i ordermejlet till trafikskolan. E-post är inte en krypterad kanal för känsliga uppgifter.",
   "- Orderinformation till exempel namn, faktureringsadress, leveransadress, betalningsbekräftelse, e-postadress och telefonnummer.",
   "- Kontoinformation till exempel användarnamn, lösenord, säkerhetsfrågor och annan information som används för att skydda ditt konto.",
   "- Kundsupportinformation Till exempel information du väljer att dela med dig av när du kommunicerar med oss, som när du skickar ett meddelande via tjänsterna.",
