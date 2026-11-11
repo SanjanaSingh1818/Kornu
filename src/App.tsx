@@ -1,5 +1,6 @@
 import { lazy, Suspense, useCallback, useEffect, useState } from "react";
 import { Footer } from "./components/Footer";
+import { CheckoutDetailsModal, type CheckoutCustomerDetails } from "./components/CheckoutDetailsModal";
 import { ContactForm } from "./components/ContactForm";
 import { VisitUs } from "./components/home";
 import { Header } from "./components/Header";
@@ -15,22 +16,30 @@ const DrivingSimulator = lazy(() => import("./DrivingSimulator"));
 export default function App() {
   const [checkoutLoading, setCheckoutLoading] = useState(false);
   const [checkoutError, setCheckoutError] = useState<string | null>(null);
+  const [checkoutProduct, setCheckoutProduct] = useState<Package | null>(null);
   const [showSim, setShowSim] = useState(false);
   const [path, setPath] = useState<PagePath>(() => getPagePath(window.location.pathname));
 
-  const startCheckout = useCallback(async (pkg: Package) => {
+  const startCheckout = useCallback((pkg: Package) => {
+    setCheckoutError(null);
+    if (!pkg.priceId) {
+      setCheckoutError("This product is not configured for Stripe Checkout yet.");
+      return;
+    }
+    setCheckoutProduct(pkg);
+  }, []);
+
+  const continueCheckout = useCallback(async (customer: CheckoutCustomerDetails) => {
+    if (!checkoutProduct?.priceId) return;
     setCheckoutError(null);
     setCheckoutLoading(true);
     try {
-      if (!pkg.priceId) {
-        throw new Error("This product is not configured for Stripe Checkout yet.");
-      }
-      window.location.assign(await createCheckoutSession(pkg.priceId, "priceId"));
+      window.location.assign(await createCheckoutSession(checkoutProduct.priceId, customer, "priceId"));
     } catch (error) {
       setCheckoutError(error instanceof Error ? error.message : "Unable to start checkout.");
       setCheckoutLoading(false);
     }
-  }, []);
+  }, [checkoutProduct]);
 
   const navigate = useCallback((nextPath: PagePath) => {
     window.history.pushState({}, "", nextPath);
@@ -72,7 +81,17 @@ export default function App() {
         {/* Contact ("Skriv in dig") page: address, hours and map below the form */}
         {path === "/contact" && <VisitUs />}
         <Footer />
-        {checkoutError && <div role="alert" className="fixed inset-x-4 bottom-4 z-50 mx-auto max-w-xl rounded-2xl border border-red-200 bg-red-50 p-4 text-center text-sm font-semibold text-red-700">{checkoutError}</div>}
+        {checkoutProduct && (
+          <CheckoutDetailsModal
+            product={checkoutProduct}
+            loading={checkoutLoading}
+            onClose={() => {
+              if (!checkoutLoading) setCheckoutProduct(null);
+            }}
+            onSubmit={continueCheckout}
+          />
+        )}
+        {checkoutError && <div role="alert" className="fixed inset-x-4 bottom-4 z-[80] mx-auto max-w-xl rounded-2xl border border-red-200 bg-red-50 p-4 text-center text-sm font-semibold text-red-700">{checkoutError}</div>}
         {showSim && (
           <Suspense fallback={<div className="fixed inset-0 z-[60] grid place-items-center bg-dark text-white text-lg font-bold">Loading simulator...</div>}>
             <DrivingSimulator onClose={() => setShowSim(false)} />

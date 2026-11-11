@@ -2,6 +2,7 @@ import { getStripe } from "./stripe/server.js";
 
 type Request = { method?: string; body?: unknown; headers: Record<string, string | string[] | undefined> };
 type Response = { status: (code: number) => Response; json: (body: unknown) => void };
+type CheckoutCustomerDetails = { name: string; email: string; phone: string };
 
 const priceEnvByPackage: Record<string, string> = {
   "pkt-5": "STRIPE_PRICE_ID_PKT_5",
@@ -21,6 +22,8 @@ export default async function handler(req: Request, res: Response) {
     const body = typeof req.body === "string" ? JSON.parse(req.body) : req.body;
     const packageId = body && typeof body === "object" && "packageId" in body && typeof body.packageId === "string" ? body.packageId : "";
     const priceIdFromBody = body && typeof body === "object" && "priceId" in body && typeof body.priceId === "string" ? body.priceId : "";
+    const customer = parseCustomerDetails(body && typeof body === "object" && "customer" in body ? body.customer : null);
+    if (!customer) return res.status(400).json({ error: "Enter a valid name, email address, and phone number before checkout." });
     const resolvedPriceId = priceIdFromBody || (packageId ? (priceEnvByPackage[packageId] ? process.env[priceEnvByPackage[packageId]] : undefined) : undefined);
 
     if (!resolvedPriceId || !/^price_[A-Za-z0-9]+$/.test(resolvedPriceId)) {
@@ -29,8 +32,12 @@ export default async function handler(req: Request, res: Response) {
 
     const price = await stripe.prices.retrieve(resolvedPriceId);
     if (!price.active || price.currency !== "sek") return res.status(400).json({ error: "The configured Stripe Price must be active and denominated in SEK." });
+    const stripeCustomer = await stripe.customers.create(customer);
     const session = await stripe.checkout.sessions.create({
       mode: "payment",
+      customer: stripeCustomer.id,
+      customer_update: { name: "auto", address: "auto" },
+      phone_number_collection: { enabled: true },
       payment_method_types: ["klarna", "card"],
       line_items: [{ price: price.id, quantity: 1 }],
       success_url: `${getOrigin(req)}/payment-success?session_id={CHECKOUT_SESSION_ID}`,
@@ -47,6 +54,18 @@ export default async function handler(req: Request, res: Response) {
   } catch (error) {
     return res.status(500).json({ error: error instanceof Error ? error.message : "Unable to create Checkout Session." });
   }
+}
+
+function parseCustomerDetails(value: unknown): CheckoutCustomerDetails | null {
+  if (!value || typeof value !== "object") return null;
+  const candidate = value as Record<string, unknown>;
+  const name = typeof candidate.name === "string" ? candidate.name.trim() : "";
+  const email = typeof candidate.email === "string" ? candidate.email.trim() : "";
+  const phone = typeof candidate.phone === "string" ? candidate.phone.trim() : "";
+  if (name.length < 2 || name.length > 120) return null;
+  if (email.length > 254 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return null;
+  if (phone.length < 7 || phone.length > 25 || !/^[+0-9() .-]+$/.test(phone)) return null;
+  return { name, email, phone };
 }
 
 function getOrigin(req: Request) {

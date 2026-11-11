@@ -113,17 +113,21 @@ function getCheckoutSessionLogPayload(session: Stripe.Checkout.Session) {
 }
 
 async function sendOrderNotification(session: Stripe.Checkout.Session) {
-  // Line items are not included in the webhook payload, so read them from Stripe.
-  const lineItems = await getStripe().checkout.sessions.listLineItems(session.id, { limit: 100 });
-  const customerName = session.customer_details?.name || "Okänt namn";
-  const customerEmail = session.customer_details?.email || session.customer_email || "";
+  const stripe = getStripe();
+  // Line items and the saved customer are not included in the webhook payload.
+  const [lineItems, savedCustomer] = await Promise.all([
+    stripe.checkout.sessions.listLineItems(session.id, { limit: 100 }),
+    getSavedCustomer(stripe, session.customer),
+  ]);
+  const customerName = session.customer_details?.name || savedCustomer?.name || "Okänt namn";
+  const customerEmail = session.customer_details?.email || session.customer_email || savedCustomer?.email || "";
   const currency = (session.currency || "sek").toUpperCase();
   const formatAmount = (amount: number | null) => formatMoney(amount ?? 0, currency);
   const paymentIntentId = typeof session.payment_intent === "string"
     ? session.payment_intent
     : session.payment_intent?.id;
   const customerAddress = formatAddress(session.customer_details?.address);
-  const customerPhone = session.customer_details?.phone;
+  const customerPhone = session.customer_details?.phone || savedCustomer?.phone;
   const orderDate = new Date(session.created * 1_000).toLocaleString("sv-SE", { timeZone: "Europe/Stockholm" });
 
   const rows = lineItems.data
@@ -207,6 +211,13 @@ async function sendOrderNotification(session: Stripe.Checkout.Session) {
   }
 
   await Promise.all(emails);
+}
+
+async function getSavedCustomer(stripe: Stripe, customer: Stripe.Checkout.Session["customer"]): Promise<Stripe.Customer | null> {
+  const customerId = typeof customer === "string" ? customer : customer?.id;
+  if (!customerId) return null;
+  const result = await stripe.customers.retrieve(customerId);
+  return "deleted" in result && result.deleted ? null : result;
 }
 
 function formatMoney(amountInMinorUnits: number, currency: string) {
