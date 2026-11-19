@@ -167,15 +167,11 @@ export function Hero() {
 
             <CmsLink
               href={site.buttons.heroSecondary}
-              className="inline-flex items-center justify-center rounded-xl border border-white/20 bg-white/10 px-7 py-3.5 text-sm font-semibold text-white backdrop-blur-lg transition-all duration-300 hover:-translate-y-1 hover:bg-white/15 sm:px-8 sm:py-4 sm:text-base"
+              className="inline-flex max-w-full items-center justify-center rounded-xl bg-primary px-5 py-3.5 text-center text-sm font-semibold leading-6 text-white shadow-xl transition-all duration-300 hover:-translate-y-1 hover:bg-primary-600 sm:px-7 sm:py-4 sm:text-base"
             >
-              {t.hero.packages}
+              {paymentNote}
             </CmsLink>
           </motion.div>
-
-          <p className="mt-4 max-w-2xl rounded-xl border border-primary-200/50 bg-primary-50/95 px-4 py-3 text-sm font-bold leading-6 text-primary-dark shadow-sm">
-            {paymentNote}
-          </p>
 
           {/* Stats */}
 
