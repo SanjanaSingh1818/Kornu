@@ -55,12 +55,9 @@ const sv = {
     ] },
   simulator: { tag: "Öva. Förbättra. Lyckas.", title: "Testa dina kunskaper i vår körsimulator.", text: "Träna reaktion, observation, parkering och trafikrytm i realistiska simulatorsessioner.", start: "Starta simulator", city: "Stadskörning", motorway: "Motorväg", night: "Mörkerkörning" },
   braking: { tag: "Risktvåan Förberedelse", title: "Braking Distance Visualizer", text: "Testa hur väglaget påverkar stoppsträckan. Det här får du lära dig live på halkbanan under Risktvåan.", variables: "Variabler & Väglag", speed: "Hastighet", choose: "Välj väglag", stopping: "Stoppsträcka", reaction: "Reaktion", braking: "Broms", total: "Total", conditions: ["Is / Snö", "Våt", "Torr", "Grus"] },
-  reviews: { tag: "Google Reviews", title: "Vad säger våra elever?", based: "baserat på 124 omdömen", verified: "Verifierat via Google", items: [
-    ["Johanna Bergqvist", "för 2 veckor sedan", "Fantastisk körskola! Klarade uppkörningen på första försöket tack vare Kornu. Jättepedagogiska lärare.", "JB"],
-    ["Sven Malmström", "för 1 månad sedan", "Rekommenderar starkt! Riskettan och Risktvåan var otroligt lärorika. Professionellt team.", "SM"],
-    ["Emma Wallin", "för 3 månader sedan", "Tack för tålamodet! Klarade provet och är nu stolt bilförare.", "EW"],
-    ["Marcus Lindgren", "för 2 månader sedan", "Supersmidigt upplägg. Priset var rimligt och lärarna riktigt duktiga.", "ML"],
-    ["Fatima Al-Hassan", "för 1 vecka sedan", "Underbar skola! Lärarna pratar även arabiska vilket hjälpte mig enormt.", "FA"],
+  reviews: { tag: "Google Reviews", title: "Vad säger våra elever?", based: "baserat på 168 omdömen", verified: "Verifierat via Google", items: [
+    ["Vedran M.", "11 feb. 2026", "Jätte bra trafikskola, med ännu bättre lärare!! Rekommenderar starkt", "VM"],
+    ["Ahmed Sohael", "5 feb. 2026", "Great Traffic School. Got my license finally. Ahmed and all instructors will help you alot :)", "AS"],
   ] },
   visit: { tag: "Hitta till oss", title: "Besök oss i Göteborg", text: "Vi finns på FO Petersons gata 6, 421 31 Västra Frölunda.", address: "Adress", contact: "Kontakt", hours: "Öppettider", open: "Öppna länk", schedule: "Mån-Tor 09:00-18:00\nFredag 09:00-16:00\nLördag 10:00-14:00" },
   final: { tag: "Redo att starta i Göteborg?", title: "Boka din första lektion och få en personlig körkortsplan.", button: "Boka din lektion", location: "Göteborg" },
@@ -139,12 +136,9 @@ const en: typeof sv = {
     ] },
   simulator: { tag: "Practise. Improve. Succeed.", title: "Test your skills in our driving simulator.", text: "Train reaction, observation, parking and traffic rhythm in realistic simulator sessions.", start: "Start simulator", city: "City driving", motorway: "Motorway", night: "Night driving" },
   braking: { tag: "Risk 2 preparation", title: "Braking Distance Visualizer", text: "Test how road conditions affect stopping distance. This is what you learn live during Risk 2.", variables: "Variables & road conditions", speed: "Speed", choose: "Choose condition", stopping: "Stopping distance", reaction: "Reaction", braking: "Braking", total: "Total", conditions: ["Ice / Snow", "Wet", "Dry", "Gravel"] },
-  reviews: { tag: "Google Reviews", title: "What do our students say?", based: "based on 124 reviews", verified: "Verified via Google", items: [
-    ["Johanna Bergqvist", "2 weeks ago", "Fantastic driving school! I passed the driving test on the first try thanks to Kornu. Very pedagogical teachers.", "JB"],
-    ["Sven Malmström", "1 month ago", "Highly recommended! Risk 1 and Risk 2 were incredibly useful. Professional team.", "SM"],
-    ["Emma Wallin", "3 months ago", "Thanks for the patience! I passed the test and am now a proud driver.", "EW"],
-    ["Marcus Lindgren", "2 months ago", "Very smooth setup. The price was fair and the teachers were really skilled.", "ML"],
-    ["Fatima Al-Hassan", "1 week ago", "Wonderful school! The teachers also speak Arabic, which helped me a lot.", "FA"],
+  reviews: { tag: "Google Reviews", title: "What do our students say?", based: "based on 168 reviews", verified: "Verified via Google", items: [
+    ["Vedran M.", "11 Feb 2026", "Jätte bra trafikskola, med ännu bättre lärare!! Rekommenderar starkt", "VM"],
+    ["Ahmed Sohael", "5 Feb 2026", "Great Traffic School. Got my license finally. Ahmed and all instructors will help you alot :)", "AS"],
   ] },
   visit: { tag: "Find us", title: "Visit us in Gothenburg", text: "Find us at FO Petersons gata 6, 421 31 Västra Frölunda.", address: "Address", contact: "Contact", hours: "Opening hours", open: "Open link", schedule: "Mon-Thu 09:00-18:00\nFriday 09:00-16:00\nSaturday 10:00-14:00" },
   final: { tag: "Ready to start in Gothenburg?", title: "Book your first lesson and get a personal licence plan.", button: "Book your lesson", location: "Gothenburg" },
@@ -224,12 +218,9 @@ const ar: typeof sv = {
     ] },
   simulator: { tag: "تدرّب. تحسّن. انجح.", title: "اختبر مهاراتك في محاكي القيادة.", text: "تدرّب على رد الفعل والملاحظة والركن وإيقاع المرور في جلسات محاكاة واقعية.", start: "ابدأ المحاكي", city: "قيادة داخل المدينة", motorway: "الطريق السريع", night: "القيادة ليلاً" },
   braking: { tag: "تحضير Risk 2", title: "حاسبة مسافة التوقف", text: "اختبر كيف تؤثر حالة الطريق على مسافة التوقف. هذا ما تتعلمه عملياً في Risk 2.", variables: "المتغيرات وحالة الطريق", speed: "السرعة", choose: "اختر حالة الطريق", stopping: "مسافة التوقف", reaction: "رد الفعل", braking: "الفرملة", total: "الإجمالي", conditions: ["جليد / ثلج", "مبلل", "جاف", "حصى"] },
-  reviews: { tag: "تقييمات Google", title: "ماذا يقول طلابنا؟", based: "بناءً على 124 تقييماً", verified: "موثق عبر Google", items: [
-    ["Johanna Bergqvist", "منذ أسبوعين", "مدرسة قيادة رائعة! نجحت في اختبار القيادة من أول محاولة بفضل Kornu. المدربون ممتازون.", "JB"],
-    ["Sven Malmström", "منذ شهر", "أنصح بها بشدة! كان Risk 1 و Risk 2 مفيدين جداً. فريق محترف.", "SM"],
-    ["Emma Wallin", "منذ 3 أشهر", "شكراً على الصبر! نجحت في الاختبار وأصبحت سائقة فخورة.", "EW"],
-    ["Marcus Lindgren", "منذ شهرين", "تنظيم سهل جداً. السعر مناسب والمدربون ماهرون.", "ML"],
-    ["Fatima Al-Hassan", "منذ أسبوع", "مدرسة رائعة! يتحدث المدربون العربية أيضاً وهذا ساعدني كثيراً.", "FA"],
+  reviews: { tag: "تقييمات Google", title: "ماذا يقول طلابنا؟", based: "بناءً على 168 تقييماً", verified: "موثق عبر Google", items: [
+    ["Vedran M.", "11 Feb 2026", "Jätte bra trafikskola, med ännu bättre lärare!! Rekommenderar starkt", "VM"],
+    ["Ahmed Sohael", "5 Feb 2026", "Great Traffic School. Got my license finally. Ahmed and all instructors will help you alot :)", "AS"],
   ] },
   visit: { tag: "اعثر علينا", title: "زرنا في يوتيبوري", text: "نحن في FO Petersons gata 6, 421 31 Västra Frölunda.", address: "العنوان", contact: "التواصل", hours: "ساعات العمل", open: "افتح الرابط", schedule: "الإثنين-الخميس 09:00-18:00\nالجمعة 09:00-16:00\nالسبت 10:00-14:00" },
   final: { tag: "جاهز للبدء في ستوكهولم؟", title: "احجز أول درس واحصل على خطة شخصية لرخصة القيادة.", button: "احجز درسك", location: "ستوكهولم" },

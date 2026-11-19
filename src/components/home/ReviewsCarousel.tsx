@@ -16,6 +16,25 @@ type GoogleReviewsResponse = {
   reviews: GoogleReview[];
 };
 
+const VERIFIED_GOOGLE_REVIEWS: GoogleReview[] = [
+  {
+    id: "vedran-m",
+    author: "Vedran M.",
+    photo: null,
+    rating: 5,
+    text: "Jätte bra trafikskola, med ännu bättre lärare!! Rekommenderar starkt",
+    createTime: "11 feb. 2026",
+  },
+  {
+    id: "ahmed-sohael",
+    author: "Ahmed Sohael",
+    photo: null,
+    rating: 5,
+    text: "Great Traffic School. Got my license finally. Ahmed and all instructors will help you alot :)",
+    createTime: "5 feb. 2026",
+  },
+];
+
 function isGoogleReviewsResponse(value: unknown): value is GoogleReviewsResponse {
   if (!value || typeof value !== "object") return false;
   const candidate = value as Partial<GoogleReviewsResponse>;
@@ -51,19 +70,10 @@ export function ReviewsCarousel() {
     return () => { cancelled = true; };
   }, []);
 
-  const fallbackReviews: GoogleReview[] = site.reviews.map((review, index) => ({
-    id: `${review.author}-${index}`,
-    author: review.author,
-    photo: null,
-    rating: review.rating,
-    text: review.text,
-    createTime: review.time,
-  }));
-  const reviews = googleReviews?.reviews ?? fallbackReviews;
-  const averageRating = googleReviews?.averageRating ?? Number(site.reviewRating);
+  const reviews = googleReviews?.reviews ?? VERIFIED_GOOGLE_REVIEWS;
+  const averageRating = googleReviews?.averageRating ?? 5;
   const reviewCount = googleReviews?.totalReviewCount;
-  const staticCount = t.reviews.based.match(/\d+/)?.[0];
-  const count = reviewCount ?? (staticCount ? Number(staticCount) : null);
+  const count = reviewCount ?? 168;
   const reviewLabel = lang === "sv" ? "Google-recensioner" : lang === "ar" ? "تقييمات Google" : "Google Reviews";
   const locale = lang === "sv" ? "sv-SE" : lang === "ar" ? "ar" : "en-GB";
   const visibleReviews = [0, 1, 2].map((offset) => reviews[(activeIndex + offset) % reviews.length]).filter((review): review is GoogleReview => Boolean(review));

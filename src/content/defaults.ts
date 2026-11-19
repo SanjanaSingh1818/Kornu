@@ -208,7 +208,7 @@ export function defaultSite(t: Translations): Site {
     trainers: DEFAULT_TRAINERS,
     trainersText: { tag: "Våra trafiklärare", title: "Människor du faktiskt vill sitta", highlight: "bredvid.", languagesLabel: "Språk" },
     reviews: t.reviews.items.map(([author, time, text, initials]) => ({ author, time, text, initials, rating: 5 })),
-    reviewRating: "4.9",
+    reviewRating: "5.0",
     reviewsUrl: "https://www.google.com/maps/search/?api=1&query=K%C3%B6r+Nu+Trafikskola+F+O+Petersons+Gata+6+V%C3%A4stra+Fr%C3%B6lunda",
     openingHours: DEFAULT_OPENING_HOURS,
     contactLabels: { phone: t.pay.phone, email: t.pay.email, org: "Org.nr" },

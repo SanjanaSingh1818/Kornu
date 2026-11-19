@@ -25,8 +25,8 @@ export function Header({ path, onNavigate }: { path: PagePath; onNavigate: (path
   return (
     <header className="fixed inset-x-0 top-0 z-50">
       <a href={site.reviewsUrl} target="_blank" rel="noopener noreferrer" className="flex min-h-9 items-center justify-center gap-2 border-b border-white/10 bg-slate-950/75 px-3 py-2 text-center text-xs font-extrabold tracking-wide text-white shadow-[0_8px_24px_rgba(0,0,0,0.28)] backdrop-blur-md transition hover:bg-slate-950/85 sm:text-sm">
-        <span>Google Reviews {site.reviewRating.replace(".", ",")} av 5</span>
-        <span className="text-amber-400" aria-label={`${site.reviewRating} out of 5 stars`}>★★★★★</span>
+        <span>Google Reviews 5 av 5</span>
+        <span className="text-amber-400" aria-label="5 out of 5 stars">★★★★★</span>
         <span className="hidden sm:inline">Hitta hit</span>
         <Icon name="arrow" className="h-4 w-4" />
       </a>
