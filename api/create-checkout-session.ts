@@ -3,7 +3,7 @@ import { normalizeSwedishPersonalNumber } from "../src/utils/swedish-personal-nu
 
 type Request = { method?: string; body?: unknown; headers: Record<string, string | string[] | undefined> };
 type Response = { status: (code: number) => Response; json: (body: unknown) => void };
-type CheckoutCustomerDetails = { name: string; email: string; phone: string; personalNumber: string };
+type CheckoutCustomerDetails = { name: string; email: string; phone: string; personalNumber: string; transmission: "manual" | "automatic" };
 
 const priceEnvByPackage: Record<string, string> = {
   "pkt-5": "STRIPE_PRICE_ID_PKT_5",
@@ -37,7 +37,7 @@ export default async function handler(req: Request, res: Response) {
       name: customer.name,
       email: customer.email,
       phone: customer.phone,
-      metadata: { personal_number: customer.personalNumber },
+      metadata: { personal_number: customer.personalNumber, transmission: customer.transmission },
     });
     const session = await stripe.checkout.sessions.create({
       mode: "payment",
@@ -71,11 +71,14 @@ function parseCustomerDetails(value: unknown): CheckoutCustomerDetails | null {
   const personalNumber = typeof candidate.personalNumber === "string"
     ? normalizeSwedishPersonalNumber(candidate.personalNumber)
     : null;
+  const transmission = candidate.transmission === "manual" || candidate.transmission === "automatic"
+    ? candidate.transmission
+    : null;
   if (name.length < 2 || name.length > 120) return null;
   if (email.length > 254 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return null;
   if (phone.length < 7 || phone.length > 25 || !/^[+0-9() .-]+$/.test(phone)) return null;
-  if (!personalNumber) return null;
-  return { name, email, phone, personalNumber };
+  if (!personalNumber || !transmission) return null;
+  return { name, email, phone, personalNumber, transmission };
 }
 
 function getOrigin(req: Request) {

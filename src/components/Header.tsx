@@ -23,7 +23,14 @@ export function Header({ path, onNavigate }: { path: PagePath; onNavigate: (path
     `rounded-xl px-4 py-3 text-center text-sm font-semibold transition hover:bg-primary-50 ${active ? "bg-primary-50 text-primary" : "text-slate-800"}`;
 
   return (
-    <header className="fixed inset-x-0 top-0 z-50 px-3 pt-3 sm:px-4 lg:px-6">
+    <header className="fixed inset-x-0 top-0 z-50">
+      <a href={site.reviewsUrl} target="_blank" rel="noopener noreferrer" className="flex min-h-9 items-center justify-center gap-2 bg-[#25211f] px-3 py-2 text-center text-xs font-extrabold tracking-wide text-white transition hover:bg-[#302a27] sm:text-sm">
+        <span>Google Reviews {site.reviewRating} out of 5</span>
+        <span className="text-amber-400" aria-label={`${site.reviewRating} out of 5 stars`}>★★★★★</span>
+        <span className="hidden sm:inline">Find here</span>
+        <Icon name="arrow" className="h-4 w-4" />
+      </a>
+      <div className="px-3 pt-2 sm:px-4 lg:px-6">
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-2 rounded-2xl border border-white/70 bg-white/88 px-3 py-2.5 shadow-[0_14px_48px_rgba(6,78,59,0.12)] backdrop-blur-2xl sm:gap-3 sm:px-4 lg:px-5 xl:gap-2 xl:px-3 2xl:max-w-[96rem] 2xl:gap-3 2xl:px-5">
         <a
           href="/"
@@ -114,6 +121,7 @@ export function Header({ path, onNavigate }: { path: PagePath; onNavigate: (path
           </motion.nav>
         )}
       </AnimatePresence>
+      </div>
     </header>
   );
 }

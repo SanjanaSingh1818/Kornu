@@ -150,7 +150,7 @@ export function applyCms(lang: Lang, baseT: Translations, baseSite: Site, cms: C
       return {
         ...fallback,
         title: str(content?.title, fallback.title),
-        paragraphs: list(content?.paragraphs, loc, fallback.paragraphs),
+        paragraphs: fallback.id === "termsInfoPage" ? fallback.paragraphs : list(content?.paragraphs, loc, fallback.paragraphs),
       };
     }),
     copyright: str(settings?.copyright, baseSite.copyright),

@@ -57,6 +57,9 @@ export function Footer() {
           <a href={site.drivingLicenceUrl} target="_blank" rel="noopener noreferrer" className="transition hover:text-white">Körkortstillstånd</a>
         </nav>
       </div>
+      <div className="mx-auto mt-8 flex max-w-7xl justify-center border-t border-white/10 pt-6">
+        <img src="/images/payment-methods.png" alt="Accepted payment methods: American Express, Apple Pay, Google Pay, Klarna, Mastercard, Shop Pay, UnionPay and Visa" className="h-auto w-full max-w-[435px]" />
+      </div>
     </footer>
   );
 }

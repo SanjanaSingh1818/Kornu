@@ -8,6 +8,7 @@ export type CheckoutCustomerDetails = {
   email: string;
   phone: string;
   personalNumber: string;
+  transmission: "manual" | "automatic";
 };
 
 type CheckoutDetailsModalProps = {
@@ -40,11 +41,17 @@ export function CheckoutDetailsModal({ product, loading, onClose, onSubmit }: Ch
     if (loading) return;
     const formData = new FormData(event.currentTarget);
     const personalNumber = normalizeSwedishPersonalNumber(String(formData.get("personalNumber") ?? ""));
+    const transmission = formData.get("transmission");
     const personalNumberInput = event.currentTarget.elements.namedItem("personalNumber");
+    const transmissionInput = event.currentTarget.elements.namedItem("transmission");
     if (!(personalNumberInput instanceof HTMLInputElement)) return;
     personalNumberInput.setCustomValidity(personalNumber ? "" : copy.invalidPersonalNumber);
     if (!personalNumber) {
       personalNumberInput.reportValidity();
+      return;
+    }
+    if (transmission !== "manual" && transmission !== "automatic") {
+      if (transmissionInput instanceof HTMLSelectElement) transmissionInput.reportValidity();
       return;
     }
     onSubmit({
@@ -52,6 +59,7 @@ export function CheckoutDetailsModal({ product, loading, onClose, onSubmit }: Ch
       email: String(formData.get("email") ?? "").trim(),
       phone: String(formData.get("phone") ?? "").trim(),
       personalNumber,
+      transmission,
     });
   };
 
@@ -110,6 +118,19 @@ export function CheckoutDetailsModal({ product, loading, onClose, onSubmit }: Ch
               onInput={(event) => event.currentTarget.setCustomValidity("")}
               className="w-full rounded-lg border border-slate-300 px-3 py-2.5 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/15"
             />
+          </label>
+          <label className="sm:col-span-2 block">
+            <span className="mb-1 block text-xs font-bold text-slate-700">{t.pay.transmission} *</span>
+            <select
+              name="transmission"
+              required
+              defaultValue=""
+              className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/15"
+            >
+              <option value="" disabled>{t.pay.transmission}</option>
+              <option value="automatic">{t.pay.automatic}</option>
+              <option value="manual">{t.pay.manual}</option>
+            </select>
           </label>
           <button type="submit" disabled={loading} className="sm:col-span-2 w-full rounded-xl bg-primary-dark px-5 py-2.5 text-sm font-bold text-white transition hover:bg-primary disabled:cursor-wait disabled:opacity-60">
             {loading ? copy.submitting : copy.continue}

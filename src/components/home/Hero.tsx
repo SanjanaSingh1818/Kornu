@@ -29,7 +29,12 @@ function Stat({
 }
 
 export function Hero() {
-  const { t, site } = useLanguage();
+  const { t, site, lang } = useLanguage();
+  const paymentNote = {
+    sv: "Betala som du vill med Klarna, välj det betalningsalternativ som passar dig i kassan.",
+    en: "Pay your way with Klarna. Choose the payment option that suits you at checkout.",
+    ar: "ادفع بالطريقة التي تناسبك مع Klarna، واختر خيار الدفع المناسب لك عند إتمام الشراء.",
+  }[lang];
   const ref = useRef<HTMLElement | null>(null);
 
   const rm = useReducedMotion();
@@ -167,6 +172,10 @@ export function Hero() {
               {t.hero.packages}
             </CmsLink>
           </motion.div>
+
+          <p className="mt-4 max-w-2xl rounded-xl border border-primary-200/50 bg-primary-50/95 px-4 py-3 text-sm font-bold leading-6 text-primary-dark shadow-sm">
+            {paymentNote}
+          </p>
 
           {/* Stats */}
 
