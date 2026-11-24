@@ -83,6 +83,7 @@ export const footer = defineType({
     lt("text", "Text under logotypen"),
     ls("quick", "Rubrik: Snabblänkar"),
     ls("courses", "Rubrik: Kurser"),
+    ls("help", "Rubrik: Hjälp och support"),
     defineField({ name: "courseLinks", title: "Kurslänkar", type: "array", of: [linkItem] }),
     defineField({ name: "helpLinks", title: "Hjälp och support", type: "array", of: [linkItem] }),
     defineField({ name: "legalLinks", title: "Juridiska länkar i sidfoten", type: "array", of: [linkItem] }),

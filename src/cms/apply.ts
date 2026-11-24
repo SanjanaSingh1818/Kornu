@@ -84,7 +84,7 @@ export function applyCms(lang: Lang, baseT: Translations, baseSite: Site, cms: C
       phone: str(contactPage?.phoneLabel, baseT.pay.phone),
       email: str(contactPage?.emailLabel, baseT.pay.email),
     } as Translations["pay"],
-    footer: labels(footer, baseT.footer, ["text", "quick", "courses", "contact", "rights", "city"]),
+    footer: labels(footer, baseT.footer, ["text", "quick", "courses", "help", "contact", "rights", "city"]),
     about: {
       ...labels(aboutPage, baseT.about, ["eyebrow", "title", "findUs", "imageAlt"]),
       text: baseT.about.text,
@@ -150,7 +150,7 @@ export function applyCms(lang: Lang, baseT: Translations, baseSite: Site, cms: C
       return {
         ...fallback,
         title: str(content?.title, fallback.title),
-        paragraphs: fallback.id === "termsInfoPage" ? fallback.paragraphs : list(content?.paragraphs, loc, fallback.paragraphs),
+        paragraphs: list(content?.paragraphs, loc, fallback.paragraphs),
       };
     }),
     copyright: str(settings?.copyright, baseSite.copyright),

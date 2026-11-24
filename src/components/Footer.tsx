@@ -37,7 +37,7 @@ export function Footer() {
         </div>
         <FLinks title={t.footer.quick} items={site.nav} />
         <FLinks title={t.footer.courses} items={site.footerCourseLinks} />
-        <FLinks title="Hjälp & support" items={site.footerHelpLinks} />
+        <FLinks title={t.footer.help} items={site.footerHelpLinks} />
         <div>
           <h3 className="text-sm font-bold text-white">{t.footer.contact}</h3>
           <div className="mt-5 space-y-4 text-sm text-white/55">

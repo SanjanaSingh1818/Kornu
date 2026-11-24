@@ -30,11 +30,6 @@ function Stat({
 
 export function Hero() {
   const { t, site, lang } = useLanguage();
-  const paymentNote = {
-    sv: "Betala som du vill med Klarna, välj det betalningsalternativ som passar dig i kassan.",
-    en: "Pay your way with Klarna. Choose the payment option that suits you at checkout.",
-    ar: "ادفع بالطريقة التي تناسبك مع Klarna، واختر خيار الدفع المناسب لك عند إتمام الشراء.",
-  }[lang];
   const ref = useRef<HTMLElement | null>(null);
 
   const rm = useReducedMotion();
@@ -169,7 +164,7 @@ export function Hero() {
               href={site.buttons.heroSecondary}
               className="inline-flex max-w-full items-center justify-center rounded-xl bg-primary px-5 py-3.5 text-center text-sm font-semibold leading-6 text-white shadow-xl transition-all duration-300 hover:-translate-y-1 hover:bg-primary-600 sm:px-7 sm:py-4 sm:text-base"
             >
-              {paymentNote}
+              {t.hero.packages}
             </CmsLink>
           </motion.div>
 
