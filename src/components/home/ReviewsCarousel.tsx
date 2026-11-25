@@ -12,20 +12,6 @@ type GoogleReview = {
   createTime: string;
 };
 
-type GoogleReviewsResponse = {
-  averageRating: number | null;
-  totalReviewCount: number | null;
-  reviews: GoogleReview[];
-};
-
-type GoogleReviewsSummary = Pick<GoogleReviewsResponse, "averageRating" | "totalReviewCount">;
-
-function isGoogleReviewsResponse(value: unknown): value is GoogleReviewsResponse {
-  if (!value || typeof value !== "object") return false;
-  const candidate = value as Partial<GoogleReviewsResponse>;
-  return Array.isArray(candidate.reviews);
-}
-
 function Arrow({ direction }: { direction: "previous" | "next" }) {
   return (
     <svg className={`h-5 w-5 ${direction === "previous" ? "rotate-180" : ""}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -36,30 +22,8 @@ function Arrow({ direction }: { direction: "previous" | "next" }) {
 
 export function ReviewsCarousel() {
   const { t, site } = useLanguage();
-  const [googleSummary, setGoogleSummary] = useState<GoogleReviewsSummary | null>(null);
   const [activeIndex, setActiveIndex] = useState(0);
   const [paused, setPaused] = useState(false);
-
-  useEffect(() => {
-    let cancelled = false;
-    fetch("/api/google-reviews")
-      .then(async (response) => {
-        const payload: unknown = await response.json();
-        if (!response.ok || !isGoogleReviewsResponse(payload)) {
-          throw new Error("Google reviews are unavailable.");
-        }
-        if (!cancelled) {
-          setGoogleSummary({
-            averageRating: payload.averageRating,
-            totalReviewCount: payload.totalReviewCount,
-          });
-        }
-      })
-      .catch((error: unknown) => {
-        if (!cancelled) console.warn("[reviews] Using local review content because Google reviews could not be loaded.", error);
-      });
-    return () => { cancelled = true; };
-  }, []);
 
   const reviews: GoogleReview[] = site.reviews.map((review, index) => ({
     id: `${review.author}-${index}`,
@@ -78,7 +42,7 @@ export function ReviewsCarousel() {
     return () => window.clearInterval(timer);
   }, [paused, reviews.length]);
 
-  const averageRating = googleSummary?.averageRating ?? Number(site.reviewRating);
+  const averageRating = Number(site.reviewRating) || 5;
   const visibleReviews = [0, 1, 2].map((offset) => reviews[(activeIndex + offset) % reviews.length]).filter((review): review is GoogleReview => Boolean(review));
 
   const move = (offset: number) => {
