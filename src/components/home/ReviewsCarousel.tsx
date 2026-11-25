@@ -5,6 +5,7 @@ import { useLanguage } from "../../i18n";
 type GoogleReview = {
   id: string;
   author: string;
+  initials: string;
   photo: string | null;
   rating: number;
   text: string;
@@ -63,6 +64,7 @@ export function ReviewsCarousel() {
   const reviews: GoogleReview[] = site.reviews.map((review, index) => ({
     id: `${review.author}-${index}`,
     author: review.author,
+    initials: review.initials,
     photo: null,
     rating: review.rating,
     text: review.text,
@@ -127,7 +129,7 @@ export function ReviewsCarousel() {
                     <img src={review.photo} alt="" className="h-11 w-11 rounded-full object-cover" />
                   ) : (
                     <span className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-primary-900 text-sm font-bold text-white">
-                      {review.author.split(/\s+/).slice(0, 2).map((part) => part[0]).join("").toUpperCase()}
+                      {review.initials || review.author.split(/\s+/).slice(0, 2).map((part) => part[0]).join("").toUpperCase()}
                     </span>
                   )}
                   <div className="min-w-0 flex-1">

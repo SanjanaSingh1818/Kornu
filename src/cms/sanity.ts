@@ -9,7 +9,9 @@ export const sanityEnabled = Boolean(projectId);
 let client: SanityClient | null = null;
 function getClient() {
   if (!projectId) return null;
-  client ??= createClient({ projectId, dataset, apiVersion: "2025-01-01", useCdn: true, perspective: "published" });
+  // Fetch published content directly so newly published review edits are not
+  // held behind Sanity's CDN cache.
+  client ??= createClient({ projectId, dataset, apiVersion: "2025-01-01", useCdn: false, perspective: "published" });
   return client;
 }
 
@@ -53,7 +55,7 @@ export const SITE_QUERY = `{
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type CmsData = Record<string, any>;
 
-const CACHE_KEY = "kornu-cms-v4"; // bump when SITE_QUERY changes shape
+const CACHE_KEY = "kornu-cms-v5"; // bump when SITE_QUERY or its freshness behavior changes
 
 export function readCachedCms(): CmsData | null {
   try {
